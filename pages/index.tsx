@@ -2,10 +2,12 @@ import type { NextPage } from 'next';
 import UnauthenticatedLayout from 'components/layouts/unauthenticated/Unauthenticated';
 import Image from 'next/image';
 import giraffeImage from 'images/home-girrafe.png';
+import Link from 'next/link';
+import { useEffect } from 'react';
 
 const Home = () => {
   return (
-    <div className='min-h-screen pl-2 pr-2  lg:-mt-20 lg:flex-row flex flex-col justify-between items-center '>
+    <div className=' pl-2 pr-2  lg:-mt-20 lg:flex-row flex flex-col justify-between items-center '>
       <div>
         <div>
           <h2 className='text-4xl mb-2'>DigiEstate!!</h2>
@@ -17,7 +19,9 @@ const Home = () => {
 
           <div className='flex  justify-between md:justify-start lg:justify-between text-sm  '>
             <div className='border w-1/2 md:w-auto hover:bg-white cursor-pointer hover:text-black hover:border-black  app-btn border-black rounded-lg pt-2 mr-2 pb-2 pl-2 pr-2'>
-              <p>View Resident App</p>
+              <Link href='/resident'>
+                <a>View Resident App</a>
+              </Link>
             </div>
             <div className='border w-1/2 md:w-auto hover:bg-white cursor-pointer hover:text-black hover:border-black border-black rounded-lg pt-2 mr-2 pb-2 pl-2 pr-2'>
               <p>View Security App</p>

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .rei-text-input {
+    @apply border-gray-400 w-full block border rounded-lg h-9 pl-1;
+  }
+  .rei-password-input {
+    @apply flex password-container border-gray-400 rounded-lg border  flex-row content-center w-full;
+  }
+}
 html,
 body {
   padding: 0;
@@ -11,6 +19,10 @@ body {
 }
 
 #digi-header {
+  font-family: 'Lato', sans-serif;
+}
+
+body {
   font-family: 'Lato', sans-serif;
 }
 a {
