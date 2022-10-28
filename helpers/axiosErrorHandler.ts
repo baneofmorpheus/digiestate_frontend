@@ -42,7 +42,7 @@ const axiosErrorHandler = (
       toast.current!.show({
         severity: 'error',
         summary: 'System error',
-        detail: data.msg,
+        detail: data.message,
         life: 10000,
       });
       break;
