@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import UnauthenticatedLayout from 'components/layouts/unauthenticated/UnauthenticatedWithoutHeader';
-import styles from 'styles/Common.module.css';
 import bgImage from 'images/login-bg.png';
+import { updateLoginData } from 'reducers/authentication';
 
 import { useForm } from 'react-hook-form';
 import ErrorMessage from 'components/validation/error_msg';
@@ -14,31 +14,40 @@ import { Toast as ToastType } from 'primereact/toast';
 import axios from 'axios';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import Link from 'next/link';
-
 import { useSelector, useDispatch } from 'react-redux';
 
-const LoginResident = () => {
-  const authToken = useSelector((state: any) => state.authentication.token);
+import { ProgressSpinner } from 'primereact/progressspinner';
 
-  const router = useRouter();
-  const dispatch = useDispatch();
+type LoginDataPropType = {};
+
+const LoginData: NextPage<LoginDataPropType> = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [formLoading, setFormLoading] = useState(false);
+  const updateLoginDispatch = useDispatch();
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
   const loginSchema = yup
     .object()
     .shape({
-      phoneNumber: yup.string().required().label('Phone Number'),
+      phone_number: yup
+        .string()
+        .matches(phoneRegExp, 'Phone number is not valid')
+        .min(11)
+        .required()
+        .label('Phone Number'),
+
       password: yup.string().required().label('Password'),
-      estateCode: yup.string().required().label('Estate Code'),
+      estate_code: yup.string().required().label('Estate Code'),
     })
     .required();
 
-  const toast = useRef<ToastType>(null);
-
   type LoginInputType = {
-    phoneNumber: string;
+    phone_number: string;
     password: string;
-    estateCode: string;
+    estate_code: string;
   };
+
   const {
     register,
     handleSubmit,
@@ -49,157 +58,192 @@ const LoginResident = () => {
     mode: 'all',
   });
 
-  const [formLoading, setFormLoading] = useState(false);
+  const router = useRouter();
+  const toast = useRef<ToastType>(null);
 
-  const loginUser = async (data: any) => {
+  const handleLogin = async (data: LoginInputType) => {
+    setFormLoading(true);
+
     try {
-      setFormLoading(true);
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/residents/login`,
         data
       );
-
-      setFormLoading(false);
-
-      if (response.status !== 200) {
-        toast.current!.show({
-          severity: 'error',
-          summary: 'System error',
-          detail: 'Error logging in',
-        });
-        return;
-      }
-
-      if (!response.data.data.user.email_verified_at) {
+      toast.current!.show({
+        severity: 'success',
+        summary: 'Login successful',
+        detail: '',
+      });
+      updateLoginDispatch(
+        updateLoginData({
+          loginToken: response.data.data.token,
+          role: 'resident',
+          estateCode: data['estate_code'],
+        })
+      );
+    } catch (error: any) {
+      if (
+        error.response?.status === 403 &&
+        error.response.data.error_action === 'VERIFY_EMAIL'
+      ) {
         return router.push(
-          `${location.protocol}//${
-            location.host
-          }/authentication/send-verification-mail/${window.btoa(
-            response.data.data.user.email
-          )}`
+          `/send-email-verification?email=${error.response.data.email}`
         );
       }
-      // router.push(
-      //   `${location.protocol}//${location.host}/authentication/verify-email/${data.email}`
-      // );
-    } catch (error: any) {
+      console.log(error);
       axiosErrorHandler(error, toast);
-      setFormLoading(false);
     }
+    setFormLoading(false);
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
-    <div className='flex min-h-screen justify-end'>
-      <div className='w-1/2 pt-40 bg-digiDefault '>
-        <h1 className='text-center text-2xl mb-6  lato-font'>
-          Login As Resident
+    <form
+      className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 w-full md:w-3/4'
+      onSubmit={handleSubmit(handleLogin)}
+    >
+      <div className=''>
+        {/* section start */}
+
+        <div>
+          <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
+            <div className='w-full'>
+              <label className='text-black'>
+                Phone Number*
+                <input
+                  {...register('phone_number')}
+                  type='tel'
+                  autoComplete='on'
+                  className='rei-text-input'
+                />
+              </label>
+              {errors['phone_number'] && (
+                <ErrorMessage message={errors['phone_number']['message']!} />
+              )}
+            </div>
+          </div>
+          <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
+            <div className='w-full'>
+              <label className='text-black'>
+                Estate Code*
+                <input
+                  {...register('estate_code')}
+                  type='tel'
+                  autoComplete='on'
+                  className='rei-text-input'
+                />
+              </label>
+              {errors['estate_code'] && (
+                <ErrorMessage message={errors['estate_code']['message']!} />
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* section start */}
+
+        <div className='mb-8'>
+          <div className='mb-2 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
+            <div className='w-full'>
+              <label className='text-black'>
+                Password*
+                <input
+                  {...register('password')}
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete='on'
+                  className='rei-text-input'
+                />
+              </label>
+              {errors['password'] && (
+                <ErrorMessage message={errors['password']['message']!} />
+              )}
+            </div>
+          </div>
+          <div>
+            <input
+              name='showPassword'
+              id='showPassword'
+              onChange={toggleShowPassword}
+              className=' mr-2'
+              type='checkbox'
+            />
+            <label
+              htmlFor='showPassword'
+              className='text-gray-800 cursor-pointer'
+            >
+              Show password
+            </label>
+          </div>
+        </div>
+
+        {/* Section End */}
+
+        <div className='text-center mb-4 '>
+          <button
+            disabled={formLoading ? true : false}
+            className=' bg-black flex ml-auto mr-auto items-center text-white mb-4 rounded-lg pl-8 pr-8 pt-2 pb-2'
+            type='submit'
+          >
+            {formLoading ? (
+              <>
+                <ProgressSpinner
+                  strokeWidth='4'
+                  style={{ width: '30px', height: '30px' }}
+                />
+                <span className='text-sm ml-2'>Loading..</span>
+              </>
+            ) : (
+              <span>Login</span>
+            )}
+          </button>
+        </div>
+        <div className='text-sm  text-center'>
+          <span className='mr-1 '>Do not have an account ?</span>{' '}
+          <Link href='/resident/register'>
+            <a className=''>
+              <span className='text-reiGreen underline'>Register</span>
+            </a>
+          </Link>
+        </div>
+        <Toast ref={toast}></Toast>
+      </div>
+    </form>
+  );
+};
+
+const LoginResident = () => {
+  const authToken = useSelector((state: any) => state.authentication.token);
+
+  return (
+    <div className='flex min-h-screen justify-end '>
+      <div className='lg:w-1/2 md:pt-20 pt-10 w-full bg-digiDefault '>
+        <h1 className='text-center text-2xl mb-8  lato-font'>
+          Login As Estate Resident
         </h1>
 
-        <form
-          className='mb-4  ml-auto mr-auto w-2/3'
-          onSubmit={handleSubmit(loginUser)}
-        >
-          <div className='  p-5 md:p-10'>
-            <div>
-              <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
-                <div className='w-full'>
-                  <label className=''>
-                    Phone Number
-                    <input
-                      {...register('phoneNumber')}
-                      type='text'
-                      name='phoneNumber'
-                      autoComplete='on'
-                      className='rei-text-input'
-                    />
-                  </label>
-                  {errors['phoneNumber'] && (
-                    <ErrorMessage message={errors['phoneNumber']['message']!} />
-                  )}
-                </div>
-              </div>
-            </div>
-            {/* Section End */}
-
-            {/* section start */}
-
-            <div>
-              <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
-                <div className='w-full'>
-                  <label className='text-black'>
-                    Estate Code
-                    <input
-                      {...register('estateCode')}
-                      type='password'
-                      autoComplete='on'
-                      className='rei-text-input'
-                    />
-                  </label>
-                  {errors['estateCode'] && (
-                    <ErrorMessage message={errors['estateCode']['message']!} />
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Section End */}
-
-            {/* section start */}
-
-            <div className='mb-8'>
-              <div className='mb-2 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
-                <div className='w-full'>
-                  <label className='text-black'>
-                    Password
-                    <input
-                      {...register('password')}
-                      type='password'
-                      autoComplete='on'
-                      className='rei-text-input'
-                    />
-                  </label>
-                  {errors['password'] && (
-                    <ErrorMessage message={errors['password']['message']!} />
-                  )}
-                </div>
-              </div>
-              <div>
-                <input className=' mr-2' type='checkbox' />
-                <label htmlFor='' className='text-gray-800'>
-                  Show password
-                </label>
-              </div>
-            </div>
-
-            {/* Section End */}
-
-            <div className='text-center mb-4 '>
-              <button
-                className=' bg-black text-white mb-4 rounded-lg pl-8 pr-8 pt-2 pb-2'
-                type='button'
-              >
-                Log in
-              </button>
-              <Link href='/authentication/password-reset'>
-                <a className='underline block text-center text-xs text-reiGreen'>
-                  Forgot password ?
-                </a>
-              </Link>
-            </div>
-            <div className='text-xs  text-center'>
-              <span className='mr-1 '>Do not have an account ?</span>{' '}
-              <Link href='/resident/register'>
-                <a className=''>
-                  <span className='text-reiGreen underline'>
-                    Create an account
-                  </span>
-                </a>
-              </Link>
-            </div>
-            <Toast ref={toast}></Toast>
-          </div>
-        </form>
+        <LoginData />
       </div>
+      <style jsx>{`
+        @keyframes p-progress-spinner-color {
+          100%,
+          0% {
+            stroke: #fff;
+          }
+          40% {
+            stroke: #0057e7;
+          }
+          66% {
+            stroke: #008744;
+          }
+          80%,
+          90% {
+            stroke: #fff;
+          }
+        }
+      `}</style>
       <style jsx global>{`
         #unautenticated {
           background-image: url(${bgImage.src});
