@@ -2,9 +2,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState, useRef, useEffect } from 'react';
 import UnauthenticatedLayout from 'components/layouts/unauthenticated/UnauthenticatedWithoutHeader';
-import styles from 'styles/Common.module.css';
 import bgImage from 'images/login-bg.png';
-import { getToken } from 'firebase/messaging';
 
 import { useForm } from 'react-hook-form';
 import ErrorMessage from 'components/validation/error_msg';
@@ -14,7 +12,6 @@ import { Toast } from 'primereact/toast';
 import { Toast as ToastType } from 'primereact/toast';
 import axios from 'axios';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
-// import { messaging, retrieveDeviceToken } from 'helpers/firebase';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,20 +20,18 @@ import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-import Image from 'next/image';
-// import uploadedImagePreview from 'images/home-girrafe.jpg';
-
 type ResidentDataPropType = {};
 
 const ResidentData: NextPage<ResidentDataPropType> = () => {
-  const dispatch = useDispatch();
-
   const [uploadedImagePreview, setUploadedImagePreview] = useState<
     string | null
   >(null);
-  const [deviceToken, setDeviceToken] = useState<string | null>(null);
+  const [uploadedImageBlob, setUploadedImageBlob] = useState<any>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [formLoading, setFormLoading] = useState(false);
+  const deviceToken = useSelector(
+    (state: any) => state.authentication.deviceToken
+  );
 
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -54,10 +49,29 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
         .min(11)
         .required()
         .label('Phone Number'),
-      gender: yup.string().required().label('Gender'),
-      marital_status: yup.string().required().label('Marital Status'),
+      gender: yup
+        .string()
+        .matches(/(male|female|other)/, 'Gender must be male,female or other')
+        .required()
+        .label('Gender'),
+      type: yup
+        .string()
+        .matches(
+          /(tenant|landlord)/,
+          'Resident type must be landlord or tenant'
+        )
+        .required()
+        .label('Resident Type'),
+      marital_status: yup
+        .string()
+        .matches(
+          /(married|single|other)/,
+          'Marital status must be married,single or other'
+        )
+        .required()
+        .label('Marital Status'),
       address: yup.string().required().label('Address'),
-      type: yup.string().required().label('Resident Type'),
+
       password: yup.string().required().label('Password'),
       estate_code: yup.string().required().label('Estate Code'),
     })
@@ -90,46 +104,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
   const router = useRouter();
   const toast = useRef<ToastType>(null);
 
-  const loginUser = async (data: any) => {
-    try {
-      setFormLoading(true);
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/login`,
-        data
-      );
-
-      setFormLoading(false);
-
-      if (response.status !== 200) {
-        toast.current!.show({
-          severity: 'error',
-          summary: 'System error',
-          detail: 'Error logging in',
-        });
-        return;
-      }
-
-      if (!response.data.data.user.email_verified_at) {
-        return router.push(
-          `${location.protocol}//${
-            location.host
-          }/authentication/send-verification-mail/${window.btoa(
-            response.data.data.user.email
-          )}`
-        );
-      }
-      // router.push(
-      //   `${location.protocol}//${location.host}/authentication/verify-email/${data.email}`
-      // );
-    } catch (error: any) {
-      axiosErrorHandler(error, toast);
-      setFormLoading(false);
-    }
-  };
-
-  const handleResidentDataSubmit = (data: RegisterInputType) => {
-    // #GET DEVICE ID
-
+  const handleResidentDataSubmit = async (data: RegisterInputType) => {
     if (!uploadedImagePreview) {
       toast.current!.show({
         severity: 'error',
@@ -138,8 +113,42 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
       });
       return;
     }
+    setFormLoading(true);
 
-    console.log(data);
+    try {
+      const formData = new FormData();
+      formData.append('profile_image', uploadedImageBlob);
+      formData.append('first_name', data['first_name']);
+      formData.append('middle_name', data['middle_name']);
+      formData.append('last_name', data['last_name']);
+      formData.append('email', data['email']);
+      formData.append('phone_number', data['phone_number']);
+      formData.append('device_id', deviceToken);
+      formData.append('gender', data['gender']);
+      formData.append('marital_status', data['marital_status']);
+      formData.append('address', data['address']);
+      formData.append('password', data['password']);
+      formData.append('estate_code', data['estate_code']);
+      formData.append('type', data['type']);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/residents`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      toast.current!.show({
+        severity: 'success',
+        summary: 'Account Registered',
+        detail: 'Please verify your email to continue',
+      });
+      console.log(response);
+    } catch (error) {
+      axiosErrorHandler(error, toast);
+    }
+    setFormLoading(false);
   };
 
   const toggleShowPassword = () => {
@@ -181,8 +190,8 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
         return;
       }
       setUploadedImagePreview(URL.createObjectURL(event.target.files[0]));
+      setUploadedImageBlob(event.target.files[0]);
     } catch (error: any) {
-      console.log(error);
       setUploadedImagePreview(null);
 
       axiosErrorHandler(error, toast);
@@ -190,7 +199,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
   };
   return (
     <form
-      className='mb-4  ml-auto mr-auto w-3/4'
+      className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 w-full md:w-3/4'
       onSubmit={handleSubmit(handleResidentDataSubmit)}
     >
       <div className='mb-8'>
@@ -210,7 +219,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
             type='button'
           >
             <FontAwesomeIcon
-              className={` text-xl text-white`}
+              className={` text-xl animate-bounce text-white`}
               icon={faUpload}
             />
           </button>
@@ -231,7 +240,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
       <div className=''>
         <div>
           <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
-            <div className='w-1/2'>
+            <div className='md:w-1/2 w-full'>
               <label className=''>
                 First Name*
                 <input
@@ -246,7 +255,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
                 <ErrorMessage message={errors['first_name']['message']!} />
               )}
             </div>
-            <div className='w-1/2'>
+            <div className='md:w-1/2 w-full'>
               <label className=''>
                 Last Name*
                 <input
@@ -269,7 +278,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
 
         <div>
           <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
-            <div className='w-1/2'>
+            <div className='md:w-1/2 w-full'>
               <label className=''>
                 Middle Name
                 <input
@@ -284,7 +293,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
                 <ErrorMessage message={errors['middle_name']['message']!} />
               )}
             </div>
-            <div className='w-1/2'>
+            <div className='md:w-1/2 w-full'>
               <label className=''>
                 Email *
                 <input
@@ -307,7 +316,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
 
         <div>
           <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
-            <div className='w-1/2'>
+            <div className='md:w-1/2 w-full'>
               <label className=''>
                 Gender*
                 <select
@@ -325,7 +334,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
                 <ErrorMessage message={errors['gender']['message']!} />
               )}
             </div>
-            <div className='w-1/2'>
+            <div className='md:w-1/2 w-full'>
               <label className=''>
                 Marital Status*
                 <select
@@ -351,15 +360,15 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
 
         <div>
           <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
-            <div className='w-1/2'>
+            <div className='md:w-1/2 w-full'>
               <label className=''>
                 Type*
                 <select
                   {...register('type')}
-                  name='gender'
+                  name='type'
                   className='rei-text-input'
                 >
-                  <option>Select</option>
+                  <option value=''>Select</option>
                   <option value='landlord'>Landlord</option>
                   <option value='tenant'>Tenant</option>
                 </select>
@@ -368,7 +377,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
                 <ErrorMessage message={errors['type']['message']!} />
               )}
             </div>
-            <div className='w-1/2'>
+            <div className='md:w-1/2 w-full'>
               <label className='text-black'>
                 Estate Code*
                 <input
@@ -471,10 +480,21 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
 
         <div className='text-center mb-4 '>
           <button
-            className=' bg-black text-white mb-4 rounded-lg pl-8 pr-8 pt-2 pb-2'
+            disabled={formLoading ? true : false}
+            className=' bg-black flex ml-auto mr-auto items-center text-white mb-4 rounded-lg pl-8 pr-8 pt-2 pb-2'
             type='submit'
           >
-            Register
+            {formLoading ? (
+              <>
+                <ProgressSpinner
+                  strokeWidth='4'
+                  style={{ width: '30px', height: '30px' }}
+                />
+                <span className='text-sm ml-2'>Loading..</span>
+              </>
+            ) : (
+              <span>Register</span>
+            )}
           </button>
         </div>
         <div className='text-xs  text-center'>
@@ -496,7 +516,7 @@ const RegisterResident = () => {
 
   return (
     <div className='flex min-h-screen justify-end '>
-      <div className='w-1/2 pt-20 bg-digiDefault '>
+      <div className='lg:w-1/2 md:pt-20 pt-10 w-full bg-digiDefault '>
         <h1 className='text-center text-2xl mb-2  lato-font'>
           Register As Estate Resident
         </h1>
@@ -504,10 +524,28 @@ const RegisterResident = () => {
 
         <ResidentData />
       </div>
+      <style jsx>{`
+        @keyframes p-progress-spinner-color {
+          100%,
+          0% {
+            stroke: #fff;
+          }
+          40% {
+            stroke: #0057e7;
+          }
+          66% {
+            stroke: #008744;
+          }
+          80%,
+          90% {
+            stroke: #fff;
+          }
+        }
+      `}</style>
       <style jsx global>{`
         #unautenticated {
           background-image: url(${bgImage.src});
-          background-size: contain;
+          background-size: 70% 100%;
           background-position: left;
           background-repeat: no-repeat;
         }

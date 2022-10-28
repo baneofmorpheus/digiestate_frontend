@@ -203,7 +203,7 @@ const LoginResident = () => {
       <style jsx global>{`
         #unautenticated {
           background-image: url(${bgImage.src});
-          background-size: contain;
+          background-size: 70% 100%;
           background-position: left;
           background-repeat: no-repeat;
         }
