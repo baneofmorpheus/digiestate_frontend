@@ -1,4 +1,5 @@
-import Header from 'components/navigation/header/Header';
+import Sidebar from 'components/navigation/sidebar/SideBar';
+import Display from 'components/navigation/display/Display';
 
 import type { NextPage } from 'next';
 
@@ -14,9 +15,10 @@ const Authenticated: NextPage<Props> = ({ children }) => {
   // }
 
   return (
-    <div className='container mx-auto'>
-      <Header />
-      <main>{children}</main>
+    <div className='container mx-auto relative'>
+      <Sidebar />
+      <main className='lg:w-2/4 ml-auto mr-auto'>{children}</main>
+      <Display />
     </div>
   );
 };
