@@ -15,8 +15,10 @@ import axios from 'axios';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
+import { updateDeviceToken } from 'reducers/authentication';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { retrieveToken } from 'helpers/firebase';
 
 type LoginDataPropType = {};
 
@@ -26,6 +28,35 @@ const LoginData: NextPage<LoginDataPropType> = () => {
   const updateLoginDispatch = useDispatch();
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const [retreivedToken, setRetrievedToken] = useState<boolean>(false);
+  const updateDeviceTokenDispatch = useDispatch();
+
+  useEffect(() => {
+    const initCloudMessaging = async () => {
+      if (retreivedToken) {
+        return;
+      }
+      try {
+        const token = await retrieveToken();
+
+        if (typeof token == 'string') {
+          setRetrievedToken(true);
+          updateDeviceTokenDispatch(updateDeviceToken(token));
+        }
+      } catch (error: any) {
+        toast.current!.show({
+          severity: 'error',
+          summary: 'Device registeration errror',
+          detail: error.message || 'Contact support',
+        });
+      }
+    };
+    initCloudMessaging();
+  }, [retreivedToken, updateDeviceTokenDispatch]);
+
+  const deviceToken = useSelector(
+    (state: any) => state.authentication.deviceToken
+  );
 
   const loginSchema = yup
     .object()
@@ -46,6 +77,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
     phone_number: string;
     password: string;
     estate_code: string;
+    device_id: string;
   };
 
   const {
@@ -65,6 +97,8 @@ const LoginData: NextPage<LoginDataPropType> = () => {
     setFormLoading(true);
 
     try {
+      data.device_id = deviceToken;
+
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/residents/login`,
         data
@@ -74,13 +108,23 @@ const LoginData: NextPage<LoginDataPropType> = () => {
         summary: 'Login successful',
         detail: '',
       });
+
+      const estate = response.data.data.estate;
+
       updateLoginDispatch(
         updateLoginData({
           loginToken: response.data.data.token,
-          role: 'resident',
-          estateCode: data['estate_code'],
+          role: response.data.data.role,
+          estate: {
+            id: estate.id,
+            name: estate.name,
+            code: estate.code,
+            image_link: estate.image_link,
+          },
         })
       );
+
+      return router.push(`/app`);
     } catch (error: any) {
       if (
         error.response?.status === 403 &&
