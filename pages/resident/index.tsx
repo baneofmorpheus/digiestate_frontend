@@ -11,7 +11,6 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Toast } from 'primereact/toast';
 import { Toast as ToastType } from 'primereact/toast';
-import axios from 'axios';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,7 +18,8 @@ import { updateDeviceToken } from 'reducers/authentication';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { retrieveToken } from 'helpers/firebase';
-
+import { updateToastData } from 'reducers/utility';
+import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 type LoginDataPropType = {};
 
 const LoginData: NextPage<LoginDataPropType> = () => {
@@ -30,6 +30,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const [retreivedToken, setRetrievedToken] = useState<boolean>(false);
   const updateDeviceTokenDispatch = useDispatch();
+  const updateToastDispatch = useDispatch();
 
   useEffect(() => {
     const initCloudMessaging = async () => {
@@ -99,8 +100,8 @@ const LoginData: NextPage<LoginDataPropType> = () => {
     try {
       data.device_id = deviceToken;
 
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/residents/login`,
+      const response = await digiEstateAxiosInstance.post(
+        '/residents/login',
         data
       );
       toast.current!.show({
@@ -135,7 +136,8 @@ const LoginData: NextPage<LoginDataPropType> = () => {
         );
       }
       console.log(error);
-      axiosErrorHandler(error, toast);
+      const toastData = axiosErrorHandler(error);
+      updateToastDispatch(updateToastData(toastData));
     }
     setFormLoading(false);
   };
