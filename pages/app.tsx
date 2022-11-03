@@ -32,7 +32,7 @@ const App = () => {
 
       default:
         setComponentToDisplay(
-          <div className='text-center '>
+          <div className='text-center bg-gray-600 text-digiDefault pt-2 pb-2 '>
             <p>
               You are not supposed to be here. <br />
               Invalid user role,contact support if you think this is an error.
@@ -42,26 +42,6 @@ const App = () => {
         break;
     }
   }, [role]);
-  const resendVerificationMail = async () => {
-    const { email } = router.query;
-
-    setFormLoading(true);
-
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/send-email-verification-mail`,
-        { email: email }
-      );
-      toast.current!.show({
-        severity: 'success',
-        summary: 'Verification mail sent',
-        detail: 'Please check your email to continue',
-      });
-    } catch (error) {
-      axiosErrorHandler(error, toast);
-    }
-    setFormLoading(false);
-  };
 
   return (
     <div className='pt-4 pl-2 pr-2'>

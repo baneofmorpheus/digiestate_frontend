@@ -116,6 +116,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
         updateLoginData({
           loginToken: response.data.data.token,
           role: response.data.data.role,
+          userId: response.data.data.user.id,
           estate: {
             id: estate.id,
             name: estate.name,
