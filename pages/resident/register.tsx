@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import UnauthenticatedLayout from 'components/layouts/unauthenticated/UnauthenticatedWithoutHeader';
 import bgImage from 'images/login-bg.png';
 
@@ -10,13 +10,15 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Toast } from 'primereact/toast';
 import { Toast as ToastType } from 'primereact/toast';
-import axios from 'axios';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
+
+import { updateToastData } from 'reducers/utility';
+import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
 
@@ -32,6 +34,8 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
   const deviceToken = useSelector(
     (state: any) => state.authentication.deviceToken
   );
+
+  const updateToastDispatch = useDispatch();
 
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -130,8 +134,8 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
       formData.append('password', data['password']);
       formData.append('estate_code', data['estate_code']);
       formData.append('type', data['type']);
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/residents`,
+      const response = await digiEstateAxiosInstance.post(
+        `/residents`,
         formData,
         {
           headers: {
@@ -146,7 +150,8 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
       });
       console.log(response);
     } catch (error) {
-      axiosErrorHandler(error, toast);
+      const toastData = axiosErrorHandler(error);
+      updateToastDispatch(updateToastData(toastData));
     }
     setFormLoading(false);
   };
@@ -181,11 +186,13 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
       if (event.target.files[0]['size'] > 5000000) {
         setUploadedImagePreview(null);
 
-        toast.current!.show({
-          severity: 'error',
-          summary: 'Image too large',
-          detail: 'Image cannot be larger than 5mb',
-        });
+        updateToastDispatch(
+          updateToastData({
+            severity: 'error',
+            summary: 'Image too large',
+            detail: 'Image cannot be larger than 5mb',
+          })
+        );
 
         return;
       }
@@ -194,7 +201,8 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
     } catch (error: any) {
       setUploadedImagePreview(null);
 
-      axiosErrorHandler(error, toast);
+      const toastData = axiosErrorHandler(error);
+      updateToastDispatch(updateToastData(toastData));
     }
   };
   return (

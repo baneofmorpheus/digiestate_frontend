@@ -1,10 +1,9 @@
 import '../styles/globals.css';
 
-import { useRef, useEffect } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-import { Provider, useSelector, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import { store, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -12,10 +11,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css'; //theme
 import 'primereact/resources/primereact.min.css'; //core css
 import 'primeicons/primeicons.css';
-import { Toast } from 'primereact/toast';
-import { Toast as ToastType } from 'primereact/toast';
 
-import { updateToast } from 'reducers/utility';
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };

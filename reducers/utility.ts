@@ -3,16 +3,20 @@ import { createSlice } from '@reduxjs/toolkit';
 export const utilitySlice = createSlice({
   name: 'utility',
   initialState: {
-    toast: null,
+    toastData: {
+      severity: null,
+      detail: null,
+      summary: null,
+    },
   },
   reducers: {
-    updateToast: (state, action) => {
-      state.toast = action.payload;
+    updateToastData: (state, action) => {
+      state.toastData = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateToast } = utilitySlice.actions;
+export const { updateToastData } = utilitySlice.actions;
 
 export default utilitySlice.reducer;
