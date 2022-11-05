@@ -1,15 +1,12 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState, useRef, useEffect } from 'react';
-import bgImage from 'images/login-bg.png';
-import { updateLoginData } from 'reducers/authentication';
+import { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 import ErrorMessage from 'components/validation/error_msg';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
-import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateDeviceToken } from 'reducers/authentication';
 

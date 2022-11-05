@@ -9,14 +9,15 @@ import { Toast as ToastType } from 'primereact/toast';
 import axios from 'axios';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { updateToastData } from 'reducers/utility';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 const SendEmailVerification = () => {
   const [formLoading, setFormLoading] = useState(true);
   const [isVerificationError, setIsVerificationError] = useState(false);
   const router = useRouter();
+  const updateToastDispatch = useDispatch();
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -38,13 +39,14 @@ const SendEmailVerification = () => {
         });
         router.push('/');
       } catch (error) {
-        axiosErrorHandler(error, toast);
+        const toastData = axiosErrorHandler(error);
+        updateToastDispatch(updateToastData(toastData));
         setIsVerificationError(true);
       }
       setFormLoading(false);
     };
     verifyEmail();
-  }, [router]);
+  }, [router, updateToastDispatch]);
 
   const toast = useRef<ToastType>(null);
 
@@ -64,7 +66,8 @@ const SendEmailVerification = () => {
         detail: 'Please check your email to continue',
       });
     } catch (error) {
-      axiosErrorHandler(error, toast);
+      const toastData = axiosErrorHandler(error);
+      updateToastDispatch(updateToastData(toastData));
     }
     setFormLoading(false);
   };
