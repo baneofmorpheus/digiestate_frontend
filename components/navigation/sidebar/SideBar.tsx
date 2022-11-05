@@ -40,7 +40,9 @@ const SideBar: NextPage = () => {
           </div>
           <div
             className={`${
-              router.pathname == '/app/dependents' ? selectedRouteStyle : ''
+              router.pathname.includes('/app/dependents')
+                ? selectedRouteStyle
+                : ''
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
           >
             {' '}
@@ -53,7 +55,7 @@ const SideBar: NextPage = () => {
           </div>
           <div
             className={`${
-              router.pathname == '/app/resident-bookings'
+              router.pathname.includes('/app/bookings')
                 ? selectedRouteStyle
                 : ''
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}

@@ -3,22 +3,12 @@ import { useRouter } from 'next/router';
 import { useState, useRef, useEffect } from 'react';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
 import ResidentHome from 'components/residents/home/Home';
-import bgImage from 'images/login-bg.png';
-import ErrorMessage from 'components/validation/error_msg';
 
-import { Toast } from 'primereact/toast';
 import { Toast as ToastType } from 'primereact/toast';
-import axios from 'axios';
-import axiosErrorHandler from 'helpers/axiosErrorHandler';
-import Link from 'next/link';
-import { useSelector, useDispatch } from 'react-redux';
 
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Divider } from 'primereact';
+import { useSelector } from 'react-redux';
 
 const App = () => {
-  const [formLoading, setFormLoading] = useState(false);
-
   const router = useRouter();
   const toast = useRef<ToastType>(null);
   const role = useSelector((state: any) => state.authentication.role);

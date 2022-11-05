@@ -51,6 +51,14 @@ const ResidentHome: NextPage = () => {
 
   return (
     <div className=''>
+      <div className='text-right'>
+        <button
+          type='button'
+          className='bg-gray-600 text-digiDefault text-sm items-center pl-4 pr-4 pt-1 pb-1 rounded-lg'
+        >
+          Book Guest
+        </button>
+      </div>
       <h5 className='mb-2'> Recent Bookings</h5>
 
       {loadingRecentBooking ? (
