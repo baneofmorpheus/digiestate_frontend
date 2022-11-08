@@ -9,29 +9,13 @@ const Unauthorized: NextPage = () => {
       <div className='w-full lg:w-3/5 xl:w-2/5 flex-col flex justify-center md:items-center '>
         <div className='pl-2 pr-2'>
           <h2 className='text-4xl mb-2'>Unauthorized Access</h2>
-          <p>Looks like you are currently logged out.</p>
-          <p className='mb-2'>
-            Login as your preferred user below and try again.
+          <p className='mb-4'>
+            Looks like you do not have permission to view that page
           </p>
           <div className='flex gap-x-2 md:gap-x-4'>
-            <Link href='/resident'>
+            <Link href='/app'>
               <a className='bg-gray-600 hover:bg-black text-white pl-4 pr-4 rounded-lg pb-1 pt-1'>
-                Resident
-              </a>
-            </Link>
-            <Link href='#'>
-              <a className='bg-gray-600 hover:bg-black text-white pl-4 pr-4 rounded-lg pb-1 pt-1'>
-                Security
-              </a>
-            </Link>
-            <Link href='#'>
-              <a className='bg-gray-600 hover:bg-black text-white pl-4 pr-4 rounded-lg pb-1 pt-1'>
-                Admin
-              </a>
-            </Link>
-            <Link href='#'>
-              <a className='bg-gray-600 hover:bg-black text-white pl-4 pr-4 rounded-lg pb-1 pt-1'>
-                SuperAdmin
+                Go Back
               </a>
             </Link>
           </div>
