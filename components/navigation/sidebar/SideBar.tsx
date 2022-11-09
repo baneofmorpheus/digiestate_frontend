@@ -60,7 +60,7 @@ const SideBar: NextPage = () => {
                 : ''
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
           >
-            <Link href='/'>
+            <Link href='/app/bookings'>
               <a>
                 <FontAwesomeIcon className={` mr-2  `} icon={faClipboardList} />
                 Bookings

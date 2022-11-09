@@ -61,30 +61,6 @@ const BookGuests = () => {
     gender: '',
   });
   const [guests, setGuests] = useState<Array<BookedGuest>>([]);
-  useEffect(() => {
-    const initCloudMessaging = async () => {
-      if (retreivedToken) {
-        return;
-      }
-      try {
-        const token = await retrieveToken();
-
-        if (typeof token == 'string') {
-          setRetrievedToken(true);
-          updateDeviceTokenDispatch(updateDeviceToken(token));
-        }
-      } catch (error: any) {
-        updateToastDispatch(
-          updateToastData({
-            severity: 'error',
-            summary: 'Device registeration errror',
-            detail: error.message || 'Contact support',
-          })
-        );
-      }
-    };
-    initCloudMessaging();
-  }, [retreivedToken, updateDeviceTokenDispatch, updateToastDispatch]);
 
   const addGuestsSchema = yup
     .object()
@@ -139,7 +115,6 @@ const BookGuests = () => {
 
   const [bookingMode, setBookingMode] = useState<string>('book_in');
   const estate = useSelector((state: any) => state.authentication.estate);
-
   const bookGuests = async (data: BookingData) => {
     try {
       if (guests.length < 1) {
@@ -177,8 +152,6 @@ const BookGuests = () => {
   };
 
   const addGuest = (data: any) => {
-    console.log('adding guests');
-    console.log(data);
     setShowBookGuestsModal(false);
     setGuests([...guests, currentGuest]);
     setCurrentGuest({
@@ -325,7 +298,7 @@ const BookGuests = () => {
                         type='button'
                       >
                         <FontAwesomeIcon
-                          className={` text-lg text-gray-600e`}
+                          className={` text-lg text-gray-600`}
                           icon={faTrash}
                         />
                       </button>

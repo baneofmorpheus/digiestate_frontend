@@ -11,6 +11,14 @@ const axiosErrorHandler = (error: any | AxiosError) => {
     };
   }
 
+  if (!error.response) {
+    return {
+      severity: 'error',
+      summary: 'Network error',
+      detail: error.message,
+      life: 10000,
+    };
+  }
   /**Handle axios errors */
   const data: any = error.response!.data;
   switch (error.response!.status) {

@@ -136,7 +136,6 @@ const LoginData: NextPage<LoginDataPropType> = () => {
           `/send-email-verification?email=${error.response.data.email}`
         );
       }
-      console.log(error);
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
     }
