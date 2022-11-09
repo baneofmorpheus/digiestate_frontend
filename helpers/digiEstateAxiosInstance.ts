@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { store } from 'store';
-
+import { updateLoginData } from 'reducers/authentication';
 const routesThatDontNeedAuth = [
   `${process.env.NEXT_PUBLIC_API_URL}/users/send-email-verification-mail`,
   `${process.env.NEXT_PUBLIC_API_URL}/users/verify-email`,
@@ -22,8 +22,6 @@ digiEstateAxiosInstance.defaults.headers['Content-Type'] = 'application/json';
 
 digiEstateAxiosInstance.interceptors.request.use(
   function (req) {
-    console.log('running interceptor');
-
     const state = store.getState();
     if (!routesThatDontNeedAuth.includes(req.url!)) {
       req.headers![
@@ -39,10 +37,24 @@ digiEstateAxiosInstance.interceptors.request.use(
 );
 
 digiEstateAxiosInstance.interceptors.response.use(
-  function (req) {
-    return req;
+  function (res) {
+    return res;
   },
   function (error) {
+    if (
+      error.response?.status == 401 &&
+      error.response.data.message.includes('Unauthenticated')
+    ) {
+      store.dispatch(
+        updateLoginData({
+          deviceToken: null,
+          userId: null,
+          loginToken: null,
+          role: null,
+          estate: null,
+        })
+      );
+    }
     return Promise.reject(error);
   }
 );

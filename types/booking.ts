@@ -8,6 +8,11 @@ export type BookingStatusType = {
   sent_back: string;
 };
 
+export type BookingActionType = {
+  book_in: string;
+  book_out: string;
+};
+
 export type SingleBooking = {
   id: number;
   name: string;
@@ -27,6 +32,7 @@ export type SingleBookedGuestType = {
   name: string;
   phone_number: string;
   phone_visible_to_security: boolean;
+  gender: string;
   send_back_guest: boolean;
   booking_info: SingleBooking;
   status: string;

@@ -4,7 +4,7 @@
 
 @layer components {
   .rei-text-input {
-    @apply border-gray-400 w-full block border rounded-lg h-9 pl-1;
+    @apply border-gray-400 w-full block border rounded-lg h-9 pl-1 !important;
   }
   .rei-text-text-area {
     @apply border-gray-400 w-full block border rounded-lg pl-1;

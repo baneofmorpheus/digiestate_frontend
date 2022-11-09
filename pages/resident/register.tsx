@@ -148,7 +148,6 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
         summary: 'Account Registered',
         detail: 'Please verify your email to continue',
       });
-      console.log(response);
     } catch (error) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
