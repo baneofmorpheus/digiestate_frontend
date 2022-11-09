@@ -4,9 +4,10 @@ export const authenticationSlice = createSlice({
   name: 'authentication',
   initialState: {
     deviceToken: null,
+    userId: null,
     loginToken: null,
     role: null,
-    estateCode: null,
+    estate: null,
   },
   reducers: {
     updateDeviceToken: (state, action) => {
@@ -15,7 +16,8 @@ export const authenticationSlice = createSlice({
     updateLoginData: (state, action) => {
       state.loginToken = action.payload.loginToken;
       state.role = action.payload.role;
-      state.estateCode = action.payload.estateCode;
+      state.userId = action.payload.userId;
+      state.estate = action.payload.estate;
     },
   },
 });

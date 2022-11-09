@@ -1,21 +1,24 @@
-import axios, { AxiosError } from 'axios';
-import { Toast as ToastType, ToastMessageType } from 'primereact/toast';
-import { RefObject } from 'react';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { ToastMessageType } from 'primereact/toast';
 
-const axiosErrorHandler = (
-  error: any | AxiosError,
-  toast: RefObject<ToastType>
-) => {
+const axiosErrorHandler = (error: any | AxiosError) => {
   /**Handle normal errors */
   if (!axios.isAxiosError(error)) {
-    toast.current!.show({
+    return {
       severity: 'error',
       summary: 'System error',
       detail: error.message,
-    });
-    return;
+    };
   }
 
+  if (!error.response) {
+    return {
+      severity: 'error',
+      summary: 'Network error',
+      detail: error.message,
+      life: 10000,
+    };
+  }
   /**Handle axios errors */
   const data: any = error.response!.data;
   switch (error.response!.status) {
@@ -34,18 +37,15 @@ const axiosErrorHandler = (
           detail: singleError,
         };
       });
-      toast.current!.show(formattedErrors);
-
-      break;
+      return formattedErrors;
 
     default:
-      toast.current!.show({
+      return {
         severity: 'error',
         summary: 'System error',
         detail: data.message,
         life: 10000,
-      });
-      break;
+      };
   }
 };
 export default axiosErrorHandler;
