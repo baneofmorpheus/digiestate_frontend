@@ -187,7 +187,7 @@ const ResidentBookingList = () => {
               <div className='w-1/5  '>
                 <button
                   type='button'
-                  className='bg-gray-600 w-full transition-all duration-1000 hover:bg-black hover:text-white lg:pl-4 pl-2 pr-2 lg:pr-4 pt-2 pb-2 rounded-r-lg text-digiDefault text-sm'
+                  className='bg-gray-600 w-full transition-all duration-700 hover:bg-black hover:text-white lg:pl-4 pl-2 pr-2 lg:pr-4 pt-2 pb-2 rounded-r-lg text-digiDefault text-sm'
                   onClick={() => {
                     setShowFilterModal(true);
                   }}
@@ -253,7 +253,7 @@ const ResidentBookingList = () => {
                         navigateToSingleBooking(singleGuest.id);
                       }}
                       key={index}
-                      className='hover:scale-105 cursor-pointer shadow-lg mt-2 border rounded-lg pl-4 pr-4 text-xs md:text-sm  flex justify-between items-center gap-x-4 text-black   pt-2 pb-2'
+                      className='hover:scale-105  transition-all duration-700 cursor-pointer shadow-lg mt-2 border rounded-lg pl-4 pr-4 text-xs md:text-sm  flex justify-between items-center gap-x-4 text-black   pt-2 pb-2'
                     >
                       <div className='flex items-center gap-x-4 w-4/5 truncate'>
                         <div className=' flex justify-center  items-center h-12 w-12 bg-gray-600 text-digiDefault rounded-full'>
