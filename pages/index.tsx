@@ -3,41 +3,12 @@ import UnauthenticatedLayout from 'components/layouts/unauthenticated/Unauthenti
 import Image from 'next/image';
 import giraffeImage from 'images/home-girrafe.png';
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Toast as ToastType } from 'primereact/toast';
 import { Toast } from 'primereact/toast';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { updateDeviceToken } from 'reducers/authentication';
-
-import { retrieveToken } from 'helpers/firebase';
 
 const Home = () => {
-  const [retreivedToken, setRetrievedToken] = useState<boolean>(false);
-  const updateDeviceTokenDispatch = useDispatch();
   const toast = useRef<ToastType>(null);
-  useEffect(() => {
-    const initCloudMessaging = async () => {
-      if (retreivedToken) {
-        return;
-      }
-      try {
-        const token = await retrieveToken();
-
-        if (typeof token == 'string') {
-          setRetrievedToken(true);
-          updateDeviceTokenDispatch(updateDeviceToken(token));
-        }
-      } catch (error: any) {
-        toast.current!.show({
-          severity: 'error',
-          summary: 'Device registeration errror',
-          detail: error.message || 'Contact support',
-        });
-      }
-    };
-    initCloudMessaging();
-  }, [retreivedToken, updateDeviceTokenDispatch]);
   return (
     <div className=' pl-2 pr-2  lg:-mt-20 lg:flex-row flex flex-col justify-between items-center '>
       <div>
