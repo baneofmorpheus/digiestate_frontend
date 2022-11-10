@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import UnauthenticatedLayout from 'components/layouts/unauthenticated/UnauthenticatedWithoutHeader';
 import bgImage from 'images/login-bg.png';
 import { updateLoginData } from 'reducers/authentication';
@@ -9,8 +9,6 @@ import { useForm } from 'react-hook-form';
 import ErrorMessage from 'components/validation/error_msg';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Toast } from 'primereact/toast';
-import { Toast as ToastType } from 'primereact/toast';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
@@ -31,6 +29,11 @@ const LoginData: NextPage<LoginDataPropType> = () => {
   const [retreivedToken, setRetrievedToken] = useState<boolean>(false);
   const updateDeviceTokenDispatch = useDispatch();
   const updateToastDispatch = useDispatch();
+  const router = useRouter();
+
+  const loginToken = useSelector(
+    (state: any) => state.authentication.loginToken
+  );
 
   useEffect(() => {
     const initCloudMessaging = async () => {
@@ -38,22 +41,38 @@ const LoginData: NextPage<LoginDataPropType> = () => {
         return;
       }
       try {
-        const token = await retrieveToken();
+        const token: string | null = await retrieveToken();
 
         if (typeof token == 'string') {
           setRetrievedToken(true);
           updateDeviceTokenDispatch(updateDeviceToken(token));
+        } else {
+          updateToastDispatch(
+            updateToastData({
+              severity: 'warn',
+              detail: 'Push Notifications Not Supported',
+              summary: 'Your browser does not support push notifications',
+            })
+          );
         }
       } catch (error: any) {
-        toast.current!.show({
-          severity: 'error',
-          summary: 'Device registeration errror',
-          detail: error.message || 'Contact support',
-        });
+        updateToastDispatch(
+          updateToastData({
+            severity: 'error',
+            summary: 'Device registeration errror',
+            detail: error.message || 'Contact support',
+          })
+        );
       }
     };
+
+    if (loginToken) {
+      router.push('/app');
+      return;
+    }
     initCloudMessaging();
-  }, [retreivedToken, updateDeviceTokenDispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const deviceToken = useSelector(
     (state: any) => state.authentication.deviceToken
@@ -91,9 +110,6 @@ const LoginData: NextPage<LoginDataPropType> = () => {
     mode: 'all',
   });
 
-  const router = useRouter();
-  const toast = useRef<ToastType>(null);
-
   const handleLogin = async (data: LoginInputType) => {
     setFormLoading(true);
 
@@ -104,11 +120,14 @@ const LoginData: NextPage<LoginDataPropType> = () => {
         '/residents/login',
         data
       );
-      toast.current!.show({
-        severity: 'success',
-        summary: 'Login successful',
-        detail: '',
-      });
+
+      updateToastDispatch(
+        updateToastData({
+          severity: 'success',
+          summary: 'Login successful',
+          detail: '',
+        })
+      );
 
       const estate = response.data.data.estate;
 
@@ -254,15 +273,12 @@ const LoginData: NextPage<LoginDataPropType> = () => {
             </a>
           </Link>
         </div>
-        <Toast ref={toast}></Toast>
       </div>
     </form>
   );
 };
 
 const LoginResident = () => {
-  const authToken = useSelector((state: any) => state.authentication.token);
-
   return (
     <div className='flex min-h-screen justify-end '>
       <div className='lg:w-1/2 md:pt-20 pt-10 w-full bg-digiDefault '>

@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import ErrorMessage from 'components/validation/error_msg';
@@ -8,10 +8,8 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateDeviceToken } from 'reducers/authentication';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { retrieveToken } from 'helpers/firebase';
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
