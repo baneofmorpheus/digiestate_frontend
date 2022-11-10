@@ -24,6 +24,7 @@ type FilterData = {
   selectedPerPage: number;
   dateRange: Array<any>;
   bookingMode: string;
+  name: string;
 };
 
 const ResidentBookingList = () => {
@@ -51,11 +52,12 @@ const ResidentBookingList = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
-
+  const [selectedName, setSelectedName] = useState<string>('');
   const [filterData, setFilterData] = useState<FilterData>({
     selectedPerPage: 10,
     dateRange: [],
     bookingMode: 'all',
+    name: '',
   });
   const handleDialogHideEevent = () => {
     setShowFilterModal(false);
@@ -75,13 +77,19 @@ const ResidentBookingList = () => {
   const resetFilter = () => {
     setShowFilterModal(false);
 
+    setSelectedName('');
     setDateRange([]);
     setBookingMode('all');
     setSelectedPerPage(10);
     setCurrentPage(1);
     paginationRef.current.resetPagination();
 
-    setFilterData({ selectedPerPage: 10, dateRange: [], bookingMode: 'all' });
+    setFilterData({
+      selectedPerPage: 10,
+      dateRange: [],
+      bookingMode: 'all',
+      name: '',
+    });
   };
   const applyFilter = () => {
     setShowFilterModal(false);
@@ -90,6 +98,7 @@ const ResidentBookingList = () => {
       selectedPerPage: selectedPerPage,
       dateRange: dateRange,
       bookingMode: bookingMode,
+      name: selectedName || '',
     });
   };
 
@@ -114,6 +123,7 @@ const ResidentBookingList = () => {
     }
     queryData.booking_type = filterData.bookingMode;
     queryData.per_page = filterData.selectedPerPage;
+    queryData.name = filterData.name;
 
     setPerPage(selectedPerPage);
     queryData.page = currentPage;
@@ -170,6 +180,11 @@ const ResidentBookingList = () => {
   const navigateToSingleBooking = (id: number) => {
     router.push(`/8app/bookings/guest/${id}`);
   };
+  const handleNameFilterSubmit = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'Enter') {
+      applyFilter();
+    }
+  };
   return (
     <div className=' pt-4 md:pl-2 md:pr-2'>
       <div className=' '>
@@ -179,9 +194,15 @@ const ResidentBookingList = () => {
             <div className='flex  mb-6'>
               <div className='w-4/5'>
                 <input
+                  value={selectedName}
+                  onChange={(e) => {
+                    setSelectedName(e.target.value);
+                  }}
+                  onKeyDown={handleNameFilterSubmit}
                   placeholder='  Search by name'
                   className='rei-text-input !rounded-r-none '
-                  type='text'
+                  type='search'
+                  name='name'
                 />{' '}
               </div>
               <div className='w-1/5  '>
