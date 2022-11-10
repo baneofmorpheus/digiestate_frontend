@@ -11,7 +11,9 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css'; //theme
 import 'primereact/resources/primereact.min.css'; //core css
 import 'primeicons/primeicons.css';
-
+import Bugsnag from '@bugsnag/js';
+import BugsnagPluginReact from '@bugsnag/plugin-react';
+import React from 'react';
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -22,6 +24,13 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
+Bugsnag.start({
+  apiKey: process.env.NEXT_PUBLIC_BUGSNAG_API_KEY!,
+  plugins: [new BugsnagPluginReact()],
+});
+
+const ErrorBoundary = Bugsnag.getPlugin('react')!.createErrorBoundary(React);
+
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
@@ -29,7 +38,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        {getLayout(<Component {...pageProps} />)}
+        <ErrorBoundary>{getLayout(<Component {...pageProps} />)}</ErrorBoundary>
       </PersistGate>
     </Provider>
   );
