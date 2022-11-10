@@ -18,14 +18,14 @@ if (process.browser) {
 }
 
 const retrieveToken = async () => {
+  if (!messaging.isSupported()) {
+    return null;
+  }
   const currentToken = await messaging.getToken({
     vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
   });
 
   if (currentToken) {
-    console.log('token');
-    console.log(currentToken);
-
     return currentToken;
   }
 };

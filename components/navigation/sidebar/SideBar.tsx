@@ -31,7 +31,7 @@ const SideBar: NextPage = () => {
               router.pathname == '/app' ? selectedRouteStyle : ''
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
           >
-            <Link href='/'>
+            <Link href='/app'>
               <a>
                 {' '}
                 <FontAwesomeIcon className={` mr-2  `} icon={faHouse} /> Home
@@ -46,7 +46,7 @@ const SideBar: NextPage = () => {
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
           >
             {' '}
-            <Link href='/'>
+            <Link href='#'>
               <a>
                 <FontAwesomeIcon className={` mr-2  `} icon={faUsers} />
                 Dependents
@@ -73,7 +73,7 @@ const SideBar: NextPage = () => {
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
           >
             {' '}
-            <Link href='/'>
+            <Link href='#'>
               <a>
                 <FontAwesomeIcon className={` mr-2  `} icon={faTruckMedical} />
                 Emergency
@@ -86,10 +86,23 @@ const SideBar: NextPage = () => {
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
           >
             {' '}
-            <Link href='/'>
+            <Link href='#'>
               <a>
                 <FontAwesomeIcon className={` mr-2  `} icon={faUser} />
                 Profile
+              </a>
+            </Link>
+          </div>
+          <div
+            className={`${
+              router.pathname == '/app/profile' ? selectedRouteStyle : ''
+            } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
+          >
+            {' '}
+            <Link href='#'>
+              <a>
+                <FontAwesomeIcon className={` mr-2  `} icon={faUser} />
+                Logout
               </a>
             </Link>
           </div>
