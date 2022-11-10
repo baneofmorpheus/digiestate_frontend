@@ -13,12 +13,12 @@ const firebaseConfig = {
 !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 let messaging: any;
 
-if (process.browser) {
+if (process.browser && firebase.messaging.isSupported()) {
   messaging = firebase.messaging();
 }
 
 const retrieveToken = async () => {
-  if (!messaging.isSupported()) {
+  if (!firebase.messaging.isSupported()) {
     return null;
   }
   const currentToken = await messaging.getToken({

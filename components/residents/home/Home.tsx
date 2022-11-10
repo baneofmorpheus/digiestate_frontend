@@ -9,7 +9,6 @@ import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { BookingStatusType, SingleBookedGuestType } from 'types';
 import moment from 'moment';
-import Bugsnag from '@bugsnag/js';
 
 const ResidentHome: NextPage = () => {
   const estate = useSelector((state: any) => state.authentication.estate);
