@@ -20,6 +20,8 @@ export type SingleBooking = {
   code: boolean;
   comment: boolean;
   status: string;
+  type: string;
+  guests?: Array<SingleBookedGuestType>;
   vehicle_make: null | string;
   vehicle_plate_number: null | string;
   resident: UserType;

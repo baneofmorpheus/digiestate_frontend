@@ -19,7 +19,7 @@ import {
 } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
-
+import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 type FilterData = {
   selectedPerPage: number;
   dateRange: Array<any>;
@@ -178,7 +178,7 @@ const ResidentBookingList = () => {
     setCurrentPage(page);
   };
   const navigateToSingleBooking = (id: number) => {
-    router.push(`/8app/bookings/guest/${id}`);
+    router.push(`/app/bookings/guests/${id}`);
   };
   const handleNameFilterSubmit = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Enter') {
@@ -199,7 +199,7 @@ const ResidentBookingList = () => {
                     setSelectedName(e.target.value);
                   }}
                   onKeyDown={handleNameFilterSubmit}
-                  placeholder='  Search by name'
+                  placeholder='  Search by name, press enter or search key to search'
                   className='rei-text-input !rounded-r-none '
                   type='search'
                   name='name'
@@ -269,47 +269,11 @@ const ResidentBookingList = () => {
               {!formLoading &&
                 guests.map((singleGuest, index) => {
                   return (
-                    <div
-                      onClick={() => {
-                        navigateToSingleBooking(singleGuest.id);
-                      }}
+                    <BookedGuest
                       key={index}
-                      className='hover:scale-105  transition-all duration-700 cursor-pointer shadow-lg mt-2 border rounded-lg pl-4 pr-4 text-xs md:text-sm  flex justify-between items-center gap-x-4 text-black   pt-2 pb-2'
-                    >
-                      <div className='flex items-center gap-x-4 w-4/5 truncate'>
-                        <div className=' flex justify-center  items-center h-12 w-12 bg-gray-600 text-digiDefault rounded-full'>
-                          <span className=''>
-                            {singleGuest.booking_info.code}
-                          </span>
-                        </div>
-                        <div className='w-3/5'>
-                          <p className='  '>{singleGuest.name}</p>
-                          <p className=''>
-                            {singleGuest.phone_number}-
-                            <span className='capitalize'>
-                              {singleGuest.gender}
-                            </span>
-                          </p>
-                          <p>
-                            {
-                              bookingAction[
-                                singleGuest.booking_info
-                                  .action as keyof BookingActionType
-                              ]
-                            }
-                          </p>
-                        </div>
-                      </div>
-                      <div className='text-gray-600 w-1/5 flex items-center justify-end gap-x-4 '>
-                        <p className='text-xs'>
-                          {
-                            bookingStatus[
-                              singleGuest.status as keyof BookingStatusType
-                            ]
-                          }
-                        </p>
-                      </div>
-                    </div>
+                      handleClick={navigateToSingleBooking}
+                      guest={singleGuest}
+                    />
                   );
                 })}
             </div>
@@ -341,7 +305,7 @@ const ResidentBookingList = () => {
               <div className='mb-6 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
                 <h4 className='mb-4 font-bold'>Filter</h4>
                 <div className='mb-4'>
-                  <span className='text-sm'>Booking Type</span>
+                  <span className='text-sm'>Booking Action</span>
                   <SelectButton
                     id='bookingMode'
                     unselectable={false}

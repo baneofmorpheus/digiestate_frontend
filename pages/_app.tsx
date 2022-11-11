@@ -14,6 +14,8 @@ import 'primeicons/primeicons.css';
 import Bugsnag from '@bugsnag/js';
 import BugsnagPluginReact from '@bugsnag/plugin-react';
 import React from 'react';
+import { useRouter } from 'next/router';
+
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -34,11 +36,14 @@ const ErrorBoundary = Bugsnag.getPlugin('react')!.createErrorBoundary(React);
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
+  const router = useRouter();
 
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <ErrorBoundary>{getLayout(<Component {...pageProps} />)}</ErrorBoundary>
+        <ErrorBoundary>
+          {getLayout(<Component {...pageProps} key={router.asPath} />)}
+        </ErrorBoundary>
       </PersistGate>
     </Provider>
   );

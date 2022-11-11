@@ -196,7 +196,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
                 Estate Code*
                 <input
                   {...register('estate_code')}
-                  type='tel'
+                  type='text'
                   autoComplete='on'
                   className='rei-text-input'
                 />

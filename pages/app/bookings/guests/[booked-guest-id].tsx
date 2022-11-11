@@ -2,13 +2,13 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState, useRef, useEffect } from 'react';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
-import ResidentBookingList from 'components/residents/bookings/booking_list/BookingList';
+import ResidentSingleGuest from 'components/residents/bookings/single_guest/SingleGuest';
 
 import { Toast as ToastType } from 'primereact/toast';
 
 import { useSelector } from 'react-redux';
 
-const BookingsList = () => {
+const SingleGuest = () => {
   const router = useRouter();
   const toast = useRef<ToastType>(null);
   const role = useSelector((state: any) => state.authentication.role);
@@ -16,13 +16,13 @@ const BookingsList = () => {
   useEffect(() => {
     switch (role) {
       case 'resident':
-        setComponentToDisplay(<ResidentBookingList />);
+        setComponentToDisplay(<ResidentSingleGuest />);
 
         break;
 
       default:
         setComponentToDisplay(
-          <div className='text-center bg-gray-600 text-digiDefault pt-2 pb-2 '>
+          <div className='text-center bg-gray-600 text-digiDefault pt-4 pb-2 '>
             <p>
               You are not supposed to be here. <br />
               Invalid user role,contact support if you think this is an error.
@@ -36,8 +36,8 @@ const BookingsList = () => {
   return <div className='pt-4 pl-2 pr-2'>{componentToDisplay}</div>;
 };
 
-BookingsList.getLayout = function getLayout(page: NextPage) {
+SingleGuest.getLayout = function getLayout(page: NextPage) {
   return <AuthenticatedLayout>{page}</AuthenticatedLayout>;
 };
 
-export default BookingsList;
+export default SingleGuest;
