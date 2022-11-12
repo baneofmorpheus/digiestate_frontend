@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { updateLoginData } from 'reducers/authentication';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHouse,
@@ -9,17 +9,17 @@ import {
   faClipboardList,
   faTruckMedical,
   faUser,
+  faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 
 import Link from 'next/link';
 const SideBar: NextPage = () => {
   const router = useRouter();
+  const updateLoginDataDispatch = useDispatch();
 
   const selectedRouteStyle =
     'bg-gray-600 border-r-4 border-black text-digiDefault';
-  useEffect(() => {
-    console.log(router.pathname);
-  }, [router]);
+
   return (
     <div className='sidebar-container hidden lg:block bg-digiDefault fixed left-0 min-h-screen w-1/4 '>
       <div className='text-black  text-right  pt-6 '>
@@ -29,10 +29,10 @@ const SideBar: NextPage = () => {
           <div
             className={`${
               router.pathname == '/app' ? selectedRouteStyle : ''
-            } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
+            } mb-4 pt-2  pr-10  pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
           >
             <Link href='/app'>
-              <a>
+              <a className=' block'>
                 {' '}
                 <FontAwesomeIcon className={` mr-2  `} icon={faHouse} /> Home
               </a>
@@ -47,7 +47,7 @@ const SideBar: NextPage = () => {
           >
             {' '}
             <Link href='#'>
-              <a>
+              <a className=' block'>
                 <FontAwesomeIcon className={` mr-2  `} icon={faUsers} />
                 Dependents
               </a>
@@ -61,7 +61,7 @@ const SideBar: NextPage = () => {
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
           >
             <Link href='/app/bookings'>
-              <a>
+              <a className=' block'>
                 <FontAwesomeIcon className={` mr-2  `} icon={faClipboardList} />
                 Bookings
               </a>
@@ -74,7 +74,7 @@ const SideBar: NextPage = () => {
           >
             {' '}
             <Link href='#'>
-              <a>
+              <a className=' block'>
                 <FontAwesomeIcon className={` mr-2  `} icon={faTruckMedical} />
                 Emergency
               </a>
@@ -87,7 +87,7 @@ const SideBar: NextPage = () => {
           >
             {' '}
             <Link href='#'>
-              <a>
+              <a className=' block'>
                 <FontAwesomeIcon className={` mr-2  `} icon={faUser} />
                 Profile
               </a>
@@ -98,13 +98,26 @@ const SideBar: NextPage = () => {
               router.pathname == '/app/profile' ? selectedRouteStyle : ''
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
           >
-            {' '}
-            <Link href='#'>
-              <a>
-                <FontAwesomeIcon className={` mr-2  `} icon={faUser} />
-                Logout
-              </a>
-            </Link>
+            <button
+              className='block text-right w-full'
+              onClick={() => {
+                updateLoginDataDispatch(
+                  updateLoginData({
+                    deviceToken: null,
+                    userId: null,
+                    loginToken: null,
+                    role: null,
+                    estate: null,
+                  })
+                );
+              }}
+            >
+              <FontAwesomeIcon
+                className={` mr-2  `}
+                icon={faRightFromBracket}
+              />
+              Logout
+            </button>
           </div>
         </div>
       </div>

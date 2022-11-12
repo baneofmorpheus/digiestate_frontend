@@ -14,7 +14,7 @@ const ToastWrapper: NextPage = () => {
   const toastData = useSelector((state: any) => state.utility.toastData);
 
   useEffect(() => {
-    const availableSeverity = ['success', 'error'];
+    const availableSeverity = ['success', 'error', 'warn'];
 
     if (!toastData) {
       return;

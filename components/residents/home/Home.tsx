@@ -8,6 +8,8 @@ import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { BookingStatusType, SingleBookedGuestType } from 'types';
+import { Skeleton } from 'primereact/skeleton';
+
 import moment from 'moment';
 
 const ResidentHome: NextPage = () => {
@@ -60,15 +62,31 @@ const ResidentHome: NextPage = () => {
           Book Guest
         </button>
       </div>
-      <h5 className='mb-2'> Recent Bookings</h5>
+      <h5 className='mb-4'> Recent Bookings</h5>
 
       {loadingRecentBooking ? (
-        <div className='text-center'>
-          <ProgressSpinner
-            strokeWidth='4'
-            style={{ width: '30px', height: '30px' }}
-          />
-          <span className='text-sm ml-2 block'>Loading..</span>
+        <div>
+          <div className='flex mb-4'>
+            <Skeleton shape='circle' size='3REM' className='mr-2'></Skeleton>
+            <div style={{ flex: '1' }}>
+              <Skeleton width='100%' className='mb-2'></Skeleton>
+              <Skeleton width='75%'></Skeleton>
+            </div>
+          </div>
+          <div className='flex mb-4'>
+            <Skeleton shape='circle' size='3REM' className='mr-2'></Skeleton>
+            <div style={{ flex: '1' }}>
+              <Skeleton width='100%' className='mb-2'></Skeleton>
+              <Skeleton width='75%'></Skeleton>
+            </div>
+          </div>
+          <div className='flex mb-4'>
+            <Skeleton shape='circle' size='3REM' className='mr-2'></Skeleton>
+            <div style={{ flex: '1' }}>
+              <Skeleton width='100%' className='mb-2'></Skeleton>
+              <Skeleton width='75%'></Skeleton>
+            </div>
+          </div>
         </div>
       ) : (
         ''

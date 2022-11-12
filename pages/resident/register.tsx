@@ -206,7 +206,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
   };
   return (
     <form
-      className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 w-full md:w-3/4'
+      className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-4 pr-4 md:pl-2 md:pr-2 w-full md:w-3/4'
       onSubmit={handleSubmit(handleResidentDataSubmit)}
     >
       <div className='mb-8'>
