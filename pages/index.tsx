@@ -21,15 +21,15 @@ const Home = () => {
           </p>
 
           <div className='flex text-center  justify-between md:justify-start gap-x-2 md:gap-x-4  text-sm  '>
-            <div className='border w-1/2 md:w-auto hover:bg-gray-600 hover:text-digiDefault cursor-pointer hover:border-black  app-btn border-black rounded-lg pt-2 mr-2 pb-2 pl-2 pr-2'>
+            <div className='border w-1/2 transition-all duration-700 md:w-auto hover:bg-gray-600 hover:text-digiDefault cursor-pointer hover:border-gray-600  app-btn border-black rounded-lg pt-2 mr-2 pb-2 '>
               <Link href='/resident'>
-                <a className=''>As Resident</a>
+                <a className='pl-2 pr-2'>As Resident</a>
               </Link>
             </div>
-            <div className='border w-1/2 md:w-auto hover:bg-gray-600 hover:text-digiDefault cursor-pointer hover:border-black border-black rounded-lg pt-2 mr-2 pb-2 pl-2 pr-2'>
+            <div className='border w-1/2 pl-2 pr-2 transition-all duration-700 md:w-auto hover:bg-gray-600 hover:text-digiDefault cursor-pointer hover:border-gray-600 border-black rounded-lg pt-2 mr-2 pb-2 '>
               <p>As Security</p>
             </div>
-            <div className='border w-1/2 md:w-auto hover:bg-gray-600 hover:text-digiDefault cursor-pointer hover:border-black border-black rounded-lg pt-2  pb-2 pl-2 pr-2'>
+            <div className='border w-1/2 pl-2 pr-2 transition-all duration-700 md:w-auto hover:bg-gray-600 hover:text-digiDefault cursor-pointer hover:border-gray-600 border-black rounded-lg pt-2  pb-2 '>
               <p>As Admin</p>
             </div>
           </div>
