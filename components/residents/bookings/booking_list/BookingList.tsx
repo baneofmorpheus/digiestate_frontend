@@ -12,11 +12,7 @@ import { Dialog } from 'primereact/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { Calendar } from 'primereact/calendar';
-import {
-  SingleBookedGuestType,
-  BookingStatusType,
-  BookingActionType,
-} from 'types';
+import { SingleBookedGuestType } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
@@ -63,17 +59,6 @@ const ResidentBookingList = () => {
     setShowFilterModal(false);
   };
 
-  const bookingStatus: BookingStatusType = {
-    timed_out: 'Timed Out',
-    pending: 'Pending',
-    completed: 'Completed',
-    detained: 'Detained',
-    sent_back: 'Sent Back',
-  };
-  const bookingAction: BookingActionType = {
-    book_in: 'Book In',
-    book_out: 'Book Out',
-  };
   const resetFilter = () => {
     setShowFilterModal(false);
 

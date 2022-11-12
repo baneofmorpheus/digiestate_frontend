@@ -57,6 +57,15 @@ const ResidentSingleGuest = () => {
     <div className=' pt-4 md:pl-2 md:pr-2'>
       <div className=' '>
         <h2 className='mb-4 lato-font'>Single Guest</h2>
+        <div className='text-right mb-4'>
+          <button
+            type='button'
+            className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+          >
+            {' '}
+            Follow Up
+          </button>
+        </div>
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
           <div className=''>
             <div className='guests-container mb-4'>
