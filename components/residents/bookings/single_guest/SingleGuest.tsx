@@ -9,13 +9,22 @@ import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { SingleBookedGuestType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
+import { Dialog } from 'primereact/dialog';
+import { SelectButton } from 'primereact/selectbutton';
 
 const ResidentSingleGuest = () => {
   const [formLoading, setFormLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const [guest, setGuest] = useState<SingleBookedGuestType>();
+  const [followUpType, setFollowUpType] = useState<string>('send_back');
+  const followUpTypes = [
+    { label: 'Send Back', value: 'send_back' },
+    { label: 'Detain', value: 'detain' },
+  ];
 
+  const [guest, setGuest] = useState<SingleBookedGuestType>();
+  const [showFollowUpModal, setShowFollowUpModal] = useState<boolean>(false);
+  const [followUpForGroup, setFollowUpForGroup] = useState<boolean>(false);
   const router = useRouter();
 
   const estate = useSelector((state: any) => state.authentication.estate);
@@ -50,6 +59,10 @@ const ResidentSingleGuest = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
 
+  const handleDialogHideEevent = () => {
+    setShowFollowUpModal(false);
+  };
+
   const navigateToSingleBooking = (id: number) => {
     return router.push(`/app/bookings/guests/${id}`);
   };
@@ -60,6 +73,9 @@ const ResidentSingleGuest = () => {
         <div className='text-right mb-4'>
           <button
             type='button'
+            onClick={() => {
+              setShowFollowUpModal(true);
+            }}
             className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
           >
             {' '}
@@ -122,11 +138,104 @@ const ResidentSingleGuest = () => {
                   )}
                 </div>
               )}
+
+              <Dialog
+                header=''
+                id='followUpDialog'
+                visible={showFollowUpModal}
+                position='bottom'
+                modal
+                style={{ width: '100vw' }}
+                onHide={handleDialogHideEevent}
+                draggable={false}
+                resizable={false}
+              >
+                <div>
+                  <form className='lg:w-1/2 ml-auto mr-auto'>
+                    <div className='mb-4 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
+                      <h4 className='mb-4 font-bold'>Follow Up</h4>
+                      <div className=''>
+                        <span className='text-sm'> Action</span>
+                        <SelectButton
+                          id='followUpSelect'
+                          unselectable={false}
+                          value={followUpType}
+                          options={followUpTypes}
+                          onChange={(e) => setFollowUpType(e.value)}
+                        ></SelectButton>
+                      </div>
+                    </div>
+                    <hr className='h-0.5 mb-4 bg-gray-600' />
+
+                    <div className='mb-4'>
+                      <input
+                        name='showPassword'
+                        id='showPassword'
+                        className=' mr-2'
+                        type='checkbox'
+                        onChange={(event) => {
+                          setFollowUpForGroup(event.target.checked);
+                        }}
+                        checked={followUpForGroup}
+                      />
+                      <label
+                        htmlFor='showPassword'
+                        className='text-gray-800 text-sm cursor-pointer'
+                      >
+                        Apply to group
+                      </label>
+                    </div>
+                    <hr className='h-0.5 mb-4 bg-gray-600' />
+
+                    <div className='flex gap-x-4'>
+                      <button
+                        type='button'
+                        onClick={() => {}}
+                        className='pt-2 pb-2 pl-4 pr-4 bg-gray-600 text-digiDefault rounded-lg text-sm'
+                      >
+                        Proceed
+                      </button>
+                      <button
+                        onClick={() => {}}
+                        type='button'
+                        className='pt-2 pb-2 pl-4 pr-4 border-2 border-gray-600 rounded-lg text-sm'
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </Dialog>
             </div>
           </div>
         </div>
       </div>
-      <style global jsx>{``}</style>
+      <style global jsx>{`
+        #followUpSelect > div {
+          height: 2rem !important;
+          font-family: 'Lato', sans-serif;
+          font-weight: normal;
+        }
+        #followUpSelect .p-button-label {
+          font-weight: normal !important;
+          font-size: 0.8rem;
+        }
+        #followUpSelect .p-button.p-highlight {
+          background: #4b5563;
+          color: #fff2d9;
+        }
+        #followUpSelect {
+          text-align: left;
+        }
+
+        .guests-container {
+          min-height: 10rem;
+        }
+
+        #followUpDialog {
+          margin: 0;
+        }
+      `}</style>
     </div>
   );
 };
