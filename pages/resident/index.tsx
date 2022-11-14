@@ -265,7 +265,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
             )}
           </button>
         </div>
-        <div className='text-sm  text-center'>
+        <div className='text-sm mb-2  text-center'>
           <span className='mr-1 '>Do not have an account ?</span>{' '}
           <Link href='/resident/register'>
             <a className=''>
@@ -273,6 +273,11 @@ const LoginData: NextPage<LoginDataPropType> = () => {
             </a>
           </Link>
         </div>
+        <Link href='/'>
+          <a className='block text-center text-xs'>
+            <span className='text-reiGreen underline'>Go Home</span>
+          </a>
+        </Link>
       </div>
     </form>
   );

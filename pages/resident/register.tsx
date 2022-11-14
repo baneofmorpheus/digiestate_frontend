@@ -504,7 +504,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
             )}
           </button>
         </div>
-        <div className='text-xs  text-center'>
+        <div className='text-sm  text-center mb-2'>
           <span className='mr-1 '>Have an account ?</span>{' '}
           <Link href='/resident'>
             <a className=''>
@@ -512,6 +512,11 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
             </a>
           </Link>
         </div>
+        <Link href='/'>
+          <a className='block text-center text-sm'>
+            <span className='text-reiGreen underline'>Go Home</span>
+          </a>
+        </Link>
       </div>
     </form>
   );
