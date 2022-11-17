@@ -17,14 +17,15 @@ const MobileMenu: NextPage = () => {
   const router = useRouter();
   const updateLoginDataDispatch = useDispatch();
   const selectedRouteStyle = ' text-digiDefault ';
+  console.log(router.pathname);
 
   return (
     <div className='bg-gray-600 lg:hidden fixed bottom-0 left-0  w-screen ml-auto mr-auto'>
-      <div className=' xl:w-1/2 items-stretch   flex justify-between text-sm ml-auto mr-auto '>
+      <div className=' xl:w-1/2 items-stretch   flex justify-between text-xs ml-auto mr-auto '>
         <div
           className={`${
             router.pathname == '/app' ? selectedRouteStyle : 'text-gray-400'
-          }    text-gray-400 pt-4  w-1/4  text-center pb-4 cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
+          }     pt-4  w-1/4  text-center pb-4 cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
         >
           <Link href='/app'>
             <a className=' block text-center'>
@@ -79,7 +80,7 @@ const MobileMenu: NextPage = () => {
         </div> */}
         <div
           className={`${
-            router.pathname == '/app/profile'
+            router.pathname == '/app/account'
               ? selectedRouteStyle
               : 'text-gray-400'
           }   pt-4  w-1/4  pb-4 cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
@@ -88,7 +89,7 @@ const MobileMenu: NextPage = () => {
           <Link href='#'>
             <a className=' block text-center '>
               <FontAwesomeIcon className={` mr-2  `} icon={faUser} />
-              <span className='block'>Profile</span>
+              <span className='block'>Account</span>
             </a>
           </Link>
         </div>
