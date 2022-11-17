@@ -87,10 +87,11 @@ const ResidentSingleGuest = () => {
       updateToastDispatch(
         updateToastData({
           severity: 'success',
-          detail: 'Security have been notified of your request.',
+          detail: 'Security has been notified of your request.',
           summary: 'Follow up was successful',
         })
       );
+      getGuest();
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
@@ -101,20 +102,22 @@ const ResidentSingleGuest = () => {
     <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
       <div className=' '>
         <h2 className='mb-4 lato-font'>Single Guest</h2>
-        {!guest?.send_back_guest && !guest?.detain_guest && (
-          <div className='text-right mb-4'>
-            <button
-              type='button'
-              onClick={() => {
-                setShowFollowUpModal(true);
-              }}
-              className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
-            >
-              {' '}
-              Follow Up
-            </button>
-          </div>
-        )}
+        {!guest?.send_back_guest &&
+          !guest?.detain_guest &&
+          guest?.booking_info.action == 'book_out' && (
+            <div className='text-right mb-4'>
+              <button
+                type='button'
+                onClick={() => {
+                  setShowFollowUpModal(true);
+                }}
+                className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+              >
+                {' '}
+                Follow Up
+              </button>
+            </div>
+          )}
 
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
           <div className=''>
