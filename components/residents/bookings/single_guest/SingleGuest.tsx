@@ -11,15 +11,18 @@ import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import { Dialog } from 'primereact/dialog';
 import { SelectButton } from 'primereact/selectbutton';
+import moment from 'moment';
 
+import { ProgressBar } from 'primereact/progressbar';
 const ResidentSingleGuest = () => {
   const [formLoading, setFormLoading] = useState(false);
+  const [followUpLoading, setFollowUpLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const [followUpType, setFollowUpType] = useState<string>('send_back');
+  const [followUpType, setFollowUpType] = useState<string>('send_back_guest');
   const followUpTypes = [
-    { label: 'Send Back', value: 'send_back' },
-    { label: 'Detain', value: 'detain' },
+    { label: 'Send Back', value: 'send_back_guest' },
+    { label: 'Detain', value: 'detain_guest' },
   ];
 
   const [guest, setGuest] = useState<SingleBookedGuestType>();
@@ -66,22 +69,56 @@ const ResidentSingleGuest = () => {
   const navigateToSingleBooking = (id: number) => {
     return router.push(`/app/bookings/guests/${id}`);
   };
+  const followUpBookOut = async () => {
+    if (formLoading) {
+      return;
+    }
+    setFollowUpLoading(true);
+    try {
+      const url = followUpForGroup
+        ? `/bookings/${guest!.booking_info.id}/group/follow-up`
+        : `/bookings/${guest!.id}/booked_guest/follow-up`;
+      const data = {
+        [followUpType]: true,
+      };
+      const response = await digiEstateAxiosInstance.post(url, data);
+      setShowFollowUpModal(false);
+
+      updateToastDispatch(
+        updateToastData({
+          severity: 'success',
+          detail: 'Security has been notified of your request.',
+          summary: 'Follow up was successful',
+        })
+      );
+      getGuest();
+    } catch (error: any) {
+      const toastData = axiosErrorHandler(error);
+      updateToastDispatch(updateToastData(toastData));
+    }
+    setFollowUpLoading(false);
+  };
   return (
-    <div className=' pt-4 md:pl-2 md:pr-2'>
+    <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
       <div className=' '>
         <h2 className='mb-4 lato-font'>Single Guest</h2>
-        <div className='text-right mb-4'>
-          <button
-            type='button'
-            onClick={() => {
-              setShowFollowUpModal(true);
-            }}
-            className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
-          >
-            {' '}
-            Follow Up
-          </button>
-        </div>
+        {!guest?.send_back_guest &&
+          !guest?.detain_guest &&
+          guest?.booking_info.action == 'book_out' && (
+            <div className='text-right mb-4'>
+              <button
+                type='button'
+                onClick={() => {
+                  setShowFollowUpModal(true);
+                }}
+                className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+              >
+                {' '}
+                Follow Up
+              </button>
+            </div>
+          )}
+
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
           <div className=''>
             <div className='guests-container mb-4'>
@@ -112,8 +149,19 @@ const ResidentSingleGuest = () => {
                     <BookedGuest guest={guest} />
                   </div>
 
-                  <div className='text-sm mt-4  mb-10 flex-col justify-start gap-y-1 md:gap-y-0  md:flex-row flex md:justify-between'>
-                    <p>Checked At : 10-Nov-2022 09:30 pm</p>
+                  <div className='text-xs mt-4  mb-10 flex-col justify-start gap-y-1 md:gap-y-0  md:flex-row flex md:justify-between'>
+                    <p>
+                      Checked At :{' '}
+                      {!!guest.time_checked_by_security
+                        ? moment(guest.time_checked_by_security).format(
+                            'DD-MMM-YYYY hh:mm a'
+                          )
+                        : '-- -- --'}
+                    </p>
+                    <p>Detain Guest : {!!guest.detain_guest ? 'Yes' : 'No'}</p>
+                    <p>
+                      Send Back Guest : {!!guest.send_back_guest ? 'Yes' : 'No'}
+                    </p>
                   </div>
                   {guest.booking_info.type === 'group' && (
                     <div>
@@ -147,6 +195,7 @@ const ResidentSingleGuest = () => {
                 modal
                 style={{ width: '100vw' }}
                 onHide={handleDialogHideEevent}
+                closable={!followUpLoading}
                 draggable={false}
                 resizable={false}
               >
@@ -187,22 +236,32 @@ const ResidentSingleGuest = () => {
                     </div>
                     <hr className='h-0.5 mb-4 bg-gray-600' />
 
-                    <div className='flex gap-x-4'>
+                    <div className='flex gap-x-4 mb-4'>
                       <button
+                        disabled={followUpLoading}
                         type='button'
-                        onClick={() => {}}
+                        onClick={followUpBookOut}
                         className='pt-2 pb-2 pl-4 pr-4 bg-gray-600 text-digiDefault rounded-lg text-sm'
                       >
                         Proceed
                       </button>
                       <button
+                        disabled={followUpLoading}
                         onClick={() => {}}
                         type='button'
-                        className='pt-2 pb-2 pl-4 pr-4 border-2 border-gray-600 rounded-lg text-sm'
+                        className='pt-2 pb-2 pl-4  pr-4 border-2 border-gray-600 rounded-lg text-sm'
                       >
                         Cancel
                       </button>
                     </div>
+
+                    {followUpLoading && (
+                      <ProgressBar
+                        mode='indeterminate'
+                        color='#4B5563'
+                        style={{ height: '6px' }}
+                      ></ProgressBar>
+                    )}
                   </form>
                 </div>
               </Dialog>

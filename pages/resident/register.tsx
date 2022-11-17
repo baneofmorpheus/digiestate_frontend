@@ -1,15 +1,13 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import UnauthenticatedLayout from 'components/layouts/unauthenticated/UnauthenticatedWithoutHeader';
-import bgImage from 'images/login-bg.png';
+import bgImage from 'images/login-bg.jpg';
 
 import { useForm } from 'react-hook-form';
 import ErrorMessage from 'components/validation/error_msg';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Toast } from 'primereact/toast';
-import { Toast as ToastType } from 'primereact/toast';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
@@ -106,15 +104,17 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
   });
 
   const router = useRouter();
-  const toast = useRef<ToastType>(null);
 
   const handleResidentDataSubmit = async (data: RegisterInputType) => {
     if (!uploadedImagePreview) {
-      toast.current!.show({
-        severity: 'error',
-        summary: 'Profile Image Required',
-        detail: 'Please upload a profile image not greater than 5mb to proceed',
-      });
+      updateToastDispatch(
+        updateToastData({
+          severity: 'error',
+          summary: 'Profile Image Required',
+          detail:
+            'Please upload a profile image not greater than 5mb to proceed',
+        })
+      );
       return;
     }
     setFormLoading(true);
@@ -140,14 +140,18 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
+            Accept: 'application/json',
           },
         }
       );
-      toast.current!.show({
-        severity: 'success',
-        summary: 'Account Registered',
-        detail: 'Please verify your email to continue',
-      });
+      updateToastDispatch(
+        updateToastData({
+          severity: 'success',
+          summary: 'Account Registered',
+          detail: 'Please verify your email to continue',
+        })
+      );
+      return router.push('/send-email-verification');
     } catch (error) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
@@ -164,10 +168,6 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
   };
 
   const uploadImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    // const formData = new FormData();
-    // formData.append('file', event.target.files[0]);
-    // formData.append('upload_preset', 'digi_upload');
-
     try {
       if (!(event.target.files instanceof FileList) || !event.target.files[0]) {
         /**
@@ -504,15 +504,19 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
             )}
           </button>
         </div>
-        <div className='text-xs  text-center'>
+        <div className='text-sm  text-center mb-2'>
           <span className='mr-1 '>Have an account ?</span>{' '}
-          <Link href='/authentication/login'>
+          <Link href='/resident'>
             <a className=''>
               <span className='text-reiGreen underline'>Sign in</span>
             </a>
           </Link>
         </div>
-        <Toast ref={toast}></Toast>
+        <Link href='/'>
+          <a className='block text-center text-sm'>
+            <span className='text-reiGreen underline'>Go Home</span>
+          </a>
+        </Link>
       </div>
     </form>
   );
