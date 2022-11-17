@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import UnauthenticatedLayout from 'components/layouts/unauthenticated/UnauthenticatedWithoutHeader';
-import bgImage from 'images/login-bg.png';
+import bgImage from 'images/login-bg.jpg';
 import { updateLoginData } from 'reducers/authentication';
 
 import { useForm } from 'react-hook-form';
@@ -265,7 +265,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
             )}
           </button>
         </div>
-        <div className='text-sm  text-center'>
+        <div className='text-sm mb-2  text-center'>
           <span className='mr-1 '>Do not have an account ?</span>{' '}
           <Link href='/resident/register'>
             <a className=''>
@@ -273,6 +273,11 @@ const LoginData: NextPage<LoginDataPropType> = () => {
             </a>
           </Link>
         </div>
+        <Link href='/'>
+          <a className='block text-center text-xs'>
+            <span className='text-reiGreen underline'>Go Home</span>
+          </a>
+        </Link>
       </div>
     </form>
   );
