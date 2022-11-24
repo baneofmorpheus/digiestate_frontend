@@ -212,7 +212,9 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
       <div className='mb-8'>
         <div
           style={{
-            backgroundImage: `url(${uploadedImagePreview})`,
+            ...(uploadedImagePreview && {
+              backgroundImage: `url(${uploadedImagePreview})`,
+            }),
             backgroundSize: 'contain',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',

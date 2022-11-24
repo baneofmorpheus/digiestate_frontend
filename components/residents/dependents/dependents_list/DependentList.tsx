@@ -8,7 +8,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import ErrorMessage from 'components/validation/error_msg';
-
+import { ProgressBar } from 'primereact/progressbar';
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { Dialog } from 'primereact/dialog';
@@ -18,6 +19,8 @@ import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import { DependentListType, SingleDependentType } from 'types/';
 import Dependent from 'components/reusable/dependent/Dependent';
+import { ProgressSpinner } from 'primereact/progressspinner';
+
 type FilterData = {
   selectedPerPage: number;
   dateRange: Array<any>;
@@ -71,9 +74,13 @@ const ResidentDependentList = () => {
 
   const [showFiltertModal, setShowFilterModal] = useState<boolean>(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [showLoadingDeleteModal, setShowLoadingDeleteModal] =
+    useState<boolean>(true);
 
   const paginationRef = useRef<any>(null);
   const [formLoading, setFormLoading] = useState(false);
+  const [editRequestLoading, setEditRequestLoading] = useState(false);
+  const [deleteRequestLoading, setDeleteRequestLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
   const [dependents, setDependents] = useState<DependentListType>([]);
@@ -89,6 +96,8 @@ const ResidentDependentList = () => {
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [selectedName, setSelectedName] = useState<string>('');
+  const [showDeleteConfirmation, setShowDeleteConfirmation] =
+    useState<boolean>(false);
   const [filterData, setFilterData] = useState<FilterData>({
     selectedPerPage: 10,
     dateRange: [],
@@ -150,7 +159,9 @@ const ResidentDependentList = () => {
     });
   };
 
-  const deleteDependent = (dependentId: number) => {};
+  const deleteDependent = (dependent: SingleDependentType) => {
+    showDeleteConfirmationDialogue(dependent);
+  };
 
   const uploadImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -274,6 +285,40 @@ const ResidentDependentList = () => {
     }
   };
 
+  const showDeleteConfirmationDialogue = (dependent: SingleDependentType) => {
+    confirmDialog({
+      message: `Are you sure you want to delete ${dependent.first_name}?`,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptClassName: 'p-button-danger',
+      accept: () => {
+        setShowDeleteConfirmation(false);
+        sendDeleteDependentRequest(dependent.id);
+      },
+    });
+  };
+
+  const sendDeleteDependentRequest = async (dependentId: number) => {
+    try {
+      setDeleteRequestLoading(true);
+      const response = await digiEstateAxiosInstance.delete(
+        `/residents/dependents/${dependentId}`
+      );
+      updateToastDispatch(
+        updateToastData({
+          severity: 'success',
+          summary: 'Delete successful',
+          detail: 'Dependent deleted successfully.',
+        })
+      );
+      getDependents();
+    } catch (error: any) {
+      const toastData = axiosErrorHandler(error);
+      updateToastDispatch(updateToastData(toastData));
+    }
+    setDeleteRequestLoading(false);
+  };
+
   const sendEditDependentRequest = async (data: SingleDependentType) => {
     try {
       const formData = new FormData();
@@ -286,13 +331,14 @@ const ResidentDependentList = () => {
       formData.append('gender', data['gender']);
       formData.append('estate_id', estate.id);
       formData.append('last_name', data['last_name']);
+      formData.append('_method', 'PATCH');
       formData.append(
         'relationship_to_resident',
         data['relationship_to_resident']
       );
       formData.append('phone_number', data['phone_number']);
 
-      setFormLoading(true);
+      setEditRequestLoading(true);
       const response = await digiEstateAxiosInstance.post(
         `/residents/dependents/${idOfDependentToEdit}`,
         formData,
@@ -303,19 +349,20 @@ const ResidentDependentList = () => {
           },
         }
       );
+      setShowEditModal(false);
       updateToastDispatch(
         updateToastData({
           severity: 'success',
-          summary: 'Action successful',
-          detail: 'Dependent added successfully.',
+          summary: 'Update successful',
+          detail: 'Dependent updated successfully.',
         })
       );
-      return router.push(`/app/dependents`);
+      getDependents();
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
     }
-    setFormLoading(false);
+    setEditRequestLoading(false);
   };
 
   return (
@@ -335,7 +382,8 @@ const ResidentDependentList = () => {
         </div>
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2  '>
           <div className=''>
-            <div className='flex  mb-6'>
+            {/* #TODO  implement dependent filter and search on frontend */}
+            {/* <div className='flex  mb-6'>
               <div className='w-4/5'>
                 <input
                   value={selectedName}
@@ -364,7 +412,7 @@ const ResidentDependentList = () => {
                   />
                 </button>
               </div>
-            </div>
+            </div> */}
 
             <div className='guests-container mb-4'>
               {formLoading && (
@@ -405,6 +453,7 @@ const ResidentDependentList = () => {
                 </div>
               )}
 
+              <ConfirmDialog visible={showDeleteConfirmation} />
               {!formLoading && dependents.length < 1 && (
                 <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
                   <p>No dependents found</p>
@@ -438,16 +487,40 @@ const ResidentDependentList = () => {
 
         <Dialog
           header=''
+          id='deleteDialog'
+          visible={deleteRequestLoading}
+          position='bottom'
+          modal
+          closable={false}
+          style={{ width: '100vw' }}
+          onHide={() => {}}
+          draggable={false}
+          resizable={false}
+        >
+          <div className='w-full h-40 flex flex-col gap-y-4 justify-center items-center'>
+            <ProgressSpinner
+              strokeWidth='4'
+              style={{ width: '40px', height: '40px' }}
+            />
+            <span className='text-sm '>Loading..</span>
+          </div>
+        </Dialog>
+        <Dialog
+          header=''
           id='editDialog'
           visible={showEditModal}
           position='bottom'
           modal
+          closable={!editRequestLoading}
           style={{ width: '100vw' }}
           onHide={handleEditDialogHideEevent}
           draggable={false}
           resizable={false}
         >
-          <div className='xl:w-2/3 text-sm ml-auto mr-auto mb-6 '>
+          <form
+            className='xl:w-2/3 text-sm ml-auto mr-auto mb-6 '
+            onSubmit={handleSubmit(sendEditDependentRequest)}
+          >
             <div className='mb-3'>
               <div
                 style={{
@@ -545,7 +618,7 @@ const ResidentDependentList = () => {
                 )}
               </div>
             </div>
-            <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
+            <div className='mb-6 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
               <div className='w-full md:w-1/2  '>
                 <label className='text-black'>
                   Relationship*
@@ -581,7 +654,26 @@ const ResidentDependentList = () => {
                 )}
               </div>
             </div>
-          </div>
+
+            {editRequestLoading && (
+              <div className='mb-4'>
+                <ProgressBar
+                  mode='indeterminate'
+                  color='#4B5563'
+                  style={{ height: '6px' }}
+                ></ProgressBar>
+              </div>
+            )}
+            <div className='text-center'>
+              <button
+                disabled={editRequestLoading}
+                className='hoveer:bg-black text-digiDefault bg-gray-600 pl-4 pr-4 pt-2 pb-2 rounded-lg '
+                type='submit'
+              >
+                Save Dependent
+              </button>
+            </div>
+          </form>
         </Dialog>
 
         <Dialog
@@ -643,41 +735,23 @@ const ResidentDependentList = () => {
         @keyframes p-progress-spinner-color {
           100%,
           0% {
-            stroke: #000;
+            stroke: #4b5563;
           }
           40% {
-            stroke: #0057e7;
+            stroke: #4b5563;
           }
           66% {
-            stroke: #008744;
+            stroke: #4b5563;
           }
           80%,
           90% {
-            stroke: #f000;
+            stroke: #4b5563;
           }
         }
-        #bookingMode > div {
-          height: 2rem !important;
-          font-family: 'Lato', sans-serif;
-          font-weight: normal;
-        }
-        #bookingMode .p-button-label {
-          font-weight: normal !important;
-          font-size: 0.8rem;
-        }
-        #bookingMode .p-button.p-highlight {
-          background: #4b5563;
-          color: #fff2d9;
-        }
-        #bookingMode {
-          text-align: left;
-        }
 
-        .guests-container {
-          min-height: 10rem;
-        }
-
-        #filterDialog {
+        #filterDialog,
+        #editDialog,
+        #deleteDialog {
           margin: 0;
         }
         @media screen and (max-width: 325px) {

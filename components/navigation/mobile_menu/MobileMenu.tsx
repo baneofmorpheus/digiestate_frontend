@@ -1,23 +1,17 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateLoginData } from 'reducers/authentication';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHouse,
   faUsers,
   faClipboardList,
-  faTruckMedical,
   faUser,
-  faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 
 import Link from 'next/link';
 const MobileMenu: NextPage = () => {
   const router = useRouter();
-  const updateLoginDataDispatch = useDispatch();
   const selectedRouteStyle = ' text-digiDefault ';
-  console.log(router.pathname);
 
   return (
     <div className='bg-gray-600 lg:hidden fixed bottom-0 left-0  w-screen ml-auto mr-auto'>
