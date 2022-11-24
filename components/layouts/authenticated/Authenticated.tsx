@@ -4,7 +4,7 @@ import Unauthenticated from 'components/utility/unauthenticated/Unauthenticated'
 import ToastWrapper from 'components/utility/toast_wrapper/ToastWrapper';
 import { useSelector } from 'react-redux';
 import Unauthorized from 'components/utility/unauthorized/Unauthorized';
-
+import MobileMenu from 'components/navigation/mobile_menu/MobileMenu';
 import type { NextPage } from 'next';
 
 type Props = {
@@ -42,6 +42,7 @@ const Authenticated: NextPage<Props> = ({ children, allowedRoles }) => {
       <main className='lg:w-2/4 ml-auto mr-auto'>{children}</main>
       <ToastWrapper />
       <Display />
+      <MobileMenu />
     </div>
   );
 };

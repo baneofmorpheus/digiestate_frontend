@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateToastData } from 'reducers/utility';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import { BookingStatusType, SingleBookedGuestType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
 
@@ -55,12 +54,11 @@ const ResidentHome: NextPage = () => {
   return (
     <div className=''>
       <div className='text-right'>
-        <button
-          type='button'
-          className='bg-gray-600 text-digiDefault text-sm items-center pl-4 pr-4 pt-1 pb-1 rounded-lg'
-        >
-          Book Guest
-        </button>
+        <Link href='/app/bookings/new'>
+          <a className='bg-gray-600  text-digiDefault text-sm items-center pl-4 pr-4 pt-2 hover:bg-black pb-2 rounded-lg'>
+            Book Guest
+          </a>
+        </Link>
       </div>
       <h5 className='mb-4'> Recent Bookings</h5>
 
