@@ -46,7 +46,7 @@ const SideBar: NextPage = () => {
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
           >
             {' '}
-            <Link href='#'>
+            <Link href='/app/dependents'>
               <a className=' block'>
                 <FontAwesomeIcon className={` mr-2  `} icon={faUsers} />
                 Dependents
@@ -67,7 +67,7 @@ const SideBar: NextPage = () => {
               </a>
             </Link>
           </div>
-          <div
+          {/* <div
             className={`${
               router.pathname == '/app/emergency' ? selectedRouteStyle : ''
             } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
@@ -79,7 +79,7 @@ const SideBar: NextPage = () => {
                 Emergency
               </a>
             </Link>
-          </div>
+          </div> */}
           <div
             className={`${
               router.pathname == '/app/profile' ? selectedRouteStyle : ''
@@ -89,7 +89,7 @@ const SideBar: NextPage = () => {
             <Link href='#'>
               <a className=' block'>
                 <FontAwesomeIcon className={` mr-2  `} icon={faUser} />
-                Profile
+                Account
               </a>
             </Link>
           </div>
