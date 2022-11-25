@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateToastData } from 'reducers/utility';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
-import { BookingStatusType, SingleBookedGuestType } from 'types';
+import { SingleBookedGuestType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 
@@ -21,13 +21,6 @@ const ResidentHome: NextPage = () => {
 
   const updateToastDispatch = useDispatch();
 
-  const bookingStatus: BookingStatusType = {
-    timed_out: 'Timed Out',
-    pending: 'Pending',
-    completed: 'Completed',
-    detained: 'Detained',
-    sent_back: 'Sent Back',
-  };
   useEffect(() => {
     async function getRecentBookings() {
       try {

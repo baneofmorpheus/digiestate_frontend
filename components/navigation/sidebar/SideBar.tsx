@@ -108,6 +108,7 @@ const SideBar: NextPage = () => {
                     loginToken: null,
                     role: null,
                     estate: null,
+                    firstName: null,
                   })
                 );
               }}
