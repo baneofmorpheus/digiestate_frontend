@@ -159,7 +159,7 @@ const CreateDependent = () => {
   };
 
   return (
-    <div className=' pt-4 pl-2 pr-2'>
+    <div className=' pt-8 pl-2 pr-2'>
       <div className=' '>
         <h2 className='mb-8  lato-font'>New Dependent</h2>
         <form

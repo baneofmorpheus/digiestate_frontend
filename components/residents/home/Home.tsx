@@ -7,6 +7,7 @@ import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { BookingStatusType, SingleBookedGuestType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
+import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 
 import moment from 'moment';
 
@@ -97,33 +98,11 @@ const ResidentHome: NextPage = () => {
 
         {recentBookings.map((singleBooking: SingleBookedGuestType, index) => {
           return (
-            <div
+            <BookedGuest
               key={index}
-              className='flex mb-2 items-center bg-gray-600 text-white pl-2 pr-2 pt-4 pb-4 rounded-sm'
-            >
-              <div className='bg-digiDefault h-12 w-12 items-center justify-center text-sm flex  rounded-full p-2 text-black mr-4'>
-                <span>{singleBooking.booking_info.code}</span>
-              </div>
-
-              <div className='text-sm flex justify-between w-full items-center'>
-                <div>
-                  <p>{singleBooking.name}</p>
-                  <p>{singleBooking.phone_number}</p>
-                  <p>
-                    {moment(singleBooking.created_at).format(
-                      'DD-MMM-YYYY hh:mm a'
-                    )}
-                  </p>
-                </div>
-                <div>
-                  {
-                    bookingStatus[
-                      singleBooking.status as keyof BookingStatusType
-                    ]
-                  }
-                </div>
-              </div>
-            </div>
+              handleClick={() => {}}
+              guest={singleBooking}
+            />
           );
         })}
       </div>

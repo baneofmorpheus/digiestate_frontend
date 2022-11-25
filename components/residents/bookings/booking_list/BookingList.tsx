@@ -193,8 +193,9 @@ const ResidentBookingList = () => {
                   onChange={(e) => {
                     setSelectedName(e.target.value);
                   }}
+                  id='filterInput'
                   onKeyDown={handleNameFilterSubmit}
-                  placeholder='  Search by name, press enter or search key to search'
+                  placeholder='  Search by name, press enter key to search'
                   className='rei-text-input !rounded-r-none '
                   type='search'
                   name='name'
@@ -381,6 +382,10 @@ const ResidentBookingList = () => {
             stroke: #f000;
           }
         }
+        #filterInput {
+          -webkit-appearance: none;
+        }
+
         #bookingMode > div {
           height: 2rem !important;
           font-family: 'Lato', sans-serif;

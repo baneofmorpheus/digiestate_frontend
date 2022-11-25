@@ -326,7 +326,7 @@ const BookGuests = () => {
           <div>
             <form
               onSubmit={handleSubmitAddGuests(addGuest)}
-              className='w-1/2 ml-auto mr-auto'
+              className='md:w-1/2 ml-auto mr-auto'
             >
               <div className='mb-6 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
                 <h4 className='mb-4 font-bold'>Add Guest</h4>
