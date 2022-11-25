@@ -3,16 +3,30 @@ import { useRouter } from 'next/router';
 import { useState, useRef, useEffect } from 'react';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
 import ResidentHome from 'components/residents/home/Home';
-
-import { Toast as ToastType } from 'primereact/toast';
+import moment from 'moment';
 
 import { useSelector } from 'react-redux';
 
 const App = () => {
-  const router = useRouter();
-  const toast = useRef<ToastType>(null);
+  const firstName = useSelector((state: any) => state.authentication.firstName);
+
   const role = useSelector((state: any) => state.authentication.role);
   const [componentToDisplay, setComponentToDisplay] = useState<any>(null);
+
+  function generateGreetings() {
+    const currentHour: number = parseInt(moment().format('HH'));
+
+    if (currentHour >= 3 && currentHour < 12) {
+      return 'Good Morning';
+    } else if (currentHour >= 12 && currentHour < 15) {
+      return 'Good Afternoon';
+    } else if (currentHour >= 15 && currentHour < 20) {
+      return 'Good Evening';
+    } else {
+      return 'Good Night';
+    }
+  }
+
   useEffect(() => {
     switch (role) {
       case 'resident':
@@ -34,8 +48,10 @@ const App = () => {
   }, [role]);
 
   return (
-    <div className='pt-4 pl-2 pr-2'>
-      <p className='mb-2'>Good morning, Genii</p>
+    <div className='pt-8 pl-2 pr-2'>
+      <p className='mb-2'>
+        {generateGreetings()}, {firstName}
+      </p>
 
       {componentToDisplay}
     </div>
