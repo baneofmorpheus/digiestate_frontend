@@ -10,7 +10,7 @@ import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { SelectButton } from 'primereact/selectbutton';
 import { Dialog } from 'primereact/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { Calendar } from 'primereact/calendar';
 import { SingleBookedGuestType } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
@@ -111,6 +111,8 @@ const ResidentBookingList = () => {
     queryData.booking_type = filterData.bookingMode;
     queryData.per_page = filterData.selectedPerPage;
     queryData.name = filterData.name;
+    queryData['sort[by]'] = 'created_at';
+    queryData['sort[order]'] = 'desc';
 
     setPerPage(selectedPerPage);
     queryData.page = currentPage;
@@ -160,8 +162,12 @@ const ResidentBookingList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterData]);
 
-  const onPageChange = (page: number) => {
+  useEffect(() => {
     getBookings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
   const navigateToSingleBooking = (id: number) => {
@@ -179,6 +185,7 @@ const ResidentBookingList = () => {
           <h2 className='  lato-font'>Booked Guests</h2>
           <Link href='/app/bookings/new'>
             <a className='bg-gray-600   text-digiDefault text-xs pl-4 pr-4 pt-2 hover:bg-black pb-2 rounded-lg'>
+              <FontAwesomeIcon className={` mr-2  `} icon={faUserPlus} />
               Book Guests
             </a>
           </Link>
@@ -211,7 +218,7 @@ const ResidentBookingList = () => {
                 >
                   Filter{' '}
                   <FontAwesomeIcon
-                    className={` filter-icon `}
+                    className={`ml-1 filter-icon `}
                     icon={faFilter}
                   />
                 </button>
