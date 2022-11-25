@@ -39,7 +39,7 @@ const Authenticated: NextPage<Props> = ({ children, allowedRoles }) => {
   return (
     <div className='container mx-auto relative'>
       <Sidebar />
-      <main className='lg:w-2/4 ml-auto mr-auto'>{children}</main>
+      <main className='lg:w-2/4 ml-auto mr-auto pb-20'>{children}</main>
       <ToastWrapper />
       <Display />
       <MobileMenu />

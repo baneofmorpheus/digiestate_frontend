@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import styles from '../../styles/authentication/ChoosePlan.module.css';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateToastData } from 'reducers/utility';
@@ -55,15 +54,15 @@ const ResidentHome: NextPage = () => {
     <div className=''>
       <div className='text-right'>
         <Link href='/app/bookings/new'>
-          <a className='bg-gray-600  text-digiDefault text-sm items-center pl-4 pr-4 pt-2 hover:bg-black pb-2 rounded-lg'>
-            Book Guest
+          <a className='bg-gray-600  text-digiDefault text-xs   items-center pl-4 pr-4 pt-2 hover:bg-black pb-2 rounded-lg'>
+            Book Guests
           </a>
         </Link>
       </div>
       <h5 className='mb-4'> Recent Bookings</h5>
 
       {loadingRecentBooking ? (
-        <div>
+        <div className='text-sm'>
           <div className='flex mb-4'>
             <Skeleton shape='circle' size='3REM' className='mr-2'></Skeleton>
             <div style={{ flex: '1' }}>
@@ -91,7 +90,7 @@ const ResidentHome: NextPage = () => {
       )}
       <div className='recent-bookings'>
         {!loadingRecentBooking && recentBookings.length < 1 && (
-          <div className='text-center bg-gray-600 text-digiDefault pt-2 pb-2 mb-2'>
+          <div className='text-center text-xs md:text-sm bg-gray-600 text-digiDefault pt-2 pb-2 mb-2'>
             <p>No recent bookings found</p>
           </div>
         )}

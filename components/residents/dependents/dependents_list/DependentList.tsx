@@ -455,7 +455,7 @@ const ResidentDependentList = () => {
 
               <ConfirmDialog visible={showDeleteConfirmation} />
               {!formLoading && dependents.length < 1 && (
-                <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
+                <div className='bg-gray-600 mb-2 text-digiDefault text-xs md:text-sm text-center  pt-2 pb-2'>
                   <p>No dependents found</p>
                 </div>
               )}

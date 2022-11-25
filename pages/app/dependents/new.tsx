@@ -316,7 +316,16 @@ const CreateDependent = () => {
             )}
             {/* Section End */}
 
-            <div className='text-center mt-4 '>
+            <div className='justify-center flex gap-x-4  mt-4 '>
+              <button
+                onClick={() => {
+                  router.push('/app/dependents');
+                }}
+                type='button'
+                className=' hover:bg-black pt-2 pb-2 pl-4 hover:text-digiDefault pr-4 rounded-lg text-gray-600 border-2 border-gray-600 '
+              >
+                Go Back
+              </button>
               <button
                 disabled={formLoading}
                 className='bg-gray-600 hover:bg-black pt-2 pb-2 pl-4 pr-4 rounded-lg text-digiDefault'
