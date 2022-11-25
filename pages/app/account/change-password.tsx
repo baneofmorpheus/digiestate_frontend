@@ -94,7 +94,7 @@ const ChangePassword = () => {
                   type='text'
                   name='old_password'
                   autoComplete='on'
-                  className='rei-text-input'
+                  className='rei-text-input text-base'
                 />
               </label>
               {errors['old_password'] && (
@@ -109,7 +109,7 @@ const ChangePassword = () => {
                   type='text'
                   name='new_password'
                   autoComplete='on'
-                  className='rei-text-input'
+                  className='rei-text-input text-base'
                 />
               </label>
               {errors['new_password'] && (
