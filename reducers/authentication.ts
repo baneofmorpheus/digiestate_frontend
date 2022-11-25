@@ -5,6 +5,7 @@ export const authenticationSlice = createSlice({
   initialState: {
     deviceToken: null,
     userId: null,
+    firstName: null,
     loginToken: null,
     role: null,
     estate: null,
@@ -18,6 +19,7 @@ export const authenticationSlice = createSlice({
       state.role = action.payload.role;
       state.userId = action.payload.userId;
       state.estate = action.payload.estate;
+      state.firstName = action.payload.firstName;
     },
   },
 });
