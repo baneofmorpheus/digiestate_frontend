@@ -1,18 +1,17 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState, useRef, useEffect } from 'react';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
-import { updateLoginData } from 'reducers/authentication';
+import { logOut } from 'reducers/authentication';
 
 import { useSelector, useDispatch } from 'react-redux';
 
 const Account = () => {
-  const router = useRouter();
-  const role = useSelector((state: any) => state.authentication.role);
+  const { user } = useSelector((state: any) => state.authentication);
+
   const updateLoginDataDispatch = useDispatch();
 
   return (
@@ -30,14 +29,16 @@ const Account = () => {
             />
           </div>
           <div>
-            <p>Leon Chux</p>
+            <p>
+              {user.firstName} {user.lastName}
+            </p>
           </div>
         </div>
         <div className='text-sm mb-4'>
           <h4 className='text-gray-600 mb-4 '>ACCOUNT</h4>
 
           <div>
-            <Link href='#'>
+            <Link href='/app/account/change-password'>
               <a className='flex justify-between w-full pt-2 pb-2 '>
                 <span className='block'>Change Password</span>
                 <FontAwesomeIcon className={` mr-2  `} icon={faChevronRight} />
@@ -103,16 +104,7 @@ const Account = () => {
           className='flex justify-between text-red-600 w-full '
           type='button'
           onClick={() => {
-            updateLoginDataDispatch(
-              updateLoginData({
-                deviceToken: null,
-                userId: null,
-                loginToken: null,
-                role: null,
-                estate: null,
-                firstName: null,
-              })
-            );
+            updateLoginDataDispatch(logOut({}));
           }}
         >
           <span className='block'>Logout</span>

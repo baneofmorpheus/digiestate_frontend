@@ -4,8 +4,11 @@ export const authenticationSlice = createSlice({
   name: 'authentication',
   initialState: {
     deviceToken: null,
-    userId: null,
-    firstName: null,
+    user: {
+      id: null,
+      firstName: null,
+      lastName: null,
+    },
     loginToken: null,
     role: null,
     estate: null,
@@ -17,15 +20,23 @@ export const authenticationSlice = createSlice({
     updateLoginData: (state, action) => {
       state.loginToken = action.payload.loginToken;
       state.role = action.payload.role;
-      state.userId = action.payload.userId;
+      state.user = action.payload.user;
       state.estate = action.payload.estate;
-      state.firstName = action.payload.firstName;
+    },
+    logOut: (state, action) => {
+      state.loginToken = null;
+      state.user = {
+        id: null,
+        firstName: null,
+        lastName: null,
+      };
+      state.estate = null;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateDeviceToken, updateLoginData } =
+export const { updateDeviceToken, updateLoginData, logOut } =
   authenticationSlice.actions;
 
 export default authenticationSlice.reducer;

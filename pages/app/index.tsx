@@ -8,7 +8,7 @@ import moment from 'moment';
 import { useSelector } from 'react-redux';
 
 const App = () => {
-  const firstName = useSelector((state: any) => state.authentication.firstName);
+  const user = useSelector((state: any) => state.authentication.user);
 
   const role = useSelector((state: any) => state.authentication.role);
   const [componentToDisplay, setComponentToDisplay] = useState<any>(null);
@@ -50,7 +50,7 @@ const App = () => {
   return (
     <div className='pt-8 pl-2 pr-2'>
       <p className='mb-2'>
-        {generateGreetings()}, {firstName}
+        {generateGreetings()}, {user.firstName}
       </p>
 
       {componentToDisplay}
