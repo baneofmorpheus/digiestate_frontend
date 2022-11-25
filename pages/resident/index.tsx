@@ -46,14 +46,6 @@ const LoginData: NextPage<LoginDataPropType> = () => {
         if (typeof token == 'string') {
           setRetrievedToken(true);
           updateDeviceTokenDispatch(updateDeviceToken(token));
-        } else {
-          updateToastDispatch(
-            updateToastData({
-              severity: 'warn',
-              detail: 'Push Notifications Not Supported',
-              summary: 'Your browser does not support push notifications',
-            })
-          );
         }
       } catch (error: any) {
         updateToastDispatch(

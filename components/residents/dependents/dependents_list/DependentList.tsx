@@ -274,8 +274,12 @@ const ResidentDependentList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterData]);
 
-  const onPageChange = (page: number) => {
+  useEffect(() => {
     getDependents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
 
