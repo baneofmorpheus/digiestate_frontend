@@ -336,14 +336,14 @@ const ResidentBookingList = () => {
                     <option value='200'>200</option>
                   </select>
                 </div>
-                <div className='text-sm'>
+                <div className=' text-sm'>
                   <label className='block' htmlFor='range'>
                     Date Range
                   </label>
                   <Calendar
                     id='range'
                     className='w-full'
-                    inputClassName='rei-text-input !text-sm'
+                    inputClassName='rei-text-input !text-base'
                     value={dateRange}
                     onChange={(e) => setDateRange(e.value)}
                     selectionMode='range'

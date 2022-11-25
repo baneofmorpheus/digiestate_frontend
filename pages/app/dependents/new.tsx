@@ -217,7 +217,7 @@ const CreateDependent = () => {
               />
             </div>
 
-            <div className='x2l:w-2/3 ml-auto mr-auto mb-6 '>
+            <div className='x2l:w-2/3 text-base md:text-sm ml-auto mr-auto mb-6 '>
               <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
                 <div className='w-full lg:w-1/2'>
                   <label className='text-black'>
