@@ -75,13 +75,13 @@ const MobileMenu: NextPage = () => {
         </div> */}
         <div
           className={`${
-            router.pathname == '/app/account'
+            router.pathname.includes('/app/account')
               ? selectedRouteStyle
               : 'text-gray-400'
           }   pt-4  w-1/4  pb-4 cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
         >
           {' '}
-          <Link href='#'>
+          <Link href='/app/account'>
             <a className=' block text-center '>
               <FontAwesomeIcon className={` mr-2  `} icon={faUser} />
               <span className='block'>Account</span>

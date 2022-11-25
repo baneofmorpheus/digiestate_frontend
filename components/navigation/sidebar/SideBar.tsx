@@ -29,7 +29,7 @@ const SideBar: NextPage = () => {
           <Link href='/app'>
             <a
               className={`${
-                router.pathname == '/app' ? selectedRouteStyle : ''
+                router.pathname === '/app' ? selectedRouteStyle : ''
               } mb-4 pt-2 block pr-10  pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
             >
               {' '}
@@ -74,10 +74,12 @@ const SideBar: NextPage = () => {
               </a>
             </Link>
           </div> */}
-          <Link href='#'>
+          <Link href='/app/account'>
             <a
               className={`${
-                router.pathname == '/app/profile' ? selectedRouteStyle : ''
+                router.pathname.includes('/app/account')
+                  ? selectedRouteStyle
+                  : ''
               } mb-4 pr-10 block pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
             >
               <FontAwesomeIcon className={` mr-2  `} icon={faUser} />
@@ -85,9 +87,7 @@ const SideBar: NextPage = () => {
             </a>
           </Link>
           <button
-            className={`${
-              router.pathname == '/app/profile' ? selectedRouteStyle : ''
-            } mb-4 pr-10 w-full pt-2 block text-right pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
+            className={` mb-4 pr-10 w-full pt-2 block text-right pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
             onClick={() => {
               updateLoginDataDispatch(
                 updateLoginData({
