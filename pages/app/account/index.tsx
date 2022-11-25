@@ -37,7 +37,7 @@ const Account = () => {
           <h4 className='text-gray-600 mb-4 '>ACCOUNT</h4>
 
           <div>
-            <Link href='/app'>
+            <Link href='#'>
               <a className='flex justify-between w-full pt-2 pb-2 '>
                 <span className='block'>Change Password</span>
                 <FontAwesomeIcon className={` mr-2  `} icon={faChevronRight} />
@@ -50,7 +50,7 @@ const Account = () => {
 
           <div>
             <div className='mb-4'>
-              <Link href='/app'>
+              <Link href='#'>
                 <a className=' flex justify-between  w-full pt-2 pb-2 '>
                   <span className='block'>Terms and Conditions</span>
                   <FontAwesomeIcon
@@ -62,7 +62,7 @@ const Account = () => {
               <hr className='bg-gray-200 block w-full h-0.5' />
             </div>
             <div className='mb-4'>
-              <Link href='/app'>
+              <Link href='#'>
                 <a className=' flex justify-between w-full  pt-2 pb-2'>
                   <span className='block'>Privacy Policy</span>
                   <FontAwesomeIcon
@@ -74,7 +74,7 @@ const Account = () => {
               <hr className='bg-gray-200 block w-full h-0.5' />
             </div>
             <div className='mb-4'>
-              <Link href='/app'>
+              <Link href='#'>
                 <a className=' flex justify-between w-full pt-2 pb-2  '>
                   <span className='block'>FAQS</span>
                   <FontAwesomeIcon
@@ -86,7 +86,7 @@ const Account = () => {
               <hr className='bg-gray-200 block w-full h-0.5' />
             </div>
             <div className='mb-4'>
-              <Link href='/app'>
+              <Link href='#'>
                 <a className=' flex justify-between w-full pt-2 pb-2 '>
                   <span className='block'>Contact Us</span>
                   <FontAwesomeIcon
