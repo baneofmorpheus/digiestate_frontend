@@ -30,6 +30,20 @@ const MobileMenu: NextPage = () => {
         </div>
         <div
           className={`${
+            router.pathname.includes('/app/bookings')
+              ? selectedRouteStyle
+              : 'text-gray-400'
+          }   pt-4  w-1/4  pb-4 cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
+        >
+          <Link href='/app/bookings'>
+            <a className=' block text-center'>
+              <FontAwesomeIcon className={` mr-2  `} icon={faClipboardList} />
+              <span className='block'>Bookings</span>
+            </a>
+          </Link>
+        </div>
+        <div
+          className={`${
             router.pathname.includes('/app/dependents')
               ? selectedRouteStyle
               : 'text-gray-400'
@@ -43,20 +57,7 @@ const MobileMenu: NextPage = () => {
             </a>
           </Link>
         </div>
-        <div
-          className={`${
-            router.pathname.includes('/app/bookings')
-              ? selectedRouteStyle
-              : 'text-gray-400'
-          }   pt-4  w-1/4  pb-4 cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
-        >
-          <Link href='/app/bookings'>
-            <a className=' block text-center'>
-              <FontAwesomeIcon className={` mr-2  `} icon={faClipboardList} />
-              <span className='block'>Bookings</span>
-            </a>
-          </Link>
-        </div>
+
         {/* <div
           className={`${
             router.pathname == '/app/emergency'

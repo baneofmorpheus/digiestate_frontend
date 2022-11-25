@@ -376,8 +376,8 @@ const ResidentDependentList = () => {
             }}
             className='bg-gray-600 h-8 hover:bg-black  text-digiDefault block text-sm rounded-lg pl-4 pr-4 '
           >
+            <FontAwesomeIcon className={` filter-icon mr-2 `} icon={faPlus} />
             New
-            <FontAwesomeIcon className={` filter-icon ml-2 `} icon={faPlus} />
           </button>
         </div>
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2  '>

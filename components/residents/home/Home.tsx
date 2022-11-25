@@ -8,6 +8,8 @@ import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { SingleBookedGuestType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 import moment from 'moment';
 
@@ -49,6 +51,7 @@ const ResidentHome: NextPage = () => {
       <div className='text-right'>
         <Link href='/app/bookings/new'>
           <a className='bg-gray-600  text-digiDefault text-xs   items-center pl-4 pr-4 pt-2 hover:bg-black pb-2 rounded-lg'>
+            <FontAwesomeIcon className={` mr-2  `} icon={faUserPlus} />
             Book Guests
           </a>
         </Link>
