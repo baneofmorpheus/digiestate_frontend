@@ -8,6 +8,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
+import Link from 'next/link';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { updateToastData } from 'reducers/utility';
@@ -16,7 +17,7 @@ import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated'
 import { SelectButton } from 'primereact/selectbutton';
 import { Dialog } from 'primereact/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 type BookedGuest = {
   name: string;
@@ -166,8 +167,19 @@ const BookGuests = () => {
     });
   };
   return (
-    <div className=' pt-4 pl-2 pr-2'>
+    <div className=' pt-10 pl-2 pr-2'>
       <div className=' '>
+        <div className='mb-6 text-xs'>
+          <Link href='/app/bookings'>
+            <a className='underline'>
+              <span className=''>
+                {' '}
+                <FontAwesomeIcon className={` mr-2 `} icon={faLeftLong} />
+                <span>Go Back</span>
+              </span>
+            </a>
+          </Link>
+        </div>
         <h2 className='mb-8  lato-font'>Book Guests</h2>
         <form
           className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '

@@ -7,6 +7,7 @@ export const authenticationSlice = createSlice({
     user: {
       id: null,
       firstName: null,
+      profileImageLink: null,
       lastName: null,
     },
     loginToken: null,
@@ -29,6 +30,7 @@ export const authenticationSlice = createSlice({
         id: null,
         firstName: null,
         lastName: null,
+        profileImageLink: null,
       };
       state.estate = null;
     },

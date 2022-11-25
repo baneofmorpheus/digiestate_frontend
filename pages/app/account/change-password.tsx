@@ -11,7 +11,7 @@ import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { updateToastData } from 'reducers/utility';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { ProgressBar } from 'primereact/progressbar';

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { logOut } from 'reducers/authentication';
+import { useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -22,8 +23,7 @@ const Account = () => {
             <Image
               alt=''
               className='rounded-full  inline-block'
-              src='https://picsum.photos/id/237/200/300
-'
+              src={user.profileImageLink}
               height={60}
               width={60}
             />
