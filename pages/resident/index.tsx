@@ -127,8 +127,13 @@ const LoginData: NextPage<LoginDataPropType> = () => {
         updateLoginData({
           loginToken: response.data.data.token,
           role: response.data.data.role,
-          userId: response.data.data.user.id,
-          firstName: response.data.data.user.first_name,
+          user: {
+            id: response.data.data.user.id,
+            profileImageLink:
+              response.data.data.user.resident_data.profile_image_link,
+            firstName: response.data.data.user.first_name,
+            lastName: response.data.data.user.last_name,
+          },
           estate: {
             id: estate.id,
             name: estate.name,

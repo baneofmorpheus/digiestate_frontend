@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateLoginData } from 'reducers/authentication';
+import { logOut } from 'reducers/authentication';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHouse,
@@ -89,16 +89,7 @@ const SideBar: NextPage = () => {
           <button
             className={` mb-4 pr-10 w-full pt-2 block text-right pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
             onClick={() => {
-              updateLoginDataDispatch(
-                updateLoginData({
-                  deviceToken: null,
-                  userId: null,
-                  loginToken: null,
-                  role: null,
-                  estate: null,
-                  firstName: null,
-                })
-              );
+              updateLoginDataDispatch(logOut({}));
             }}
           >
             <FontAwesomeIcon className={` mr-2  `} icon={faRightFromBracket} />

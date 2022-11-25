@@ -38,7 +38,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-  const loginSchema = yup
+  const registerSchema = yup
     .object()
     .shape({
       first_name: yup.string().required().label('First Name'),
@@ -99,7 +99,7 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
     formState: { errors },
     formState,
   } = useForm<RegisterInputType>({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(registerSchema),
     mode: 'all',
   });
 
@@ -525,8 +525,6 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
 };
 
 const RegisterResident = () => {
-  const authToken = useSelector((state: any) => state.authentication.token);
-
   return (
     <div className='flex min-h-screen justify-end '>
       <div className='lg:w-1/2 md:pt-20 pt-10 w-full bg-digiDefault '>

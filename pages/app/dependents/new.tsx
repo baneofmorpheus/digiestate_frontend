@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
 import { ProgressBar } from 'primereact/progressbar';
+import Link from 'next/link';
 
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
@@ -16,7 +17,7 @@ import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated'
 import { SingleDependentType } from 'types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faLeftLong } from '@fortawesome/free-solid-svg-icons';
 const CreateDependent = () => {
   const [uploadedImagePreview, setUploadedImagePreview] = useState<
     string | null
@@ -159,8 +160,19 @@ const CreateDependent = () => {
   };
 
   return (
-    <div className=' pt-8 pl-2 pr-2'>
+    <div className=' pt-10 pl-2 pr-2'>
       <div className=' '>
+        <div className='mb-6 text-xs'>
+          <Link href='/app/dependents'>
+            <a className='underline'>
+              <span className=''>
+                {' '}
+                <FontAwesomeIcon className={` mr-2 `} icon={faLeftLong} />
+                <span>Go Back</span>
+              </span>
+            </a>
+          </Link>
+        </div>
         <h2 className='mb-8  lato-font'>New Dependent</h2>
         <form
           className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '
@@ -317,15 +329,6 @@ const CreateDependent = () => {
             {/* Section End */}
 
             <div className='justify-center flex gap-x-4  mt-4 '>
-              <button
-                onClick={() => {
-                  router.push('/app/dependents');
-                }}
-                type='button'
-                className=' hover:bg-black pt-2 pb-2 pl-4 hover:text-digiDefault pr-4 rounded-lg text-gray-600 border-2 border-gray-600 '
-              >
-                Go Back
-              </button>
               <button
                 disabled={formLoading}
                 className='bg-gray-600 hover:bg-black pt-2 pb-2 pl-4 pr-4 rounded-lg text-digiDefault'

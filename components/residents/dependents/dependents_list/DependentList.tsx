@@ -89,7 +89,7 @@ const ResidentDependentList = () => {
 
   const [dateRange, setDateRange] = useState<any>([]);
   const [bookingMode, setBookingMode] = useState<string>('all');
-  const { estate, userId } = useSelector((state: any) => state.authentication);
+  const { estate, user } = useSelector((state: any) => state.authentication);
   const [perPage, setPerPage] = useState<number>(10);
   const [selectedPerPage, setSelectedPerPage] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -242,7 +242,7 @@ const ResidentDependentList = () => {
     setFormLoading(true);
     try {
       const response = await digiEstateAxiosInstance.get(
-        `/residents/${userId}/dependents/${estate.id}?${queryString}`
+        `/residents/${user.id}/dependents/${estate.id}?${queryString}`
       );
       setDependents(response.data.data.dependents);
 
@@ -259,7 +259,7 @@ const ResidentDependentList = () => {
     filterData.name,
     selectedPerPage,
     currentPage,
-    userId,
+    user.id,
     estate.id,
     updateToastDispatch,
   ]);
