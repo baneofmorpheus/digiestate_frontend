@@ -20,6 +20,8 @@ const ChangePassword = () => {
   const router = useRouter();
   const updateToastDispatch = useDispatch();
   const [formLoading, setFormLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
   const changePasswordSchema = yup
     .object()
     .shape({
@@ -65,6 +67,10 @@ const ChangePassword = () => {
     }
     setFormLoading(false);
   };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <div className='pt-10 text-sm md:pl-2 md:pr-2 pl-4 pr-4'>
       <div className='mb-6 text-xs'>
@@ -85,13 +91,13 @@ const ChangePassword = () => {
         onSubmit={handleSubmit(sendChangePasswordRequest)}
       >
         <div>
-          <div className='mb-6 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
+          <div className='mb-4 flex flex-col md:flex-row justify-between gap-y-2.5 md:gap-x-2.5 '>
             <div className='md:w-1/2 w-full'>
               <label className=''>
                 Old Password*
                 <input
                   {...register('old_password')}
-                  type='text'
+                  type={showPassword ? 'text' : 'password'}
                   name='old_password'
                   autoComplete='on'
                   className='rei-text-input text-base'
@@ -106,7 +112,7 @@ const ChangePassword = () => {
                 New Password*
                 <input
                   {...register('new_password')}
-                  type='text'
+                  type={showPassword ? 'text' : 'password'}
                   name='new_password'
                   autoComplete='on'
                   className='rei-text-input text-base'
@@ -116,6 +122,21 @@ const ChangePassword = () => {
                 <ErrorMessage message={errors['new_password']['message']!} />
               )}
             </div>
+          </div>
+          <div className='mb-6'>
+            <input
+              name='showPassword'
+              id='showPassword'
+              onChange={toggleShowPassword}
+              className=' mr-2'
+              type='checkbox'
+            />
+            <label
+              htmlFor='showPassword'
+              className='text-gray-800 cursor-pointer'
+            >
+              Show password
+            </label>
           </div>
           {formLoading && (
             <div className='mb-4'>
