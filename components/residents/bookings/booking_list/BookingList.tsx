@@ -16,6 +16,8 @@ import { SingleBookedGuestType } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
+import Link from 'next/link';
+
 type FilterData = {
   selectedPerPage: number;
   dateRange: Array<any>;
@@ -173,7 +175,15 @@ const ResidentBookingList = () => {
   return (
     <div className=' pt-4 md:pl-2 md:pr-2'>
       <div className=' '>
-        <h2 className='mb-8  lato-font'>Booked Guests</h2>
+        <div className='flex mb-8 justify-between'>
+          <h2 className='  lato-font'>Booked Guests</h2>
+          <Link href='/app/bookings/new'>
+            <a className='bg-gray-600   text-digiDefault text-xs pl-4 pr-4 pt-2 hover:bg-black pb-2 rounded-lg'>
+              Book Guests
+            </a>
+          </Link>
+        </div>
+
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
           <div className=''>
             <div className='flex  mb-6'>
@@ -183,8 +193,9 @@ const ResidentBookingList = () => {
                   onChange={(e) => {
                     setSelectedName(e.target.value);
                   }}
+                  id='filterInput'
                   onKeyDown={handleNameFilterSubmit}
-                  placeholder='  Search by name, press enter or search key to search'
+                  placeholder='  Search by name, press enter key to search'
                   className='rei-text-input !rounded-r-none '
                   type='search'
                   name='name'
@@ -371,6 +382,10 @@ const ResidentBookingList = () => {
             stroke: #f000;
           }
         }
+        #filterInput {
+          -webkit-appearance: none;
+        }
+
         #bookingMode > div {
           height: 2rem !important;
           font-family: 'Lato', sans-serif;

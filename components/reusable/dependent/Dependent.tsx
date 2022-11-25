@@ -39,7 +39,7 @@ const Dependent: NextPage<DependentPropType> = ({
           </p>
         </div>
       </div>
-      <div className='text-gray-600  flex gap-y-1 items-center justify-end gap-x-4 '>
+      <div className='text-gray-600  flex gap-y-1 items-center justify-end gap-x-2.5 '>
         <button
           onClick={() => {
             editDependent(dependent);

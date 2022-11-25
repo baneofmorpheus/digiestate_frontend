@@ -36,7 +36,7 @@ const MobileMenu: NextPage = () => {
           }   pt-4  w-1/4  pb-4 cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
         >
           {' '}
-          <Link href='#'>
+          <Link href='/app/dependents'>
             <a className='text-center block'>
               <FontAwesomeIcon className={` mr-2  `} icon={faUsers} />
               <span className='block'>Dependents</span>
