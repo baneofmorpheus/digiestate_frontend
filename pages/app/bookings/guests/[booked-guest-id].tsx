@@ -19,6 +19,10 @@ const SingleGuest = () => {
         setComponentToDisplay(<ResidentSingleGuest />);
 
         break;
+      case 'security':
+        setComponentToDisplay(<ResidentSingleGuest />);
+
+        break;
 
       default:
         setComponentToDisplay(

@@ -38,7 +38,7 @@ const SecurityHome: NextPage = () => {
   const [showFiltertModal, setShowFilterModal] = useState<boolean>(false);
   const [selectedPerPage, setSelectedPerPage] = useState<number>(10);
   const [bookingMode, setBookingMode] = useState<string>('all');
-  const [selectedNameOrCode, setSelectedName] = useState<string>('');
+  const [selectedNameOrCode, setSelectedNameOrCode] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [recentBookings, setRecentBookings] = useState<Array<any>>([]);
@@ -69,7 +69,7 @@ const SecurityHome: NextPage = () => {
   const resetFilter = () => {
     setShowFilterModal(false);
 
-    setSelectedName('');
+    setSelectedNameOrCode('');
     setBookingMode('all');
     setSelectedPerPage(10);
     setCurrentPage(1);
@@ -170,7 +170,7 @@ const SecurityHome: NextPage = () => {
           <input
             value={selectedNameOrCode}
             onChange={(e) => {
-              setSelectedName(e.target.value);
+              setSelectedNameOrCode(e.target.value);
             }}
             id='filterInput'
             onKeyDown={handleNameFilterSubmit}
@@ -292,15 +292,16 @@ const SecurityHome: NextPage = () => {
           </div>
         )}
 
-        {recentBookings.map((singleBooking: SingleBookedGuestType, index) => {
-          return (
-            <BookedGuest
-              key={index}
-              handleClick={() => {}}
-              guest={singleBooking}
-            />
-          );
-        })}
+        {!loadingRecentBooking &&
+          recentBookings.map((singleBooking: SingleBookedGuestType, index) => {
+            return (
+              <BookedGuest
+                key={index}
+                handleClick={navigateToSingleBooking}
+                guest={singleBooking}
+              />
+            );
+          })}
       </div>
       <Pagination
         ref={paginationRef}
