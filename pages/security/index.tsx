@@ -109,7 +109,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
       data.device_id = deviceToken;
 
       const response = await digiEstateAxiosInstance.post(
-        '/residents/login',
+        '/estate-security/login',
         data
       );
 
@@ -129,8 +129,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
           role: response.data.data.role,
           user: {
             id: response.data.data.user.id,
-            profileImageLink:
-              response.data.data.user.resident_data.profile_image_link,
+            profileImageLink: null,
             firstName: response.data.data.user.first_name,
             lastName: response.data.data.user.last_name,
           },
@@ -247,7 +246,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
         <div className='text-center mb-4 '>
           <button
             disabled={formLoading ? true : false}
-            className=' bg-black flex ml-auto mr-auto items-center text-white mb-4 rounded-lg pl-8 pr-8 pt-2 pb-2'
+            className=' bg-gray-600 text-digiDefault text-sm hover:bg-black flex ml-auto mr-auto items-center  mb-4 rounded-lg pl-8 pr-8 pt-2 pb-2'
             type='submit'
           >
             {formLoading ? (
@@ -263,17 +262,10 @@ const LoginData: NextPage<LoginDataPropType> = () => {
             )}
           </button>
         </div>
-        <div className='text-sm mb-2  text-center'>
-          <span className='mr-1 '>Do not have an account ?</span>{' '}
-          <Link href='/resident/register'>
-            <a className=''>
-              <span className='text-reiGreen underline'>Register</span>
-            </a>
-          </Link>
-        </div>
+
         <Link href='/'>
           <a className='block text-center text-xs'>
-            <span className='text-reiGreen underline'>Go Home</span>
+            <span className='underline'>Go Home</span>
           </a>
         </Link>
       </div>
@@ -286,7 +278,7 @@ const LoginSecurity = () => {
     <div className='flex min-h-screen justify-end '>
       <div className='lg:w-1/2 md:pt-20 pt-10 w-full bg-digiDefault '>
         <h1 className='text-center text-2xl mb-8  lato-font'>
-          Login As Estate Resident
+          Login As Estate Security
         </h1>
 
         <LoginData />

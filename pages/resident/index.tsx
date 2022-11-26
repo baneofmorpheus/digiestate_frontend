@@ -247,7 +247,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
         <div className='text-center mb-4 '>
           <button
             disabled={formLoading ? true : false}
-            className=' bg-black flex ml-auto mr-auto items-center text-white mb-4 rounded-lg pl-8 pr-8 pt-2 pb-2'
+            className=' bg-gray-600 text-digiDefault text-sm hover:bg-black flex ml-auto mr-auto items-center  mb-4 rounded-lg pl-8 pr-8 pt-2 pb-2'
             type='submit'
           >
             {formLoading ? (
