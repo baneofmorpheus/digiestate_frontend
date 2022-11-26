@@ -15,13 +15,15 @@ import {
 import Link from 'next/link';
 const SideBar: NextPage = () => {
   const router = useRouter();
+  const { role, estate } = useSelector((state: any) => state.authentication);
+
   const updateLoginDataDispatch = useDispatch();
 
   const selectedRouteStyle =
     'bg-gray-600 border-r-4 border-black text-digiDefault';
 
   return (
-    <div className='sidebar-container hidden lg:block bg-digiDefault fixed left-0 min-h-screen w-1/4 '>
+    <div className='sidebar-container lg:flex-col justify-between hidden lg:flex lg:justify-between bg-digiDefault fixed left-0 min-h-screen w-1/4 '>
       <div className='text-black  text-right  pt-6 '>
         <h4 className='text-xl bold mb-4 pr-10'>DigiEstate</h4>
 
@@ -96,6 +98,10 @@ const SideBar: NextPage = () => {
             Logout
           </button>
         </div>
+      </div>
+      <div className='w-full bg-gray-600 mt-auto text-digiDefault pt-4 pb-4 pr-10 text-right ml-auto '>
+        <p className='capitalize mb-1'>Estate: {estate.name}.</p>
+        <p className='capitalize'>Role: {role}.</p>
       </div>
       <style jsx>{`
         .sidebar-container {
