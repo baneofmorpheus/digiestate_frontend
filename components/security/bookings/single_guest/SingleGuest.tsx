@@ -50,8 +50,11 @@ const SecuritySingleGuest = () => {
       if (guest.booking_info.action === 'book_out') {
         setCompleteBookingTypes([
           { label: 'Completed', value: 'completed' },
-          { label: 'Detained', value: 'detained' },
-          { label: 'Sent Back', value: 'sent_back' },
+          ...(guest.detain_guest && { label: 'Detained', value: 'detained' }),
+          ...(guest.send_back_guest && {
+            label: 'Sent Back',
+            value: 'sent_back',
+          }),
         ]);
       }
     } catch (error: any) {

@@ -25,7 +25,7 @@ type FilterData = {
   name: string;
 };
 
-const ResidentBookingList = () => {
+const SecurityBookingList = () => {
   const [showFiltertModal, setShowFilterModal] = useState<boolean>(false);
 
   const paginationRef = useRef<any>(null);
@@ -179,18 +179,8 @@ const ResidentBookingList = () => {
     }
   };
   return (
-    <div className=' pt-4 md:pl-2 md:pr-2'>
+    <div className=' pt-10 md:pl-2 md:pr-2'>
       <div className=' '>
-        <div className='flex mb-8 justify-between'>
-          <h2 className='  lato-font'>Booked Guests</h2>
-          <Link href='/app/bookings/new'>
-            <a className='bg-gray-600   text-digiDefault text-xs pl-4 pr-4 pt-2 hover:bg-black pb-2 rounded-lg'>
-              <FontAwesomeIcon className={` mr-2  `} icon={faUserPlus} />
-              Book Guests
-            </a>
-          </Link>
-        </div>
-
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
           <div className=''>
             <div className='flex  mb-6'>
@@ -427,4 +417,4 @@ const ResidentBookingList = () => {
   );
 };
 
-export default ResidentBookingList;
+export default SecurityBookingList;

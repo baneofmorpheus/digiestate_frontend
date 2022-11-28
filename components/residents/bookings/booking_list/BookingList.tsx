@@ -179,7 +179,7 @@ const ResidentBookingList = () => {
     }
   };
   return (
-    <div className=' pt-4 md:pl-2 md:pr-2'>
+    <div className=' pt-10 md:pl-2 md:pr-2'>
       <div className=' '>
         <div className='flex mb-8 justify-between'>
           <h2 className='  lato-font'>Booked Guests</h2>
