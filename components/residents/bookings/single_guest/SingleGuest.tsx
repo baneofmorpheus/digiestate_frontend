@@ -202,7 +202,7 @@ const ResidentSingleGuest = () => {
                 <div>
                   <form className='lg:w-1/2 ml-auto mr-auto'>
                     <div className='mb-4 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
-                      <h4 className='mb-4 font-bold'>Follow Up</h4>
+                      <h4 className='mb-4 font-semibold'>Follow Up</h4>
                       <div className=''>
                         <span className='text-sm'> Action</span>
                         <SelectButton
@@ -214,27 +214,32 @@ const ResidentSingleGuest = () => {
                         ></SelectButton>
                       </div>
                     </div>
-                    <hr className='h-0.5 mb-4 bg-gray-600' />
 
-                    <div className='mb-4'>
-                      <input
-                        name='showPassword'
-                        id='showPassword'
-                        className=' mr-2'
-                        type='checkbox'
-                        onChange={(event) => {
-                          setFollowUpForGroup(event.target.checked);
-                        }}
-                        checked={followUpForGroup}
-                      />
-                      <label
-                        htmlFor='showPassword'
-                        className='text-gray-800 text-sm cursor-pointer'
-                      >
-                        Apply to group
-                      </label>
-                    </div>
-                    <hr className='h-0.5 mb-4 bg-gray-600' />
+                    {guest?.booking_info.type === 'group' && (
+                      <div>
+                        <hr className='h-0.5 mb-4 bg-gray-600' />
+
+                        <div className='mb-4'>
+                          <input
+                            name='showPassword'
+                            id='showPassword'
+                            className=' mr-2'
+                            type='checkbox'
+                            onChange={(event) => {
+                              setFollowUpForGroup(event.target.checked);
+                            }}
+                            checked={followUpForGroup}
+                          />
+                          <label
+                            htmlFor='showPassword'
+                            className='text-gray-800 text-sm cursor-pointer'
+                          >
+                            Apply to group
+                          </label>
+                        </div>
+                        <hr className='h-0.5 mb-4 bg-gray-600' />
+                      </div>
+                    )}
 
                     <div className='flex gap-x-4 mb-4'>
                       <button
