@@ -14,16 +14,16 @@ import { SelectButton } from 'primereact/selectbutton';
 import moment from 'moment';
 
 import { ProgressBar } from 'primereact/progressbar';
-const ResidentSingleGuest = () => {
+const SecuritySingleGuest = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [followUpLoading, setFollowUpLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const [followUpType, setFollowUpType] = useState<string>('send_back_guest');
-  const followUpTypes = [
-    { label: 'Send Back', value: 'send_back_guest' },
-    { label: 'Detain', value: 'detain_guest' },
-  ];
+  const [completeBookingType, setCompleteBookingType] =
+    useState<string>('completed');
+  const [completeBookingTypes, setCompleteBookingTypes] = useState<any>([
+    { label: 'Completed', value: 'completed' },
+  ]);
 
   const [guest, setGuest] = useState<SingleBookedGuestType>();
   const [showFollowUpModal, setShowFollowUpModal] = useState<boolean>(false);
@@ -46,6 +46,14 @@ const ResidentSingleGuest = () => {
         }
       );
       setGuest(guest);
+
+      if (guest.booking_info.action === 'book_out') {
+        setCompleteBookingTypes([
+          { label: 'Completed', value: 'completed' },
+          { label: 'Detained', value: 'detained' },
+          { label: 'Sent Back', value: 'sent_back' },
+        ]);
+      }
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
@@ -69,17 +77,17 @@ const ResidentSingleGuest = () => {
   const navigateToSingleBooking = (id: number) => {
     return router.push(`/app/bookings/guests/${id}`);
   };
-  const followUpBookOut = async () => {
+  const finalizeBooking = async () => {
     if (formLoading) {
       return;
     }
     setFollowUpLoading(true);
     try {
       const url = followUpForGroup
-        ? `/bookings/${guest!.booking_info.id}/group/follow-up`
-        : `/bookings/${guest!.id}/booked_guest/follow-up`;
+        ? `/bookings/${guest!.booking_info.id}/complete-booking`
+        : `/bookings/${guest!.id}/booked_guest/complete`;
       const data = {
-        [followUpType]: true,
+        status: completeBookingType,
       };
       const response = await digiEstateAxiosInstance.post(url, data);
       setShowFollowUpModal(false);
@@ -87,8 +95,8 @@ const ResidentSingleGuest = () => {
       updateToastDispatch(
         updateToastData({
           severity: 'success',
-          detail: 'Security has been notified of your request.',
-          summary: 'Follow up was successful',
+          detail: 'Booking finalized',
+          summary: 'Booking was finalized successfully',
         })
       );
       getGuest();
@@ -102,22 +110,20 @@ const ResidentSingleGuest = () => {
     <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
       <div className=' '>
         <h2 className='mb-4 lato-font'>Single Guest</h2>
-        {!guest?.send_back_guest &&
-          !guest?.detain_guest &&
-          guest?.booking_info.action == 'book_out' && (
-            <div className='text-right mb-4'>
-              <button
-                type='button'
-                onClick={() => {
-                  setShowFollowUpModal(true);
-                }}
-                className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
-              >
-                {' '}
-                Follow Up
-              </button>
-            </div>
-          )}
+        {guest?.status === 'pending' && (
+          <div className='text-right mb-4'>
+            <button
+              type='button'
+              onClick={() => {
+                setShowFollowUpModal(true);
+              }}
+              className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+            >
+              {' '}
+              Finalize Booking
+            </button>
+          </div>
+        )}
 
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
           <div className=''>
@@ -202,19 +208,18 @@ const ResidentSingleGuest = () => {
                 <div>
                   <form className='lg:w-1/2 ml-auto mr-auto'>
                     <div className='mb-4 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
-                      <h4 className='mb-4 font-semibold'>Follow Up</h4>
+                      <h4 className='mb-4 font-semibold'>Finalize Booking</h4>
                       <div className=''>
                         <span className='text-sm'> Action</span>
                         <SelectButton
                           id='followUpSelect'
                           unselectable={false}
-                          value={followUpType}
-                          options={followUpTypes}
-                          onChange={(e) => setFollowUpType(e.value)}
+                          value={completeBookingType}
+                          options={completeBookingTypes}
+                          onChange={(e) => setCompleteBookingType(e.value)}
                         ></SelectButton>
                       </div>
                     </div>
-
                     {guest?.booking_info.type === 'group' && (
                       <div>
                         <hr className='h-0.5 mb-4 bg-gray-600' />
@@ -245,7 +250,7 @@ const ResidentSingleGuest = () => {
                       <button
                         disabled={followUpLoading}
                         type='button'
-                        onClick={followUpBookOut}
+                        onClick={finalizeBooking}
                         className='pt-2 pb-2 pl-4 pr-4 bg-gray-600 text-digiDefault rounded-lg text-sm'
                       >
                         Proceed
@@ -304,4 +309,4 @@ const ResidentSingleGuest = () => {
   );
 };
 
-export default ResidentSingleGuest;
+export default SecuritySingleGuest;

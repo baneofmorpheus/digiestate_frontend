@@ -5,6 +5,8 @@ import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated'
 import ResidentHome from 'components/residents/home/Home';
 import moment from 'moment';
 
+import SecurityHome from 'components/security/home/Home';
+
 import { useSelector } from 'react-redux';
 
 const App = () => {
@@ -31,6 +33,10 @@ const App = () => {
     switch (role) {
       case 'resident':
         setComponentToDisplay(<ResidentHome />);
+
+        break;
+      case 'security':
+        setComponentToDisplay(<SecurityHome />);
 
         break;
 
