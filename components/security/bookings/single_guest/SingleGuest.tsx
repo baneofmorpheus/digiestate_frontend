@@ -85,7 +85,7 @@ const SecuritySingleGuest = () => {
     try {
       const url = followUpForGroup
         ? `/bookings/${guest!.booking_info.id}/complete-booking`
-        : `/bookings/${guest!.id}/booked_guest/complete`;
+        : `/bookings/${guest!.id}/complete`;
       const data = {
         status: completeBookingType,
       };
@@ -242,9 +242,9 @@ const SecuritySingleGuest = () => {
                             Apply to group
                           </label>
                         </div>
-                        <hr className='h-0.5 mb-4 bg-gray-600' />
                       </div>
                     )}
+                    <hr className='h-0.5 mb-4 bg-gray-600' />
 
                     <div className='flex gap-x-4 mb-4'>
                       <button
