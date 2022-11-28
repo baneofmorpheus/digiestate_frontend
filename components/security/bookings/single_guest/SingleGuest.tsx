@@ -14,7 +14,7 @@ import { SelectButton } from 'primereact/selectbutton';
 import moment from 'moment';
 
 import { ProgressBar } from 'primereact/progressbar';
-const ResidentSingleGuest = () => {
+const SecuritySingleGuest = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [followUpLoading, setFollowUpLoading] = useState(false);
   const updateToastDispatch = useDispatch();
@@ -299,4 +299,4 @@ const ResidentSingleGuest = () => {
   );
 };
 
-export default ResidentSingleGuest;
+export default SecuritySingleGuest;

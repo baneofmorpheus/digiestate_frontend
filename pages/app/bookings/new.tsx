@@ -347,7 +347,7 @@ const BookGuests = () => {
                     Name
                     <input
                       {...registerAddGuest('name')}
-                      type='tel'
+                      type='name'
                       autoComplete='on'
                       value={currentGuest.name}
                       onChange={(event) => {

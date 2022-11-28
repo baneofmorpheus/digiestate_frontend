@@ -99,9 +99,9 @@ const SideBar: NextPage = () => {
           </button>
         </div>
       </div>
-      <div className='w-full bg-gray-600 mt-auto text-digiDefault pt-4 pb-4 pr-10 text-right ml-auto '>
-        <p className='capitalize mb-1'>Estate: {estate.name}.</p>
-        <p className='capitalize'>Role: {role}.</p>
+      <div className='w-full bg-gray-600 mt-auto text-digiDefault pt-2 pb-2 pr-10 text-right ml-auto '>
+        <p className='capitalize mb-1'>Estate: {estate.name}</p>
+        <p className='capitalize'>Role: {role}</p>
       </div>
       <style jsx>{`
         .sidebar-container {
