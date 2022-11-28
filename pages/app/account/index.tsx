@@ -11,27 +11,34 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 const Account = () => {
-  const { user } = useSelector((state: any) => state.authentication);
+  const { user, role, estate } = useSelector(
+    (state: any) => state.authentication
+  );
 
   const updateLoginDataDispatch = useDispatch();
 
   return (
     <div className='pt-10 md:pl-2 md:pr-2 pl-4 pr-4'>
       <div>
-        <div className='flex items-center gap-x-4 mb-4'>
-          <div>
-            <Image
-              alt=''
-              className='rounded-full  inline-block'
-              src={user.profileImageLink}
-              height={60}
-              width={60}
-            />
-          </div>
-          <div>
-            <p>
-              {user.firstName} {user.lastName}
+        <div className='flex items-center gap-x-4 mb-6'>
+          {role == 'resident' && (
+            <div>
+              <Image
+                alt=''
+                className='rounded-full  inline-block'
+                src={user.profileImageLink}
+                height={60}
+                width={60}
+              />
+            </div>
+          )}
+
+          <div className='capitalize'>
+            <p className='mb-2'>
+              {user.firstName} {user.lastName}{' '}
+              <span className='capitalize ml-2'> ({role})</span>
             </p>
+            <p>{estate.name}</p>
           </div>
         </div>
         <div className='text-sm mb-4'>

@@ -27,7 +27,9 @@ const Home = () => {
               </Link>
             </div>
             <div className='border w-1/2 pl-2 pr-2 transition-all duration-700 md:w-auto hover:bg-gray-600 hover:text-digiDefault cursor-pointer hover:border-gray-600 border-black rounded-lg pt-2 mr-2 pb-2 '>
-              <p>As Security</p>
+              <Link href='/security'>
+                <a className='pl-2 pr-2'>As Security</a>
+              </Link>
             </div>
             <div className='border w-1/2 pl-2 pr-2 transition-all duration-700 md:w-auto hover:bg-gray-600 hover:text-digiDefault cursor-pointer hover:border-gray-600 border-black rounded-lg pt-2  pb-2 '>
               <p>As Admin</p>

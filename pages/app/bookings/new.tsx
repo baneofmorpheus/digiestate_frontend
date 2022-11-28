@@ -347,7 +347,7 @@ const BookGuests = () => {
                     Name
                     <input
                       {...registerAddGuest('name')}
-                      type='tel'
+                      type='name'
                       autoComplete='on'
                       value={currentGuest.name}
                       onChange={(event) => {
@@ -356,7 +356,7 @@ const BookGuests = () => {
                           name: event.target.value,
                         });
                       }}
-                      className='rei-text-input'
+                      className='rei-text-input text-base'
                     />
                   </label>
                   {errorsAddGuest['name'] && (
@@ -379,7 +379,7 @@ const BookGuests = () => {
                       }}
                       value={currentGuest.phone_number}
                       autoComplete='on'
-                      className='rei-text-input'
+                      className='rei-text-input text-base'
                     />
                   </label>
                   {errorsAddGuest['phone_number'] && (
@@ -401,7 +401,7 @@ const BookGuests = () => {
                           gender: event.target.value,
                         });
                       }}
-                      className='rei-text-input'
+                      className='rei-text-input text-base'
                     >
                       <option>Select</option>
                       <option value='male'>Male</option>
