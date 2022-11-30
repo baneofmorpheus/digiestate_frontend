@@ -86,12 +86,10 @@ const SecuritySingleDependent = () => {
               {formLoading && (
                 <div>
                   <div className='flex mb-4'>
-                    <Skeleton
-                      shape='circle'
-                      size='3REM'
-                      className='mr-2'
-                    ></Skeleton>
                     <div style={{ flex: '1' }}>
+                      <Skeleton width='100%' className='mb-2'></Skeleton>
+                      <Skeleton width='100%' className='mb-2'></Skeleton>
+                      <Skeleton width='100%' className='mb-2'></Skeleton>
                       <Skeleton width='100%' className='mb-2'></Skeleton>
                       <Skeleton width='75%'></Skeleton>
                     </div>
