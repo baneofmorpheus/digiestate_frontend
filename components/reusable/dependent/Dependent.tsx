@@ -47,15 +47,8 @@ const Dependent: NextPage<DependentPropType> = ({
             {dependent.gender}
           </p>
 
-          {role === 'resident' && (
-            <p className='text-capitalize text-xs mb-1 text-gray-500'>
-              {dependent.relationship_to_resident}
-            </p>
-          )}
-
-          <p className='text-capitalize text-xs text-gray-500'>
-            <FontAwesomeIcon className={`mr-1`} icon={faLocationDot} />{' '}
-            {dependent.estate_user!.address}
+          <p className='text-capitalize text-xs mb-1 text-gray-500'>
+            {dependent.relationship_to_resident} to the Resident
           </p>
         </div>
       </div>

@@ -142,7 +142,7 @@ const SecurityDependentList = () => {
   };
 
   return (
-    <div className=' pt-10 md:pl-2 md:pr-2'>
+    <div className=' pt-6 md:pl-2 md:pr-2'>
       <div className=' '>
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2  '>
           <div className=''>
