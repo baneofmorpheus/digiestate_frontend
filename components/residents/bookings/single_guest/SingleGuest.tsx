@@ -12,7 +12,9 @@ import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import { Dialog } from 'primereact/dialog';
 import { SelectButton } from 'primereact/selectbutton';
 import moment from 'moment';
-
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { ProgressBar } from 'primereact/progressbar';
 const ResidentSingleGuest = () => {
   const [formLoading, setFormLoading] = useState(false);
@@ -101,10 +103,22 @@ const ResidentSingleGuest = () => {
   return (
     <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
       <div className=' '>
+        <div className='mb-6 text-xs'>
+          <Link href='/app/bookings'>
+            <a className='underline'>
+              <span className=''>
+                {' '}
+                <FontAwesomeIcon className={` mr-2 `} icon={faLeftLong} />
+                <span>Go Back</span>
+              </span>
+            </a>
+          </Link>
+        </div>
         <h2 className='mb-4 lato-font'>Single Guest</h2>
         {!guest?.send_back_guest &&
           !guest?.detain_guest &&
-          guest?.booking_info.action == 'book_out' && (
+          guest?.booking_info.action == 'book_out' &&
+          guest?.status == 'pending' && (
             <div className='text-right mb-4'>
               <button
                 type='button'
@@ -150,18 +164,18 @@ const ResidentSingleGuest = () => {
                   </div>
 
                   <div className='text-xs mt-4  mb-10 flex-col justify-start gap-y-1 md:gap-y-0  md:flex-row flex md:justify-between'>
-                    <p>
-                      Checked At :{' '}
-                      {!!guest.time_checked_by_security
-                        ? moment(guest.time_checked_by_security).format(
-                            'DD-MMM-YYYY hh:mm a'
-                          )
-                        : '-- -- --'}
-                    </p>
                     <p>Detain Guest : {!!guest.detain_guest ? 'Yes' : 'No'}</p>
                     <p>
                       Send Back Guest : {!!guest.send_back_guest ? 'Yes' : 'No'}
                     </p>
+                    {!!guest.time_checked_by_security && (
+                      <p>
+                        Checked At :
+                        {moment(guest.time_checked_by_security).format(
+                          'DD-MMM-YYYY hh:mm a'
+                        )}
+                      </p>
+                    )}
                   </div>
                   {guest.booking_info.type === 'group' && (
                     <div>
