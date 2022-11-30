@@ -36,6 +36,7 @@ export type SingleBookedGuestType = {
   phone_visible_to_security: boolean;
   gender: string;
   send_back_guest: boolean;
+  address?: string;
   detain_guest: boolean;
   booking_info: SingleBooking;
   status: string;

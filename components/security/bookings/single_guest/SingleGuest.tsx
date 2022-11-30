@@ -3,7 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { SingleBookedGuestType } from 'types';
@@ -12,6 +13,7 @@ import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import { Dialog } from 'primereact/dialog';
 import { SelectButton } from 'primereact/selectbutton';
 import moment from 'moment';
+import Link from 'next/link';
 
 import { ProgressBar } from 'primereact/progressbar';
 const SecuritySingleGuest = () => {
@@ -40,21 +42,23 @@ const SecuritySingleGuest = () => {
         `/bookings/${estate.id}/guests/${bookedGuestId}`
       );
       const guest = response.data.data;
-      guest.booking_info.guests.forEach(
+      guest?.booking_info.guests.forEach(
         (singleGuest: SingleBookedGuestType) => {
-          singleGuest.booking_info = guest.booking_info;
+          singleGuest.booking_info = guest?.booking_info;
         }
       );
       setGuest(guest);
 
-      if (guest.booking_info.action === 'book_out') {
+      if (guest?.booking_info.action === 'book_out') {
         setCompleteBookingTypes([
           { label: 'Completed', value: 'completed' },
-          ...(guest.detain_guest && { label: 'Detained', value: 'detained' }),
-          ...(guest.send_back_guest && {
-            label: 'Sent Back',
-            value: 'sent_back',
-          }),
+          ...[guest.detain_guest && { label: 'Detained', value: 'detained' }],
+          ...[
+            guest.send_back_guest && {
+              label: 'Sent Back',
+              value: 'sent_back',
+            },
+          ],
         ]);
       }
     } catch (error: any) {
@@ -87,8 +91,8 @@ const SecuritySingleGuest = () => {
     setFollowUpLoading(true);
     try {
       const url = followUpForGroup
-        ? `/bookings/${guest!.booking_info.id}/complete-booking`
-        : `/bookings/${guest!.id}/complete`;
+        ? `/bookings/${guest?.booking_info.id}/complete-booking`
+        : `/bookings/${guest?.id}/complete`;
       const data = {
         status: completeBookingType,
       };
@@ -112,6 +116,17 @@ const SecuritySingleGuest = () => {
   return (
     <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
       <div className=' '>
+        <div className='mb-6 text-xs'>
+          <Link href='/app/bookings'>
+            <a className='underline'>
+              <span className=''>
+                {' '}
+                <FontAwesomeIcon className={` mr-2 `} icon={faLeftLong} />
+                <span>Go Back</span>
+              </span>
+            </a>
+          </Link>
+        </div>
         <h2 className='mb-4 lato-font'>Single Guest</h2>
         {guest?.status === 'pending' && (
           <div className='text-right mb-4'>
@@ -158,19 +173,33 @@ const SecuritySingleGuest = () => {
                     <BookedGuest guest={guest} />
                   </div>
 
-                  <div className='text-xs mt-4  mb-10 flex-col justify-start gap-y-1 md:gap-y-0  md:flex-row flex md:justify-between'>
-                    <p>
-                      Checked At :{' '}
-                      {!!guest.time_checked_by_security
-                        ? moment(guest.time_checked_by_security).format(
-                            'DD-MMM-YYYY hh:mm a'
-                          )
-                        : '-- -- --'}
-                    </p>
+                  <div className='text-xs mt-4   mb-2 flex-col justify-start gap-y-1 md:gap-y-0  md:flex-row flex md:justify-between'>
                     <p>Detain Guest : {!!guest.detain_guest ? 'Yes' : 'No'}</p>
                     <p>
                       Send Back Guest : {!!guest.send_back_guest ? 'Yes' : 'No'}
                     </p>
+                    {!!guest.time_checked_by_security && (
+                      <p>
+                        Checked At :
+                        {moment(guest.time_checked_by_security).format(
+                          'DD-MMM-YYYY hh:mm a'
+                        )}
+                      </p>
+                    )}
+                  </div>
+                  <div className='text-xs  mb-10 flex-col justify-start gap-y-1 md:gap-y-0  md:flex-row flex md:justify-between'>
+                    <p>
+                      <Link href={`/app/residents/single/${guest.resident.id}`}>
+                        <a>
+                          Resident:{' '}
+                          <span className='underline'>
+                            {guest.resident.first_name}{' '}
+                            {guest.resident.last_name}
+                          </span>
+                        </a>
+                      </Link>
+                    </p>
+                    <p>Address : {guest?.address}</p>
                   </div>
                   {guest.booking_info.type === 'group' && (
                     <div>
