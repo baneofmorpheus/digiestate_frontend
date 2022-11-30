@@ -43,6 +43,9 @@ const Dependent: NextPage<DependentPropType> = ({
           <p className=' mb-1 '>
             {dependent.first_name} {dependent.last_name}
           </p>
+          <p className='text-gray-500 text-xs mb-1 capitalize'>
+            {dependent.gender}
+          </p>
 
           {role === 'resident' && (
             <p className='text-capitalize text-xs mb-1 text-gray-500'>

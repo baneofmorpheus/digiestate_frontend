@@ -103,12 +103,12 @@ const SecuritySingleDependent = () => {
                 </div>
               )}
               {!formLoading && !!dependent && (
-                <div className='flex-col lg:flex-row flex gap-y-5 gap-x-2'>
-                  <div className=' shadow-lg text-center '>
+                <div className='flex-col lg:flex-row flex gap-y-5 gap-x-4'>
+                  <div className='  text-center '>
                     <Image
                       preview={true}
                       alt=''
-                      imageClassName='w-full'
+                      imageClassName='shadow-lg'
                       src={dependent.profile_image_link}
                     />
                   </div>

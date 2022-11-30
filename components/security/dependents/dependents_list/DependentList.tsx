@@ -155,6 +155,7 @@ const SecurityDependentList = () => {
                   onChange={(e) => {
                     setSelectedName(e.target.value);
                   }}
+                  id='filterInput'
                   onKeyDown={handleNameFilterSubmit}
                   placeholder='  Search by name, press enter or search key to search'
                   className='rei-text-input !rounded-r-none '
@@ -319,6 +320,9 @@ const SecurityDependentList = () => {
           90% {
             stroke: #4b5563;
           }
+        }
+        #filterInput {
+          -webkit-appearance: none;
         }
 
         #filterDialog,
