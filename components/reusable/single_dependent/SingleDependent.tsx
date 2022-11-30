@@ -15,21 +15,11 @@ import Link from 'next/link';
 
 const SecuritySingleDependent = () => {
   const [formLoading, setFormLoading] = useState(false);
-  const [followUpLoading, setFollowUpLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const [completeBookingType, setCompleteBookingType] =
-    useState<string>('completed');
-  const [completeBookingTypes, setCompleteBookingTypes] = useState<any>([
-    { label: 'Completed', value: 'completed' },
-  ]);
-
   const [dependent, setDependent] = useState<SingleDependentType>();
-  const [showFollowUpModal, setShowFollowUpModal] = useState<boolean>(false);
-  const [followUpForGroup, setFollowUpForGroup] = useState<boolean>(false);
-  const router = useRouter();
 
-  const estate = useSelector((state: any) => state.authentication.estate);
+  const router = useRouter();
 
   const getDependent = useCallback(async () => {
     setFormLoading(true);
@@ -55,14 +45,6 @@ const SecuritySingleDependent = () => {
     getDependent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
-
-  const handleDialogHideEevent = () => {
-    setShowFollowUpModal(false);
-  };
-
-  const navigateToSingleBooking = (id: number) => {
-    return router.push(`/app/bookings/guests/${id}`);
-  };
 
   return (
     <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
