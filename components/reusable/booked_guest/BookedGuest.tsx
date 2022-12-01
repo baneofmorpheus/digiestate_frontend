@@ -40,7 +40,7 @@ const BookedGuest: NextPage<BookedGuestPropType> = ({ guest, handleClick }) => {
         <div className='w-3/5'>
           <p className='  '>{guest.name}</p>
           <p className=''>
-            {guest.phone_number}-
+            {!!guest.phone_number ? guest.phone_number : 'XXX-XXXXX'}-
             <span className='capitalize'>{guest.gender}</span>
           </p>
           <p>
