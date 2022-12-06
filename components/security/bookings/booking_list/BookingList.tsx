@@ -179,9 +179,12 @@ const SecurityBookingList = () => {
     }
   };
   return (
-    <div className=' pt-10 md:pl-2 md:pr-2'>
+    <div className=' pt-6 md:pl-2 md:pr-2'>
       <div className=' '>
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
+          <div className='flex mb-2 justify-between'>
+            <h2 className='  lato-font'>Booked Guests</h2>
+          </div>
           <div className=''>
             <div className='flex  mb-6'>
               <div className='w-4/5'>

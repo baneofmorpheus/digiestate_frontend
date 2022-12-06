@@ -373,7 +373,7 @@ const ResidentDependentList = () => {
     <div className=' pt-4 md:pl-2 md:pr-2'>
       <div className=' '>
         <div className='flex justify-between mb-4'>
-          <h2 className='mb-8  lato-font'>Dependents </h2>
+          <h2 className='mb-2  lato-font'>Dependents </h2>
           <button
             onClick={() => {
               router.push('/app/dependents/new');
@@ -467,12 +467,7 @@ const ResidentDependentList = () => {
                 dependents.map(
                   (singleDependent: SingleDependentType, index) => {
                     return (
-                      <Dependent
-                        editDependent={editDependent}
-                        deleteDependent={deleteDependent}
-                        key={index}
-                        dependent={singleDependent}
-                      />
+                      <Dependent key={index} dependent={singleDependent} />
                     );
                   }
                 )}
