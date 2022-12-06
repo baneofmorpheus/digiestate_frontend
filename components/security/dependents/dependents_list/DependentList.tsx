@@ -229,7 +229,7 @@ const SecurityDependentList = () => {
                   (singleDependent: SingleDependentType, index) => {
                     return (
                       <Dependent
-                        viewDependent={viewDependent}
+                        handleClick={viewDependent}
                         key={index}
                         dependent={singleDependent}
                       />

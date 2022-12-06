@@ -4,8 +4,12 @@ import { useState, useEffect, useCallback } from 'react';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
-
+import { faLeftLong, faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
+import PreviousPage from 'components/navigation/previous_page/PreviousPage';
+import {
+  faLocationDot,
+  faMarsAndVenus,
+} from '@fortawesome/free-solid-svg-icons';
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { SingleDependentType } from 'types';
@@ -49,18 +53,7 @@ const SecuritySingleDependent = () => {
   return (
     <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
       <div className=' '>
-        <div className='mb-6 text-xs'>
-          <Link href='/app/dependents'>
-            <a className='underline'>
-              <span className=''>
-                {' '}
-                <FontAwesomeIcon className={` mr-2 `} icon={faLeftLong} />
-                <span>Go Back</span>
-              </span>
-            </a>
-          </Link>
-        </div>
-        <h2 className='mb-4 lato-font'>Single Dependent</h2>
+        <PreviousPage label='Single Dependent' />
 
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
           <div className=''>
@@ -85,33 +78,54 @@ const SecuritySingleDependent = () => {
                 </div>
               )}
               {!formLoading && !!dependent && (
-                <div className='flex-col lg:flex-row flex gap-y-5 gap-x-4'>
-                  <div className='  text-center '>
-                    <Image
-                      preview={true}
-                      alt=''
-                      imageClassName='shadow-lg'
-                      src={dependent.profile_image_link}
-                    />
+                <div>
+                  <div className='mb-2'>
+                    <h3 className='mb-1 capitalize'>
+                      {dependent.first_name} {dependent.last_name}
+                    </h3>
+                    <p className='text-xs text-gray-600'>
+                      <Link
+                        href={`/app/residents/single/${dependent.estate_user?.user_id}`}
+                      >
+                        <a className='underline'>
+                          {dependent.estate_user?.user?.first_name}{' '}
+                          {dependent.estate_user?.user?.last_name} (Resident)
+                        </a>
+                      </Link>
+                    </p>
                   </div>
-                  <div className=' text-sm'>
-                    <p className='mb-1'>
-                      Name: {dependent.first_name} {dependent.last_name}
-                    </p>
-                    <p className='mb-1'>
-                      Address: {dependent.estate_user?.address}
-                    </p>
-                    <p className='mb-1'>
-                      Resident:{' '}
-                      <span className='underline cursor-pointer'>
-                        {dependent.estate_user?.user?.first_name}{' '}
-                        {dependent.estate_user?.user?.last_name}
-                      </span>
-                    </p>
-                    <p className='mb-1 capitalize'>
-                      Relationship To Resident:{' '}
-                      {dependent.relationship_to_resident}
-                    </p>
+                  <div className='flex-col lg:flex-row flex gap-y-5 gap-x-4'>
+                    <div className='w-full lg:w-1/2  text-center '>
+                      <Image
+                        preview={true}
+                        alt=''
+                        imageClassName='shadow-lg'
+                        src={dependent.profile_image_link}
+                      />
+                    </div>
+                    <div className='shadow-lg w-full lg:w-1/2  justify-center gap-y-2 capitalize pl-4 pr-4 pt-4 pb-4  text-sm'>
+                      <p className='mb-1'>
+                        <FontAwesomeIcon
+                          className={` text-sm text-gray-600 mr-2`}
+                          icon={faLocationDot}
+                        />{' '}
+                        {dependent.estate_user?.address}
+                      </p>
+                      <p className='mb-1'>
+                        <FontAwesomeIcon
+                          className={` text-sm text-gray-600 mr-2`}
+                          icon={faMarsAndVenus}
+                        />
+                        {dependent.gender}
+                      </p>
+                      <p className='mb-1 capitalize'>
+                        <FontAwesomeIcon
+                          className={` text-sm text-gray-600 mr-2`}
+                          icon={faPeopleGroup}
+                        />
+                        {dependent.relationship_to_resident} to The Resident
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}

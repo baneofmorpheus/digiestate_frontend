@@ -10,8 +10,12 @@ const PreviousPage: NextPage<PropType> = ({ label }) => {
   const router = useRouter();
 
   return (
-    <div className='mb-6 flex items-center text-xs'>
-      <button type='button' onClick={() => router.back()}>
+    <div className='mb-4 flex items-center text-xs'>
+      <button
+        className='p-4 pl-0 pr-2'
+        type='button'
+        onClick={() => router.back()}
+      >
         <a className='underline'>
           <FontAwesomeIcon className={` mr-2 `} icon={faLeftLong} />
         </a>

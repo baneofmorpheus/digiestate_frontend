@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 
-import Link from 'next/link';
 const Display: NextPage = () => {
   return (
     <div className='display-container hidden lg:block bg-digiDefault z-90 fixed right-0 top-0 w-1/4  min-h-screen border-l border-black'>
