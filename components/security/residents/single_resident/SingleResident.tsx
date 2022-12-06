@@ -18,6 +18,10 @@ import { UserType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
 import { Image } from 'primereact/image';
 import PreviousPage from 'components/navigation/previous_page/PreviousPage';
+import Dependent from 'components/reusable/dependent/Dependent';
+
+import { SingleDependentType } from 'types';
+
 const SecuritySingleResident = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [followUpLoading, setFollowUpLoading] = useState(false);
@@ -43,6 +47,13 @@ const SecuritySingleResident = () => {
         `/estates/${estate.id}/residents/${residentId}`
       );
       const resident = response.data.data;
+      resident.estate_user?.dependents.forEach(
+        (singleDependent: SingleDependentType) => {
+          const copiedEstateUser = { ...resident.estate_user };
+          delete copiedEstateUser.dependents;
+          singleDependent.estate_user = copiedEstateUser;
+        }
+      );
 
       setResident(resident);
     } catch (error: any) {
@@ -95,6 +106,11 @@ const SecuritySingleResident = () => {
     }
     setFollowUpLoading(false);
   };
+
+  const viewDependent = (dependent: SingleDependentType) => {
+    return router.push(`/app/dependents/single/${dependent.id}`);
+  };
+
   return (
     <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
       <div className=' '>
@@ -118,7 +134,7 @@ const SecuritySingleResident = () => {
 
               {!formLoading && !resident && (
                 <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                  <p>No dependent found matching that info</p>
+                  <p>No resident found matching that info</p>
                 </div>
               )}
 
@@ -148,7 +164,7 @@ const SecuritySingleResident = () => {
                       {resident.estate_user?.dependents?.length} Dependents
                     </p>
                   </div>
-                  <div className='flex-col lg:flex-row flex gap-y-5 gap-x-4'>
+                  <div className='flex-col mb-6 lg:flex-row flex gap-y-5 gap-x-4'>
                     <div className='w-full lg:w-1/2 text-center '>
                       <Image
                         preview={true}
@@ -180,6 +196,20 @@ const SecuritySingleResident = () => {
                         {resident.resident_data?.marital_status}
                       </p>
                     </div>
+                  </div>
+                  <div>
+                    <h4>Dependents</h4>
+                    {resident.estate_user?.dependents?.map(
+                      (singleDependent: SingleDependentType, index) => {
+                        return (
+                          <Dependent
+                            handleClick={viewDependent}
+                            dependent={singleDependent}
+                            key={index}
+                          />
+                        );
+                      }
+                    )}
                   </div>
                 </div>
               )}

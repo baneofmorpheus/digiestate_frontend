@@ -10,6 +10,7 @@ import {
   faUserPlus,
   faUser,
   faRightFromBracket,
+  faHouseUser,
 } from '@fortawesome/free-solid-svg-icons';
 
 import Link from 'next/link';
@@ -49,6 +50,19 @@ const SideBar: NextPage = () => {
             >
               <FontAwesomeIcon className={` mr-2  `} icon={faUserPlus} />
               Registrations
+            </a>
+          </Link>
+          <Link href='/app/residents/'>
+            <a
+              className={`${
+                router.pathname.includes('/app/residents/') &&
+                router.pathname !== '/app/residents/registrations'
+                  ? selectedRouteStyle
+                  : ''
+              } mb-4 pr-10 block pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
+            >
+              <FontAwesomeIcon className={` mr-2  `} icon={faHouseUser} />
+              Residents
             </a>
           </Link>
           <Link href='/app/dependents'>
