@@ -6,7 +6,6 @@ export type EstateUserType = {
   role: string;
   estate_id: number;
   user_id: number;
-  user?: UserType;
   created_at: string;
   updated_at: string;
 };

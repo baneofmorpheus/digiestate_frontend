@@ -467,12 +467,7 @@ const ResidentDependentList = () => {
                 dependents.map(
                   (singleDependent: SingleDependentType, index) => {
                     return (
-                      <Dependent
-                        editDependent={editDependent}
-                        deleteDependent={deleteDependent}
-                        key={index}
-                        dependent={singleDependent}
-                      />
+                      <Dependent key={index} dependent={singleDependent} />
                     );
                   }
                 )}
