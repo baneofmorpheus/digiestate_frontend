@@ -1,4 +1,4 @@
-import { EstateUserType } from './estate_user';
+import { DependentEstateUserType } from './user';
 
 export type SingleDependentType = {
   id: number;
@@ -9,7 +9,7 @@ export type SingleDependentType = {
   phone_number: string;
   relationship_to_resident: string;
   profile_image_link: string;
-  estate_user?: EstateUserType;
+  estate_user?: DependentEstateUserType;
   created_at: string;
   updated_at: string;
 };

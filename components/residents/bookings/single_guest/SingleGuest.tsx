@@ -3,6 +3,14 @@ import { useState, useEffect, useCallback } from 'react';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
+import {
+  faHandcuffs,
+  faLocationDot,
+  faPersonWalkingArrowLoopLeft,
+  faHouseUser,
+  faClock,
+} from '@fortawesome/free-solid-svg-icons';
+import PreviousPage from 'components/navigation/previous_page/PreviousPage';
 
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
@@ -103,18 +111,8 @@ const ResidentSingleGuest = () => {
   return (
     <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
       <div className=' '>
-        <div className='mb-6 text-xs'>
-          <Link href='/app/bookings'>
-            <a className='underline'>
-              <span className=''>
-                {' '}
-                <FontAwesomeIcon className={` mr-2 `} icon={faLeftLong} />
-                <span>Go Back</span>
-              </span>
-            </a>
-          </Link>
-        </div>
-        <h2 className='mb-4 lato-font'>Single Guest</h2>
+        <PreviousPage label='Single Guest' />
+
         {!guest?.send_back_guest &&
           !guest?.detain_guest &&
           guest?.booking_info.action == 'book_out' &&
@@ -162,20 +160,62 @@ const ResidentSingleGuest = () => {
                   <div>
                     <BookedGuest guest={guest} />
                   </div>
-
-                  <div className='text-xs mt-4  mb-10 flex-col justify-start gap-y-1 md:gap-y-0  md:flex-row flex md:justify-between'>
-                    <p>Detain Guest : {!!guest.detain_guest ? 'Yes' : 'No'}</p>
-                    <p>
-                      Send Back Guest : {!!guest.send_back_guest ? 'Yes' : 'No'}
-                    </p>
-                    {!!guest.time_checked_by_security && (
-                      <p>
-                        Checked At :
-                        {moment(guest.time_checked_by_security).format(
-                          'DD-MMM-YYYY hh:mm a'
-                        )}
+                  <div className='shadow-lg border text-xs md:text-sm   rounded-lg pt-2 pb-2 mb-6 pl-10 pr-4'>
+                    <div className='mt-4 ml-auto    mb-2 '>
+                      <p className='mb-2'>
+                        <FontAwesomeIcon
+                          className={` mr-4 text-xl text-gray-600 `}
+                          icon={faHandcuffs}
+                        />
+                        <span className=''>
+                          {!!guest.detain_guest ? 'Yes' : 'No'} (Detain)
+                        </span>
                       </p>
-                    )}
+                      <p className='mb-2'>
+                        <FontAwesomeIcon
+                          className={` mr-4 text-xl text-gray-600`}
+                          icon={faPersonWalkingArrowLoopLeft}
+                        />
+                        {!!guest.send_back_guest ? 'Yes' : 'No'} (Send Back)
+                      </p>
+
+                      {!!guest.time_checked_by_security && (
+                        <p>
+                          <FontAwesomeIcon
+                            className={` mr-4 text-xl text-gray-600`}
+                            icon={faClock}
+                          />
+                          {moment(guest.time_checked_by_security).format(
+                            'DD-MMM-YYYY hh:mm a'
+                          )}{' '}
+                          (Check in/out)
+                        </p>
+                      )}
+                      <p className='mb-2'>
+                        <Link
+                          href={`/app/residents/single/${guest.resident.id}`}
+                        >
+                          <a>
+                            <FontAwesomeIcon
+                              className={` mr-4  text-xl text-gray-600`}
+                              icon={faHouseUser}
+                            />{' '}
+                            <span className='underline'>
+                              {guest.resident.first_name}{' '}
+                              {guest.resident.last_name} (Resident)
+                            </span>
+                          </a>
+                        </Link>
+                      </p>
+                      <p className='mb-2'>
+                        {' '}
+                        <FontAwesomeIcon
+                          className={` mr-4 text-xl text-gray-600`}
+                          icon={faLocationDot}
+                        />{' '}
+                        {guest?.address}
+                      </p>
+                    </div>
                   </div>
                   {guest.booking_info.type === 'group' && (
                     <div>

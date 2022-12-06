@@ -11,7 +11,7 @@ const Unauthenticated: NextPage = () => {
           <h2 className='text-4xl mb-2'>You have been logged out.</h2>
           <p>Looks like your login session has expired or been revoked .</p>
           <p className='mb-4'>Login as your preferred user below to continue</p>
-          <div className='flex gap-x-2 md:gap-x-4'>
+          <div className='flex gap-x-2 md:gap-x-4 mb-4'>
             <Link href='/resident'>
               <a className='bg-gray-600 hover:bg-black text-white pl-4 pr-4 rounded-lg pb-1 pt-1'>
                 Resident
@@ -28,10 +28,10 @@ const Unauthenticated: NextPage = () => {
               </a>
             </Link>
           </div>
+          <Link href='/'>
+            <a className='underline text-center block'>Go Home</a>
+          </Link>
         </div>
-        <Link href='/'>
-          <a className='underline'>Or Go Home</a>
-        </Link>
       </div>
       <div className='w-full lg:w-3/5  flex items-center flex-col justify-center'>
         <Image alt='' className='w-full h-auto  ' src={scarecrowImage} />
