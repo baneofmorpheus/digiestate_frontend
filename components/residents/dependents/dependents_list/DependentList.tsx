@@ -23,8 +23,6 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 
 type FilterData = {
   selectedPerPage: number;
-  dateRange: Array<any>;
-  bookingMode: string;
   name: string;
 };
 
@@ -100,8 +98,7 @@ const ResidentDependentList = () => {
     useState<boolean>(false);
   const [filterData, setFilterData] = useState<FilterData>({
     selectedPerPage: 10,
-    dateRange: [],
-    bookingMode: 'all',
+
     name: '',
   });
 
@@ -127,8 +124,7 @@ const ResidentDependentList = () => {
 
     setFilterData({
       selectedPerPage: 10,
-      dateRange: [],
-      bookingMode: 'all',
+
       name: '',
     });
   };
@@ -137,8 +133,7 @@ const ResidentDependentList = () => {
 
     setFilterData({
       selectedPerPage: selectedPerPage,
-      dateRange: dateRange,
-      bookingMode: bookingMode,
+
       name: selectedName || '',
     });
   };
@@ -204,22 +199,6 @@ const ResidentDependentList = () => {
   const getDependents = useCallback(async () => {
     const queryData: any = {};
 
-    if (filterData.dateRange.length > 0) {
-      if (
-        filterData.dateRange.length > 1 &&
-        !!filterData.dateRange[0] &&
-        !!filterData.dateRange[1]
-      ) {
-        queryData.start_date = moment(filterData.dateRange[0]).format(
-          'Y-MM-DD'
-        );
-        queryData.end_date = moment(filterData.dateRange[1]).format('Y-MM-DD');
-      } else if (!!filterData.dateRange[0]) {
-        queryData.start_date = moment(filterData.dateRange[0]).format(
-          'Y-MM-DD'
-        );
-      }
-    }
     queryData.per_page = filterData.selectedPerPage;
     queryData.name = filterData.name;
 
@@ -227,15 +206,9 @@ const ResidentDependentList = () => {
     queryData.page = currentPage;
     const queryString = Object.keys(queryData)
       .map((key) => {
-        /**
-         * If booking type is all dont include the filter at all
-         */
-
-        if (queryData[key] != 'all') {
-          return (
-            encodeURIComponent(key) + '=' + encodeURIComponent(queryData[key])
-          );
-        }
+        return (
+          encodeURIComponent(key) + '=' + encodeURIComponent(queryData[key])
+        );
       })
       .join('&');
 
@@ -254,7 +227,6 @@ const ResidentDependentList = () => {
     }
     setFormLoading(false);
   }, [
-    filterData.dateRange,
     filterData.selectedPerPage,
     filterData.name,
     selectedPerPage,
@@ -368,7 +340,9 @@ const ResidentDependentList = () => {
     }
     setEditRequestLoading(false);
   };
-
+  const viewDependent = (dependent: SingleDependentType) => {
+    return router.push(`/app/dependents/single/${dependent.id}`);
+  };
   return (
     <div className=' pt-4 md:pl-2 md:pr-2'>
       <div className=' '>
@@ -386,14 +360,14 @@ const ResidentDependentList = () => {
         </div>
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2  '>
           <div className=''>
-            {/* #TODO  implement dependent filter and search on frontend */}
-            {/* <div className='flex  mb-6'>
+            <div className='flex  mb-6'>
               <div className='w-4/5'>
                 <input
                   value={selectedName}
                   onChange={(e) => {
                     setSelectedName(e.target.value);
                   }}
+                  id='filterInput'
                   onKeyDown={handleNameFilterSubmit}
                   placeholder='  Search by name, press enter or search key to search'
                   className='rei-text-input !rounded-r-none '
@@ -416,8 +390,7 @@ const ResidentDependentList = () => {
                   />
                 </button>
               </div>
-            </div> */}
-
+            </div>
             <div className='guests-container mb-4'>
               {formLoading && (
                 <div>
@@ -467,7 +440,11 @@ const ResidentDependentList = () => {
                 dependents.map(
                   (singleDependent: SingleDependentType, index) => {
                     return (
-                      <Dependent key={index} dependent={singleDependent} />
+                      <Dependent
+                        key={index}
+                        handleClick={viewDependent}
+                        dependent={singleDependent}
+                      />
                     );
                   }
                 )}
@@ -746,6 +723,10 @@ const ResidentDependentList = () => {
           90% {
             stroke: #4b5563;
           }
+        }
+
+        #filterInput {
+          -webkit-appearance: none;
         }
 
         #filterDialog,
