@@ -7,6 +7,7 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { logOut } from 'reducers/authentication';
 import { useState } from 'react';
+import PreviousPage from 'components/navigation/previous_page/PreviousPage';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -20,6 +21,8 @@ const Account = () => {
   return (
     <div className='pt-10 md:pl-2 md:pr-2 pl-4 pr-4'>
       <div>
+        <PreviousPage label='Account Settings' />
+
         <div className='flex items-center gap-x-4 mb-6'>
           {role == 'resident' && (
             <div>
@@ -33,10 +36,10 @@ const Account = () => {
             </div>
           )}
 
-          <div className='capitalize'>
-            <p className='mb-2'>
+          <div className='capitalize text-gray-600 text-sm'>
+            <p className='mb-1'>
               {user.firstName} {user.lastName}{' '}
-              <span className='capitalize ml-2'> ({role})</span>
+              <span className=' block'> ({role})</span>
             </p>
             <p>{estate.name}</p>
           </div>
@@ -91,32 +94,9 @@ const Account = () => {
                   />
                 </a>
               </Link>
-              <hr className='bg-gray-200 block w-full h-0.5' />
-            </div>
-            <div className='mb-4'>
-              <Link href='#'>
-                <a className=' flex justify-between w-full pt-2 pb-2 '>
-                  <span className='block'>Contact Us</span>
-                  <FontAwesomeIcon
-                    className={` mr-2  `}
-                    icon={faChevronRight}
-                  />
-                </a>
-              </Link>
-              <hr className='bg-gray-200 block w-full h-0.5' />
             </div>
           </div>
         </div>
-        <button
-          className='flex justify-between text-red-600 w-full '
-          type='button'
-          onClick={() => {
-            updateLoginDataDispatch(logOut({}));
-          }}
-        >
-          <span className='block'>Logout</span>
-          <FontAwesomeIcon className={` mr-2  `} icon={faChevronRight} />
-        </button>
       </div>
     </div>
   );
