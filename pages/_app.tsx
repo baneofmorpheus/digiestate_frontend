@@ -15,7 +15,7 @@ import Bugsnag from '@bugsnag/js';
 import BugsnagPluginReact from '@bugsnag/plugin-react';
 import React from 'react';
 import { useRouter } from 'next/router';
-
+import { ScrollTop } from 'primereact/scrolltop';
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -43,6 +43,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <PersistGate loading={null} persistor={persistor}>
         <ErrorBoundary>
           {getLayout(<Component {...pageProps} key={router.asPath} />)}
+          <ScrollTop />
         </ErrorBoundary>
       </PersistGate>
     </Provider>
