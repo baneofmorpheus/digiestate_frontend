@@ -420,9 +420,9 @@ const BookGuests = () => {
                       <option value='other'>Other</option>
                     </select>
                   </label>
-                  {errorsAddGuest['name'] && (
+                  {errorsAddGuest['gender'] && (
                     <ErrorMessage
-                      message={errorsAddGuest['name']['message']!}
+                      message={errorsAddGuest['gender']['message']!}
                     />
                   )}
                 </div>
