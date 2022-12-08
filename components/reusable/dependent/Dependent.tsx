@@ -11,8 +11,6 @@ type DependentPropType = {
 };
 
 const Dependent: NextPage<DependentPropType> = ({ dependent, handleClick }) => {
-  const role = useSelector((state: any) => state.role);
-
   return (
     <div
       onClick={() => {
@@ -51,28 +49,7 @@ const Dependent: NextPage<DependentPropType> = ({ dependent, handleClick }) => {
           </p>
         </div>
       </div>
-      {/* {role === 'resident' && (
-        <div className='text-gray-600  flex gap-y-1 items-center justify-end gap-x-2.5 '>
-          <button
-            onClick={() => {
-              editDependent?.(dependent);
-            }}
-            type='button'
-            className=' hover:text-black pl-2 pr-2 pt-2 pb-2'
-          >
-            <FontAwesomeIcon className={` text-sm `} icon={faPen} />
-          </button>
-          <button
-            onClick={() => {
-              deleteDependent?.(dependent);
-            }}
-            type='button'
-            className='hover:text-black pl-2 pr-2 pt-2 pb-2'
-          >
-            <FontAwesomeIcon className={` text-sm `} icon={faTrash} />
-          </button>
-        </div>
-      )} */}
+
       <div className='text-gray-600 w-1/5 flex-col flex gap-y-1 items-center justify-end gap-x-4 '>
         <span className='bg-gray-600 capitalize text-xs inline-block text-digiDefault pl-2 pr-2 pt-1 pb-1 rounded-lg'>
           {dependent.gender}

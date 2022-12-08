@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState, useRef, useEffect } from 'react';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
-import SecuritySingleDependent from 'components/reusable/single_dependent/SingleDependent';
+import SingleDependent from 'components/reusable/single_dependent/SingleDependent';
 import { Toast as ToastType } from 'primereact/toast';
 
 import { useSelector } from 'react-redux';
@@ -15,7 +15,11 @@ const SingleSecurity = () => {
   useEffect(() => {
     switch (role) {
       case 'security':
-        setComponentToDisplay(<SecuritySingleDependent />);
+        setComponentToDisplay(<SingleDependent />);
+
+        break;
+      case 'resident':
+        setComponentToDisplay(<SingleDependent />);
 
         break;
 
