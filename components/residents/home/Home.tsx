@@ -1,6 +1,8 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { updateToastData } from 'reducers/utility';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
@@ -20,6 +22,7 @@ const ResidentHome: NextPage = () => {
     useState<boolean>(false);
 
   const [recentBookings, setRecentBookings] = useState<Array<any>>([]);
+  const router = useRouter();
 
   const updateToastDispatch = useDispatch();
 
@@ -45,7 +48,9 @@ const ResidentHome: NextPage = () => {
     }
     getRecentBookings();
   }, [estate, updateToastDispatch]);
-
+  const navigateToSingleBooking = (id: number) => {
+    router.push(`/app/bookings/guests/${id}`);
+  };
   return (
     <div className=''>
       <div className='text-right'>
@@ -96,7 +101,7 @@ const ResidentHome: NextPage = () => {
           return (
             <BookedGuest
               key={index}
-              handleClick={() => {}}
+              handleClick={navigateToSingleBooking}
               guest={singleBooking}
             />
           );

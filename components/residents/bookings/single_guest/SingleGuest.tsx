@@ -160,61 +160,89 @@ const ResidentSingleGuest = () => {
                   <div>
                     <BookedGuest guest={guest} />
                   </div>
-                  <div className='shadow-lg border text-xs md:text-sm   rounded-lg pt-2 pb-2 mb-6 pl-10 pr-4'>
+                  <div className='shadow-lg border text-xs md:text-sm   rounded-lg pt-2 pb-2 mb-6 pl-2 pr-4'>
                     <div className='mt-4 ml-auto    mb-2 '>
-                      <p className='mb-2'>
-                        <FontAwesomeIcon
-                          className={` mr-4 text-xl text-gray-600 `}
-                          icon={faHandcuffs}
-                        />
-                        <span className=''>
-                          {!!guest.detain_guest ? 'Yes' : 'No'} (Detain)
-                        </span>
-                      </p>
-                      <p className='mb-2'>
-                        <FontAwesomeIcon
-                          className={` mr-4 text-xl text-gray-600`}
-                          icon={faPersonWalkingArrowLoopLeft}
-                        />
-                        {!!guest.send_back_guest ? 'Yes' : 'No'} (Send Back)
-                      </p>
+                      <div className='flex flex-col mb-2'>
+                        <div className='flex gap-x-1 items-center'>
+                          <div className='w-1/6 text-center'>
+                            <FontAwesomeIcon
+                              className={`  text-xl text-gray-600 `}
+                              icon={faHandcuffs}
+                            />
+                          </div>
+                          <div>
+                            <span className=''>
+                              {!!guest.detain_guest ? 'Yes' : 'No'} (Detain)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className='flex flex-col mb-2'>
+                        <div className='flex gap-x-1 items-center'>
+                          <div className='w-1/6 text-center'>
+                            <FontAwesomeIcon
+                              className={`  text-xl text-gray-600`}
+                              icon={faPersonWalkingArrowLoopLeft}
+                            />
+                          </div>
+                          <div>
+                            <span className=''>
+                              {!!guest.send_back_guest ? 'Yes' : 'No'} (Send
+                              Back)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
 
                       {!!guest.time_checked_by_security && (
-                        <p>
-                          <FontAwesomeIcon
-                            className={` mr-4 text-xl text-gray-600`}
-                            icon={faClock}
-                          />
-                          {moment(guest.time_checked_by_security).format(
-                            'DD-MMM-YYYY hh:mm a'
-                          )}{' '}
-                          (Check in/out)
-                        </p>
+                        <div className='flex flex-col mb-2'>
+                          <div className='flex gap-x-1 items-center'>
+                            <div className='w-1/6 text-center'>
+                              <FontAwesomeIcon
+                                className={`  text-xl text-gray-600`}
+                                icon={faClock}
+                              />
+                            </div>
+                            <div>
+                              <span className=''>
+                                {moment(guest.time_checked_by_security).format(
+                                  'DD-MMM-YYYY hh:mm a'
+                                )}{' '}
+                                (Check in/out)
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       )}
-                      <p className='mb-2'>
-                        <Link
-                          href={`/app/residents/single/${guest.resident.id}`}
-                        >
-                          <a>
+                      <div className='flex flex-col mb-2'>
+                        <div className='flex gap-x-1 items-center'>
+                          <div className='w-1/6 text-center'>
                             <FontAwesomeIcon
-                              className={` mr-4  text-xl text-gray-600`}
+                              className={`   text-xl text-gray-600`}
                               icon={faHouseUser}
                             />{' '}
+                          </div>
+                          <div>
                             <span className='underline'>
                               {guest.resident.first_name}{' '}
                               {guest.resident.last_name} (Resident)
                             </span>
-                          </a>
-                        </Link>
-                      </p>
-                      <p className='mb-2'>
-                        {' '}
-                        <FontAwesomeIcon
-                          className={` mr-4 text-xl text-gray-600`}
-                          icon={faLocationDot}
-                        />{' '}
-                        {guest?.address}
-                      </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className='flex flex-col mb-2'>
+                        <div className='flex gap-x-1 items-center'>
+                          <div className='w-1/6 text-center'>
+                            <FontAwesomeIcon
+                              className={`  text-xl text-gray-600`}
+                              icon={faLocationDot}
+                            />{' '}
+                          </div>
+                          <div>
+                            <span className=''>{guest?.address}</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   {guest.booking_info.type === 'group' && (

@@ -18,7 +18,7 @@ const Resident: NextPage<ResidentPropType> = ({ resident, handleClick }) => {
           handleClick(resident);
         }
       }}
-      className={`hover:scale-105  mb-4 transition-all duration-700 cursor-pointer shadow-lg mt-2 border rounded-lg pl-4 pr-4 text-xs md:text-sm  flex justify-between items-center gap-x-4 text-black   pt-2 pb-2`}
+      className={`betterhover:hover:scale-105  mb-4 transition-all duration-700 cursor-pointer shadow-lg mt-2 border rounded-lg pl-4 pr-4 text-xs md:text-sm  flex justify-between items-center gap-x-4 text-black   pt-2 pb-2`}
     >
       <div className='flex items-center gap-x-4 w-4/5 truncate'>
         <div
