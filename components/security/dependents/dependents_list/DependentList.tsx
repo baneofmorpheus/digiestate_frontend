@@ -77,15 +77,9 @@ const SecurityDependentList = () => {
     queryData.page = currentPage;
     const queryString = Object.keys(queryData)
       .map((key) => {
-        /**
-         * If booking type is all dont include the filter at all
-         */
-
-        if (queryData[key] != 'all') {
-          return (
-            encodeURIComponent(key) + '=' + encodeURIComponent(queryData[key])
-          );
-        }
+        return (
+          encodeURIComponent(key) + '=' + encodeURIComponent(queryData[key])
+        );
       })
       .join('&');
 
