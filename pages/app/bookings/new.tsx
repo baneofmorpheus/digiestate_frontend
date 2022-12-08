@@ -197,7 +197,7 @@ const BookGuests = () => {
 
             {/* Section End */}
 
-            <div className='text-center mb-4 mt-2 '>
+            <div className='text-center mb-4 mt-4 '>
               <button
                 disabled={formLoading ? true : false}
                 className='  border-2 border-gray-600 text-gray-600 flex ml-auto mr-auto items-center text-sm  mb-4 rounded-lg pl-8 pr-8 pt-2 pb-2'
