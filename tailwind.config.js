@@ -6,6 +6,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        'bounce-short': 'bounce 1s ease-in-out 5',
+      },
       screens: {
         betterhover: { raw: '(hover: hover)' },
       },
