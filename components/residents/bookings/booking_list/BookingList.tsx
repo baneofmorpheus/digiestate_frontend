@@ -17,6 +17,7 @@ import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import Link from 'next/link';
+import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
 
 type FilterData = {
   selectedPerPage: number;
@@ -183,12 +184,6 @@ const ResidentBookingList = () => {
       <div className=' '>
         <div className='flex mb-2 justify-between'>
           <h2 className='  lato-font'>Booked Guests</h2>
-          <Link href='/app/bookings/new'>
-            <a className='bg-gray-600   text-digiDefault text-xs pl-4 pr-4 pt-2 hover:bg-black pb-2 rounded-lg'>
-              <FontAwesomeIcon className={` mr-2  `} icon={faUserPlus} />
-              Book Guests
-            </a>
-          </Link>
         </div>
 
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
@@ -371,6 +366,7 @@ const ResidentBookingList = () => {
             </form>
           </div>
         </Dialog>
+        <NewItemButton link='/app/bookings/new' />
       </div>
       <style global jsx>{`
         @keyframes p-progress-spinner-color {

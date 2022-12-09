@@ -13,6 +13,7 @@ import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import { DependentListType, SingleDependentType } from 'types/';
 import Dependent from 'components/reusable/dependent/Dependent';
+import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
 
 type FilterData = {
   selectedPerPage: number;
@@ -147,15 +148,6 @@ const ResidentDependentList = () => {
       <div className=' '>
         <div className='flex justify-between mb-4'>
           <h2 className='mb-2  lato-font'>Dependents </h2>
-          <button
-            onClick={() => {
-              router.push('/app/dependents/new');
-            }}
-            className='bg-gray-600 h-8 hover:bg-black  text-digiDefault block text-sm rounded-lg pl-4 pr-4 '
-          >
-            <FontAwesomeIcon className={` filter-icon mr-2 `} icon={faPlus} />
-            New
-          </button>
         </div>
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2  '>
           <div className=''>
@@ -313,6 +305,7 @@ const ResidentDependentList = () => {
             </form>
           </div>
         </Dialog>
+        <NewItemButton link='/app/dependents/new' />
       </div>
       <style global jsx>{`
         @keyframes p-progress-spinner-color {
