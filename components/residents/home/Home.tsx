@@ -11,8 +11,9 @@ import { SingleBookedGuestType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
+import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
 import moment from 'moment';
 
 const ResidentHome: NextPage = () => {
@@ -52,15 +53,7 @@ const ResidentHome: NextPage = () => {
     router.push(`/app/bookings/guests/${id}`);
   };
   return (
-    <div className=''>
-      <div className='text-right'>
-        <Link href='/app/bookings/new'>
-          <a className='bg-gray-600  text-digiDefault text-xs   items-center pl-4 pr-4 pt-2 hover:bg-black pb-2 rounded-lg'>
-            <FontAwesomeIcon className={` mr-2  `} icon={faUserPlus} />
-            Book Guests
-          </a>
-        </Link>
-      </div>
+    <div className='relative min-h-screen pt-2'>
       <h5 className='mb-4'> Recent Bookings</h5>
 
       {loadingRecentBooking ? (
@@ -97,16 +90,18 @@ const ResidentHome: NextPage = () => {
           </div>
         )}
 
-        {recentBookings.map((singleBooking: SingleBookedGuestType, index) => {
-          return (
-            <BookedGuest
-              key={index}
-              handleClick={navigateToSingleBooking}
-              guest={singleBooking}
-            />
-          );
-        })}
+        {!loadingRecentBooking &&
+          recentBookings.map((singleBooking: SingleBookedGuestType, index) => {
+            return (
+              <BookedGuest
+                key={index}
+                handleClick={navigateToSingleBooking}
+                guest={singleBooking}
+              />
+            );
+          })}
       </div>
+      <NewItemButton link='/app/bookings/new' />
     </div>
   );
 };
