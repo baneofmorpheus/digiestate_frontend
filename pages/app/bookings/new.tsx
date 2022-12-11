@@ -76,6 +76,7 @@ const BookGuests = () => {
         .string()
         .matches(phoneRegExp, 'Phone number is not valid')
         .min(11)
+        .max(11)
         .required()
         .label('Phone Number'),
 

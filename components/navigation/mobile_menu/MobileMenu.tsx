@@ -2,36 +2,23 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { logOut } from 'reducers/authentication';
-
+import { useSelector } from 'react-redux';
+import ExtraSidebar from '../extra_sidebar/ExtraSidebar';
 import {
   faHouse,
   faUsers,
   faClipboardList,
-  faUser,
-  faAnglesRight,
   faEllipsis,
   faHouseUser,
-  faUserPlus,
-  faCircleQuestion,
-  faMoneyBill1Wave,
-  faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Sidebar } from 'primereact/sidebar';
-('@fortawesome/free-solid-svg-icons');
 import Link from 'next/link';
 
 const MobileMenu: NextPage = () => {
-  const updateLoginDataDispatch = useDispatch();
-
   const router = useRouter();
   const [sidebarVisible, setSideBarVisibile] = useState<boolean>(false);
   const selectedRouteStyle = ' text-digiDefault ';
-  const { user, role, estate } = useSelector(
-    (state: any) => state.authentication
-  );
+  const { role } = useSelector((state: any) => state.authentication);
 
   return (
     <div className='bg-gray-600 lg:hidden fixed bottom-0 left-0  w-screen ml-auto mr-auto'>
@@ -97,36 +84,6 @@ const MobileMenu: NextPage = () => {
           </Link>
         </div>
 
-        {/* <div
-          className={`${
-            router.pathname == '/app/emergency'
-              ? selectedRouteStyle
-              : 'text-gray-400'
-          }   pt-4  w-1/4  pb-4 cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
-        >
-          {' '}
-          <Link href='#'>
-            <a className=' block text-center'>
-              <FontAwesomeIcon className={` mr-2  `} icon={faTruckMedical} />
-              <span className='block '>Emergency</span>
-            </a>
-          </Link>
-        </div> */}
-        {/* <div
-          className={`${
-            router.pathname.includes('/app/account')
-              ? selectedRouteStyle
-              : 'text-gray-400'
-          }   pt-4  w-1/4  pb-4 cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
-        >
-          {' '}
-          <Link href='/app/account'>
-            <a className=' block text-center '>
-              <FontAwesomeIcon className={` mr-2  `} icon={faUser} />
-              <span className='block'>Account</span>
-            </a>
-          </Link>
-        </div> */}
         <div
           className={`
           }   text-gray-400  w-1/4  cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
@@ -143,115 +100,11 @@ const MobileMenu: NextPage = () => {
             <span className='block'>More</span>
           </button>
         </div>
-        {/* <div
-          className={`${
-            router.pathname == '/app/profile'
-              ? selectedRouteStyle
-              : 'text-gray-400'
-          }   pt-4  w-1/4  pb-4 cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
-        >
-          <button
-            className='block text-center w-full'
-            onClick={() => {
-              updateLoginDataDispatch(
-                updateLoginData({
-                  deviceToken: null,
-                  userId: null,
-                  loginToken: null,
-                  role: null,
-                  estate: null,
-                })
-              );
-            }}
-          >
-            <FontAwesomeIcon className={` mr-2  `} icon={faRightFromBracket} />
-            <span className='block'>Logout</span>
-          </button>
-        </div> */}
       </div>
-      <Sidebar
-        position='right'
-        showCloseIcon={false}
-        visible={sidebarVisible}
-        onHide={() => setSideBarVisibile(false)}
-      >
-        <div className='h-full flex flex-col justify-between '>
-          <div className='text-gray-600'>
-            <h4 className='font-medium mb-6'>Extra Features</h4>
-            {role !== 'resident' && (
-              <>
-                <Link href='/app'>
-                  <a className=' block mb-2 '>
-                    <FontAwesomeIcon className={` mr-4  `} icon={faUserPlus} />
-                    <span className=''>Registrations</span>
-                  </a>
-                </Link>
-                <hr className='h-0.5 mb-4 bg-gray-200' />
-              </>
-            )}
-
-            <Link href='/app/account'>
-              <button
-                type='button'
-                className='block text-start mb-2 w-full'
-                onClick={() => {
-                  setSideBarVisibile(false);
-                  router.push('/app/account');
-                }}
-              >
-                <FontAwesomeIcon className={` mr-4  `} icon={faUser} />
-                <span className=''>Account</span>
-              </button>
-            </Link>
-            <hr className='h-0.5 mb-4 bg-gray-200' />
-            <Link href='#'>
-              <a className=' block mb-2 '>
-                <FontAwesomeIcon
-                  className={` mr-4  `}
-                  icon={faCircleQuestion}
-                />
-                <span className=''>Get Help</span>
-              </a>
-            </Link>
-            <hr className='h-0.5 mb-4 bg-gray-200' />
-            <Link href='#'>
-              <a className=' block mb-2 '>
-                <FontAwesomeIcon className={` mr-4  `} icon={faEnvelope} />
-                <span className=''>Contact Us</span>
-              </a>
-            </Link>
-            <hr className='h-0.5 mb-4 bg-gray-200' />
-            <Link href='#'>
-              <a className=' block mb-2 '>
-                <FontAwesomeIcon
-                  className={` mr-4  `}
-                  icon={faMoneyBill1Wave}
-                />
-                <span className=''>Make Money With Us</span>
-              </a>
-            </Link>
-          </div>
-
-          <div className=''>
-            <div className='capitalize mb-2   text-sm'>
-              <p className='mb-1'>
-                {user.firstName}
-                <span className='capitalize ml-1'> ({role})</span>
-              </p>
-              <p>{estate.name}</p>
-            </div>
-            <button
-              onClick={() => {
-                updateLoginDataDispatch(logOut({}));
-              }}
-              className='border block w-full ml-auto mr-auto rounded-lg border-gray-400 pl-4 pr-4 pt-2 pb-2'
-              type='button'
-            >
-              Log Out
-            </button>
-          </div>
-        </div>
-      </Sidebar>
+      <ExtraSidebar
+        sidebarVisible={sidebarVisible}
+        setSideBarVisibile={setSideBarVisibile}
+      />
     </div>
   );
 };
