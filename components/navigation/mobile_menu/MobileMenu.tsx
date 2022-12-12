@@ -8,7 +8,7 @@ import {
   faHouse,
   faUsers,
   faClipboardList,
-  faEllipsis,
+  faAnglesRight,
   faHouseUser,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -96,7 +96,7 @@ const MobileMenu: NextPage = () => {
             className='text-center pt-4  pb-4 block w-full'
             type='button'
           >
-            <FontAwesomeIcon className={` mr-2   `} icon={faEllipsis} />
+            <FontAwesomeIcon className={` mr-2   `} icon={faAnglesRight} />
             <span className='block'>More</span>
           </button>
         </div>

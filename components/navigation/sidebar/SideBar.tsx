@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
@@ -10,7 +10,7 @@ import {
   faClipboardList,
   faUserPlus,
   faUser,
-  faEllipsis,
+  faAnglesRight,
   faHouseUser,
 } from '@fortawesome/free-solid-svg-icons';
 import ExtraSidebar from '../extra_sidebar/ExtraSidebar';
@@ -20,8 +20,6 @@ const SideBar: NextPage = () => {
   const router = useRouter();
   const { role, estate } = useSelector((state: any) => state.authentication);
   const [sidebarVisible, setSideBarVisibile] = useState<boolean>(false);
-
-  const updateLoginDataDispatch = useDispatch();
 
   const selectedRouteStyle =
     'bg-gray-600 border-r-4 border-black text-digiDefault';
@@ -128,7 +126,7 @@ const SideBar: NextPage = () => {
               setSideBarVisibile(true);
             }}
           >
-            <FontAwesomeIcon className={` mr-2   `} icon={faEllipsis} />
+            <FontAwesomeIcon className={` mr-2   `} icon={faAnglesRight} />
             <span className=''>More</span>
           </button>
         </div>

@@ -8,12 +8,10 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
-import Link from 'next/link';
 import PreviousPage from 'components/navigation/previous_page/PreviousPage';
 
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
-import { Checkbox } from 'primereact/checkbox';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
@@ -21,20 +19,9 @@ import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated'
 import { SelectButton } from 'primereact/selectbutton';
 import { Dialog } from 'primereact/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faLeftLong } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-type BookedGuest = {
-  name: string;
-  phone_number: string;
-  gender: string;
-  phone_visible_to_security: boolean;
-};
-
-type BookingData = {
-  vehicle_make: string;
-  vehicle_plate_number: string;
-  comment: string;
-};
+import { NewGuestType, ExtraBookingDataType } from 'types';
 
 const BookGuests = () => {
   const [showBookGuestModal, setShowBookGuestsModal] = useState<boolean>(false);
@@ -45,15 +32,10 @@ const BookGuests = () => {
     setFormLoading(false);
   };
 
-  const [activeAccordionIndex, setActiveAccordionIndex] = useState<number>(0);
   const [formLoading, setFormLoading] = useState(false);
 
-  const [bookInVehicle, setBookInVehicle] = useState(false);
-  const [passExtraInstructions, setPassExtraInstructions] = useState(false);
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-  const [retreivedToken, setRetrievedToken] = useState<boolean>(false);
-  const updateDeviceTokenDispatch = useDispatch();
   const updateToastDispatch = useDispatch();
 
   const bookingTypes = [
@@ -61,13 +43,13 @@ const BookGuests = () => {
     { label: 'Book Out', value: 'book_out' },
   ];
 
-  const [currentGuest, setCurrentGuest] = useState<BookedGuest>({
+  const [currentGuest, setCurrentGuest] = useState<NewGuestType>({
     name: '',
     phone_number: '',
     phone_visible_to_security: false,
     gender: '',
   });
-  const [guests, setGuests] = useState<Array<BookedGuest>>([]);
+  const [guests, setGuests] = useState<Array<NewGuestType>>([]);
 
   const addGuestsSchema = yup
     .object()
@@ -89,7 +71,7 @@ const BookGuests = () => {
     })
     .required();
 
-  const bookingDataSchema = yup
+  const ExtraBookingDataTypeSchema = yup
     .object()
     .shape({
       vehicle_make: yup.string().label('Vehicle Make'),
@@ -103,8 +85,8 @@ const BookGuests = () => {
     handleSubmit,
     formState: { errors },
     formState,
-  } = useForm<BookingData>({
-    resolver: yupResolver(bookingDataSchema),
+  } = useForm<ExtraBookingDataType>({
+    resolver: yupResolver(ExtraBookingDataTypeSchema),
     mode: 'all',
   });
 
@@ -114,7 +96,7 @@ const BookGuests = () => {
     formState: { errors: errorsAddGuest },
     formState: formStateAddGuest,
     reset: resetAddGuest,
-  } = useForm<BookedGuest>({
+  } = useForm<NewGuestType>({
     resolver: yupResolver(addGuestsSchema),
     mode: 'all',
   });
@@ -123,7 +105,12 @@ const BookGuests = () => {
 
   const [bookingMode, setBookingMode] = useState<string>('book_in');
   const estate = useSelector((state: any) => state.authentication.estate);
-  const bookGuests = async (data: BookingData) => {
+
+  const bookGuests = async (data: ExtraBookingDataType) => {
+    data.vehicle_make = data.vehicle_make || '';
+    data.vehicle_plate_number = data.vehicle_plate_number || '';
+    data.comment = data.comment || '';
+
     try {
       if (guests.length < 1) {
         updateToastDispatch(
@@ -324,8 +311,6 @@ const BookGuests = () => {
                   </div>
                 </AccordionTab>
               </Accordion>
-
-              {passExtraInstructions && <div className='mb-4  j'></div>}
             </div>
             {guests.length > 0 && (
               <div className='text-center'>

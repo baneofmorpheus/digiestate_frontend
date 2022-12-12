@@ -10,23 +10,35 @@ import {
   faHouseUser,
   faClock,
 } from '@fortawesome/free-solid-svg-icons';
-import PreviousPage from 'components/navigation/previous_page/PreviousPage';
+import { useForm } from 'react-hook-form';
+import ErrorMessage from 'components/validation/error_msg';
 
+import PreviousPage from 'components/navigation/previous_page/PreviousPage';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
-import { SingleBookedGuestType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import { Dialog } from 'primereact/dialog';
 import { SelectButton } from 'primereact/selectbutton';
 import moment from 'moment';
-import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { ProgressBar } from 'primereact/progressbar';
+import {
+  ExtraBookingDataType,
+  SingleBookedGuestType,
+  NewGuestType,
+} from 'types';
+
+type BookOutFormType = {
+  comment: string;
+};
+
 const ResidentSingleGuest = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [followUpLoading, setFollowUpLoading] = useState(false);
+  const [bookOutLoading, setBookOutLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
   const [followUpType, setFollowUpType] = useState<string>('send_back_guest');
@@ -37,10 +49,29 @@ const ResidentSingleGuest = () => {
 
   const [guest, setGuest] = useState<SingleBookedGuestType>();
   const [showFollowUpModal, setShowFollowUpModal] = useState<boolean>(false);
+  const [showBookOutModal, setShowBookOutModal] = useState<boolean>(false);
   const [followUpForGroup, setFollowUpForGroup] = useState<boolean>(false);
+  const [bookOutForGroup, setBookOutForGroup] = useState<boolean>(false);
   const router = useRouter();
 
   const estate = useSelector((state: any) => state.authentication.estate);
+
+  const bookOutDataSchema = yup
+    .object()
+    .shape({
+      comment: yup.string().max(7000).label('Extra Instructions'),
+    })
+    .required();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    formState,
+  } = useForm<BookOutFormType>({
+    resolver: yupResolver(bookOutDataSchema),
+    mode: 'all',
+  });
 
   const getGuest = useCallback(async () => {
     setFormLoading(true);
@@ -75,10 +106,14 @@ const ResidentSingleGuest = () => {
   const handleDialogHideEevent = () => {
     setShowFollowUpModal(false);
   };
+  const handleBookOutDialogHideEvent = () => {
+    setShowBookOutModal(false);
+  };
 
   const navigateToSingleBooking = (id: number) => {
     return router.push(`/app/bookings/guests/${id}`);
   };
+
   const followUpBookOut = async () => {
     if (formLoading) {
       return;
@@ -108,6 +143,66 @@ const ResidentSingleGuest = () => {
     }
     setFollowUpLoading(false);
   };
+
+  const bookOutGuests = async (data: BookOutFormType) => {
+    setBookOutLoading(true);
+    try {
+      let guests: Array<NewGuestType> = [];
+
+      if (bookOutForGroup) {
+        guests = guest!.booking_info.guests!.map(
+          (singleGuest: SingleBookedGuestType) => {
+            return {
+              name: singleGuest.name,
+              phone_number: singleGuest.phone_number,
+              gender: singleGuest.gender,
+              phone_visible_to_security: singleGuest.phone_visible_to_security,
+            };
+          }
+        );
+      } else {
+        /**
+         * Book out current guest only
+         */
+
+        guests.push({
+          name: guest!.name,
+          phone_number: guest!.phone_number,
+          gender: guest!.gender,
+          phone_visible_to_security: guest!.phone_visible_to_security,
+        });
+      }
+
+      const data: ExtraBookingDataType = {
+        vehicle_make: guest!.booking_info.vehicle_make as string,
+        vehicle_plate_number: guest!.booking_info
+          .vehicle_plate_number as string,
+        comment: '',
+      };
+      const payload = {
+        ...data,
+        guests,
+        estate_id: estate.id,
+        action: 'book_out',
+      };
+      const response = await digiEstateAxiosInstance.post('/bookings', payload);
+      setShowBookOutModal(false);
+
+      updateToastDispatch(
+        updateToastData({
+          severity: 'success',
+          detail: 'Book out was successful',
+          summary: 'Your guest(s) have been booked out',
+        })
+      );
+      router.push('/app/bookings');
+    } catch (error: any) {
+      const toastData = axiosErrorHandler(error);
+      updateToastDispatch(updateToastData(toastData));
+    }
+    setBookOutLoading(false);
+  };
+
   return (
     <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
       <div className=' '>
@@ -127,6 +222,21 @@ const ResidentSingleGuest = () => {
               >
                 {' '}
                 Follow Up
+              </button>
+            </div>
+          )}
+        {guest?.booking_info.action == 'book_in' &&
+          guest?.status == 'completed' && (
+            <div className='text-right mb-4'>
+              <button
+                type='button'
+                onClick={() => {
+                  setShowBookOutModal(true);
+                }}
+                className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+              >
+                {' '}
+                Book Out
               </button>
             </div>
           )}
@@ -343,6 +453,95 @@ const ResidentSingleGuest = () => {
                     </div>
 
                     {followUpLoading && (
+                      <ProgressBar
+                        mode='indeterminate'
+                        color='#4B5563'
+                        style={{ height: '6px' }}
+                      ></ProgressBar>
+                    )}
+                  </form>
+                </div>
+              </Dialog>
+
+              <Dialog
+                header=''
+                id='followUpDialog'
+                visible={showBookOutModal}
+                position='bottom'
+                modal
+                style={{ width: '100vw' }}
+                onHide={handleBookOutDialogHideEvent}
+                closable={!bookOutLoading}
+                draggable={false}
+                resizable={false}
+              >
+                <div>
+                  <form
+                    onSubmit={handleSubmit(bookOutGuests)}
+                    className='lg:w-1/2 ml-auto mr-auto'
+                  >
+                    <div className='mb-4 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
+                      <h4 className='mb-4 font-semibold'>Book Out Guest</h4>
+                    </div>
+
+                    <div className='mb-4'>
+                      <label className='text-black'>
+                        Extra Instructions
+                        <textarea
+                          {...register('comment')}
+                          name=''
+                          className='rei-text-text-area '
+                          id=''
+                          rows={4}
+                        ></textarea>
+                      </label>
+                      {errors['comment'] && (
+                        <ErrorMessage message={errors['comment']['message']!} />
+                      )}
+                    </div>
+                    <div>
+                      <hr className='h-0.5 mb-4 bg-gray-600' />
+
+                      <div className='mb-4'>
+                        <input
+                          name='applyToGroup'
+                          id='applyToGroup'
+                          className=' mr-2'
+                          type='checkbox'
+                          onChange={(event) => {
+                            setBookOutForGroup(event.target.checked);
+                          }}
+                          checked={bookOutForGroup}
+                        />
+                        <label
+                          htmlFor='applyToGroup'
+                          className='text-gray-800 text-sm cursor-pointer'
+                        >
+                          Apply to group
+                        </label>
+                      </div>
+                      <hr className='h-0.5 mb-4 bg-gray-600' />
+                    </div>
+
+                    <div className='flex gap-x-4 mb-4'>
+                      <button
+                        disabled={bookOutLoading}
+                        type='submit'
+                        className='pt-2 pb-2 pl-4 pr-4 bg-gray-600 text-digiDefault rounded-lg text-sm'
+                      >
+                        Proceed
+                      </button>
+                      <button
+                        disabled={bookOutLoading}
+                        onClick={() => {}}
+                        type='button'
+                        className='pt-2 pb-2 pl-4  pr-4 border-2 border-gray-600 rounded-lg text-sm'
+                      >
+                        Cancel
+                      </button>
+                    </div>
+
+                    {bookOutLoading && (
                       <ProgressBar
                         mode='indeterminate'
                         color='#4B5563'
