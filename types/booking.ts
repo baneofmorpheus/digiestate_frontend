@@ -46,4 +46,17 @@ export type SingleBookedGuestType = {
   updated_at: string;
 };
 
+export type NewGuestType = {
+  name: string;
+  phone_number: string;
+  gender: string;
+  phone_visible_to_security: boolean;
+};
+
+export type ExtraBookingDataType = {
+  vehicle_make: string;
+  vehicle_plate_number: string;
+  comment: string;
+};
+
 export type SingleBookedGuestListType = Array<SingleBookedGuestType>;

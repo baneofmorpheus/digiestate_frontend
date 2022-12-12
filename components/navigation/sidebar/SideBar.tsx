@@ -1,24 +1,25 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
-import { logOut } from 'reducers/authentication';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+
 import {
   faHouse,
   faUsers,
   faClipboardList,
   faUserPlus,
   faUser,
-  faRightFromBracket,
+  faAnglesRight,
   faHouseUser,
 } from '@fortawesome/free-solid-svg-icons';
+import ExtraSidebar from '../extra_sidebar/ExtraSidebar';
 
 import Link from 'next/link';
 const SideBar: NextPage = () => {
   const router = useRouter();
   const { role, estate } = useSelector((state: any) => state.authentication);
-
-  const updateLoginDataDispatch = useDispatch();
+  const [sidebarVisible, setSideBarVisibile] = useState<boolean>(false);
 
   const selectedRouteStyle =
     'bg-gray-600 border-r-4 border-black text-digiDefault';
@@ -122,11 +123,11 @@ const SideBar: NextPage = () => {
           <button
             className={` mb-4 pr-10 w-full pt-2 block text-right pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
             onClick={() => {
-              updateLoginDataDispatch(logOut({}));
+              setSideBarVisibile(true);
             }}
           >
-            <FontAwesomeIcon className={` mr-2  `} icon={faRightFromBracket} />
-            Logout
+            <FontAwesomeIcon className={` mr-2   `} icon={faAnglesRight} />
+            <span className=''>More</span>
           </button>
         </div>
       </div>
@@ -134,6 +135,10 @@ const SideBar: NextPage = () => {
         <p className='capitalize mb-1'>Estate: {estate.name}</p>
         <p className='capitalize'>Role: {role}</p>
       </div>
+      <ExtraSidebar
+        sidebarVisible={sidebarVisible}
+        setSideBarVisibile={setSideBarVisibile}
+      />
       <style jsx>{`
         .sidebar-container {
           border-right: 1px solid rgba(0, 0, 0, 0.1);
