@@ -10,7 +10,7 @@ import houseLottie from 'lottie/house.json';
 const Home = () => {
   const toast = useRef<ToastType>(null);
   return (
-    <div className=' pl-2 lg:container min-h-screen pr-2   lg:-mt-20 lg:flex-row gap-y-20 lg:gap-y-0 flex flex-col justify-between items-center '>
+    <div className=' pl-2 lg:container min-h-screen pr-2 pb-10  lg:-mt-20 lg:flex-row gap-y-20 lg:gap-y-0 flex flex-col justify-between items-center '>
       <div className=' lg:w-1/2'>
         <div>
           <p className='text-gray-600'>Welcome to</p>
