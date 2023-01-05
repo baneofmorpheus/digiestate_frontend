@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect, useCallback } from 'react';
+import { Timeline } from 'primereact/timeline';
+import { bookingStatusLabels } from 'helpers/reusable';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
@@ -29,10 +31,17 @@ import {
   ExtraBookingDataType,
   SingleBookedGuestType,
   NewGuestType,
+  BookingStatusType,
 } from 'types';
 
 type BookOutFormType = {
   comment: string;
+};
+
+type BookingHistory = {
+  status: string;
+  date: string;
+  id: number;
 };
 
 const ResidentSingleGuest = () => {
@@ -52,6 +61,7 @@ const ResidentSingleGuest = () => {
   const [showBookOutModal, setShowBookOutModal] = useState<boolean>(false);
   const [followUpForGroup, setFollowUpForGroup] = useState<boolean>(false);
   const [bookOutForGroup, setBookOutForGroup] = useState<boolean>(false);
+  const [bookingHistory, setBookingHistory] = useState<Array<BookingHistory>>();
   const router = useRouter();
 
   const estate = useSelector((state: any) => state.authentication.estate);
@@ -80,13 +90,23 @@ const ResidentSingleGuest = () => {
       const response = await digiEstateAxiosInstance.get(
         `/bookings/${estate.id}/guests/${bookedGuestId}`
       );
-      const guest = response.data.data;
-      guest.booking_info.guests.forEach(
+      const guest: SingleBookedGuestType = response.data.data;
+      guest.booking_info!.guests!.forEach(
         (singleGuest: SingleBookedGuestType) => {
           singleGuest.booking_info = guest.booking_info;
         }
       );
       setGuest(guest);
+      const bookingHistory = guest.logs!.map((singleLog) => {
+        return {
+          id: singleLog.id,
+          status:
+            bookingStatusLabels[singleLog.status as keyof BookingStatusType],
+          date: moment(singleLog.created_at).format('DD-MMM-YYYY hh:mm a'),
+        };
+      });
+
+      setBookingHistory(bookingHistory);
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
@@ -267,14 +287,22 @@ const ResidentSingleGuest = () => {
               )}
               {!formLoading && !!guest && (
                 <div>
-                  <div>
+                  <div className='mb-8'>
                     <BookedGuest guest={guest} />
+                  </div>
+                  <div className='mb-8'>
+                    <Timeline
+                      value={bookingHistory}
+                      align='left'
+                      className='!text-xs !md:text-sm'
+                      content={(item) => `${item.status} at ${item.date}`}
+                    />
                   </div>
                   <div className='shadow-lg border text-xs md:text-sm   rounded-lg pt-2 pb-2 mb-6 pl-2 pr-4'>
                     <div className='mt-4 ml-auto    mb-2 '>
                       <div className='flex flex-col mb-2'>
                         <div className='flex gap-x-1 items-center'>
-                          <div className='w-1/6 text-center'>
+                          <div className='w-10 text-center'>
                             <FontAwesomeIcon
                               className={`  text-xl text-gray-600 `}
                               icon={faHandcuffs}
@@ -282,14 +310,15 @@ const ResidentSingleGuest = () => {
                           </div>
                           <div>
                             <span className=''>
-                              {!!guest.detain_guest ? 'Yes' : 'No'} (Detain)
+                              {!!guest.detain_guest ? 'Yes' : 'No'} (Detain
+                              Guest)
                             </span>
                           </div>
                         </div>
                       </div>
                       <div className='flex flex-col mb-2'>
                         <div className='flex gap-x-1 items-center'>
-                          <div className='w-1/6 text-center'>
+                          <div className='w-10 text-center'>
                             <FontAwesomeIcon
                               className={`  text-xl text-gray-600`}
                               icon={faPersonWalkingArrowLoopLeft}
@@ -298,35 +327,15 @@ const ResidentSingleGuest = () => {
                           <div>
                             <span className=''>
                               {!!guest.send_back_guest ? 'Yes' : 'No'} (Send
-                              Back)
+                              Back Guest)
                             </span>
                           </div>
                         </div>
                       </div>
 
-                      {!!guest.time_checked_by_security && (
-                        <div className='flex flex-col mb-2'>
-                          <div className='flex gap-x-1 items-center'>
-                            <div className='w-1/6 text-center'>
-                              <FontAwesomeIcon
-                                className={`  text-xl text-gray-600`}
-                                icon={faClock}
-                              />
-                            </div>
-                            <div>
-                              <span className=''>
-                                {moment(guest.time_checked_by_security).format(
-                                  'DD-MMM-YYYY hh:mm a'
-                                )}{' '}
-                                (Check in/out)
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
                       <div className='flex flex-col mb-2'>
                         <div className='flex gap-x-1 items-center'>
-                          <div className='w-1/6 text-center'>
+                          <div className='w-10 text-center'>
                             <FontAwesomeIcon
                               className={`   text-xl text-gray-600`}
                               icon={faHouseUser}
@@ -342,14 +351,14 @@ const ResidentSingleGuest = () => {
                       </div>
                       <div className='flex flex-col mb-2'>
                         <div className='flex gap-x-1 items-center'>
-                          <div className='w-1/6 text-center'>
+                          <div className='w-10 text-center'>
                             <FontAwesomeIcon
                               className={`  text-xl text-gray-600`}
                               icon={faLocationDot}
                             />{' '}
                           </div>
                           <div>
-                            <span className=''>{guest?.address}</span>
+                            <span className=''>{guest?.address} (Address)</span>
                           </div>
                         </div>
                       </div>

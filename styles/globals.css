@@ -48,6 +48,12 @@ a {
   font-size: 1rem !important;
 }
 
+.p-timeline .p-timeline-event-marker {
+  border: 2px solid #4b5563 !important;
+}
+.p-timeline .p-timeline-event-opposite {
+  display: none;
+}
 @media (prefers-color-scheme: dark) {
   html {
     /* color-scheme: dark; */

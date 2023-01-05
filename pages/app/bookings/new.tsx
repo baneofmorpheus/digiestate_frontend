@@ -299,7 +299,7 @@ const BookGuests = () => {
                       Extra Instructions
                       <textarea
                         {...register('comment')}
-                        name=''
+                        name='comment'
                         className='rei-text-text-area '
                         id=''
                         rows={4}
