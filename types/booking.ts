@@ -6,6 +6,7 @@ export type BookingStatusType = {
   in: string;
   leaving: string;
   booked: string;
+  cancelled: string;
   out: string;
 };
 

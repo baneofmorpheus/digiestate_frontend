@@ -34,6 +34,8 @@ import {
   BookingStatusType,
 } from 'types';
 
+import { Checkbox } from 'primereact/checkbox';
+
 type BookOutFormType = {
   comment: string;
 };
@@ -48,6 +50,7 @@ const ResidentSingleGuest = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [followUpLoading, setFollowUpLoading] = useState(false);
   const [bookOutLoading, setBookOutLoading] = useState(false);
+  const [cancelBookingLoading, setCancelBookingLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
   const [followUpType, setFollowUpType] = useState<string>('send_back_guest');
@@ -59,8 +62,10 @@ const ResidentSingleGuest = () => {
   const [guest, setGuest] = useState<SingleBookedGuestType>();
   const [showFollowUpModal, setShowFollowUpModal] = useState<boolean>(false);
   const [showBookOutModal, setShowBookOutModal] = useState<boolean>(false);
+  const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
   const [followUpForGroup, setFollowUpForGroup] = useState<boolean>(false);
   const [bookOutForGroup, setBookOutForGroup] = useState<boolean>(false);
+  const [cancelGroupBooking, setCancelGroupBooking] = useState<boolean>(false);
   const [bookingHistory, setBookingHistory] = useState<Array<BookingHistory>>();
   const router = useRouter();
 
@@ -128,6 +133,9 @@ const ResidentSingleGuest = () => {
   };
   const handleBookOutDialogHideEvent = () => {
     setShowBookOutModal(false);
+  };
+  const handleCancelDialogHideEvent = () => {
+    setShowCancelModal(false);
   };
 
   const navigateToSingleBooking = (id: number) => {
@@ -223,6 +231,30 @@ const ResidentSingleGuest = () => {
     setBookOutLoading(false);
   };
 
+  const sendCancelBookingRequest = async () => {
+    setCancelBookingLoading(true);
+    try {
+      const url = cancelGroupBooking
+        ? `/bookings/${guest!.booking_info.id}/group/cancel`
+        : `/bookings/${guest!.id}/booked_guest/cancel`;
+
+      const response = await digiEstateAxiosInstance.post(url, {});
+      setShowCancelModal(false);
+
+      updateToastDispatch(
+        updateToastData({
+          severity: 'success',
+          detail: 'Booking(s) cancelled successfully',
+        })
+      );
+      await getGuest();
+    } catch (error: any) {
+      const toastData = axiosErrorHandler(error);
+      updateToastDispatch(updateToastData(toastData));
+    }
+    setCancelBookingLoading(false);
+  };
+
   return (
     <div className=' pt-4 md:pl-2 md:pr-2 pb-2'>
       <div className=' '>
@@ -245,6 +277,20 @@ const ResidentSingleGuest = () => {
               </button>
             </div>
           )}
+        {guest?.status == 'booked' && (
+          <div className='text-right mb-4'>
+            <button
+              type='button'
+              onClick={() => {
+                setShowCancelModal(true);
+              }}
+              className='border-gray-600 border-2 text-gray-600 pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+            >
+              {' '}
+              Cancel Booking
+            </button>
+          </div>
+        )}
         {guest?.booking_info.action == 'book_in' &&
           guest?.status == 'completed' && (
             <div className='text-right mb-4'>
@@ -551,6 +597,78 @@ const ResidentSingleGuest = () => {
                     </div>
 
                     {bookOutLoading && (
+                      <ProgressBar
+                        mode='indeterminate'
+                        color='#4B5563'
+                        style={{ height: '6px' }}
+                      ></ProgressBar>
+                    )}
+                  </form>
+                </div>
+              </Dialog>
+              <Dialog
+                header=''
+                id='followUpDialog'
+                visible={showCancelModal}
+                position='bottom'
+                modal
+                style={{ width: '100vw' }}
+                onHide={handleCancelDialogHideEvent}
+                closable={!cancelBookingLoading}
+                draggable={false}
+                resizable={false}
+              >
+                <div>
+                  <form
+                    onSubmit={handleSubmit(sendCancelBookingRequest)}
+                    className='lg:w-1/2 ml-auto mr-auto'
+                  >
+                    <div className='mb-4 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
+                      <h4 className='mb-4 font-semibold'>Cancel Booking</h4>
+                    </div>
+
+                    <div>
+                      <hr className='h-0.5 mb-4 bg-gray-600' />
+
+                      <div className='mb-4'>
+                        <Checkbox
+                          onChange={(event) => {
+                            setCancelGroupBooking(event.target.checked);
+                          }}
+                          inputId='applyToGroup'
+                          name='applyToGroup'
+                          checked={cancelGroupBooking}
+                          className='mr-2'
+                        ></Checkbox>
+                        <label
+                          htmlFor='applyToGroup'
+                          className='text-gray-800 text-sm cursor-pointer'
+                        >
+                          Apply to group
+                        </label>
+                      </div>
+                      <hr className='h-0.5 mb-4 bg-gray-600' />
+                    </div>
+
+                    <div className='flex gap-x-4 mb-4'>
+                      <button
+                        disabled={cancelBookingLoading}
+                        type='submit'
+                        className='pt-2 pb-2 pl-4 pr-4 bg-gray-600 text-digiDefault rounded-lg text-sm'
+                      >
+                        Proceed
+                      </button>
+                      <button
+                        disabled={cancelBookingLoading}
+                        onClick={() => {}}
+                        type='button'
+                        className='pt-2 pb-2 pl-4  pr-4 border-2 border-gray-600 rounded-lg text-sm'
+                      >
+                        Cancel
+                      </button>
+                    </div>
+
+                    {cancelBookingLoading && (
                       <ProgressBar
                         mode='indeterminate'
                         color='#4B5563'
