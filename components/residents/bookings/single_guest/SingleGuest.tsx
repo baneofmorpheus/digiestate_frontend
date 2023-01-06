@@ -10,7 +10,6 @@ import {
   faLocationDot,
   faPersonWalkingArrowLoopLeft,
   faHouseUser,
-  faClock,
 } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
 import ErrorMessage from 'components/validation/error_msg';
