@@ -499,29 +499,30 @@ const ResidentSingleGuest = () => {
                     <div className='mb-4 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
                       <h4 className='mb-4 font-semibold'>Book Out Guest</h4>
                     </div>
+                    {guest?.booking_info.type === 'group' && (
+                      <div>
+                        <hr className='h-0.5 mb-4 bg-gray-600' />
 
-                    <div>
-                      <hr className='h-0.5 mb-4 bg-gray-600' />
-
-                      <div className='mb-4'>
-                        <Checkbox
-                          onChange={(event) => {
-                            setBookOutForGroup(event.target.checked);
-                          }}
-                          inputId='bookOutForGroup'
-                          name='bookOutForGroup'
-                          checked={bookOutForGroup}
-                          className='mr-2'
-                        ></Checkbox>
-                        <label
-                          htmlFor='bookOutForGroup'
-                          className='text-gray-800 text-sm cursor-pointer'
-                        >
-                          Apply to group
-                        </label>
+                        <div className='mb-4'>
+                          <Checkbox
+                            onChange={(event) => {
+                              setBookOutForGroup(event.target.checked);
+                            }}
+                            inputId='bookOutForGroup'
+                            name='bookOutForGroup'
+                            checked={bookOutForGroup}
+                            className='mr-2'
+                          ></Checkbox>
+                          <label
+                            htmlFor='bookOutForGroup'
+                            className='text-gray-800 text-sm cursor-pointer'
+                          >
+                            Apply to group
+                          </label>
+                        </div>
+                        <hr className='h-0.5 mb-4 bg-gray-600' />
                       </div>
-                      <hr className='h-0.5 mb-4 bg-gray-600' />
-                    </div>
+                    )}
 
                     <div className='flex gap-x-4 mb-4'>
                       <button
@@ -572,28 +573,30 @@ const ResidentSingleGuest = () => {
                       <h4 className='mb-4 font-semibold'>Cancel Booking</h4>
                     </div>
 
-                    <div>
-                      <hr className='h-0.5 mb-4 bg-gray-600' />
+                    {guest?.booking_info.type === 'group' && (
+                      <div>
+                        <hr className='h-0.5 mb-4 bg-gray-600' />
 
-                      <div className='mb-4'>
-                        <Checkbox
-                          onChange={(event) => {
-                            setCancelGroupBooking(event.target.checked);
-                          }}
-                          inputId='applyToGroup'
-                          name='applyToGroup'
-                          checked={cancelGroupBooking}
-                          className='mr-2'
-                        ></Checkbox>
-                        <label
-                          htmlFor='applyToGroup'
-                          className='text-gray-800 text-sm cursor-pointer'
-                        >
-                          Apply to group
-                        </label>
+                        <div className='mb-4'>
+                          <Checkbox
+                            onChange={(event) => {
+                              setCancelGroupBooking(event.target.checked);
+                            }}
+                            inputId='applyToGroup'
+                            name='applyToGroup'
+                            checked={cancelGroupBooking}
+                            className='mr-2'
+                          ></Checkbox>
+                          <label
+                            htmlFor='applyToGroup'
+                            className='text-gray-800 text-sm cursor-pointer'
+                          >
+                            Apply to group
+                          </label>
+                        </div>
+                        <hr className='h-0.5 mb-4 bg-gray-600' />
                       </div>
-                      <hr className='h-0.5 mb-4 bg-gray-600' />
-                    </div>
+                    )}
 
                     <div className='flex gap-x-4 mb-4'>
                       <button
