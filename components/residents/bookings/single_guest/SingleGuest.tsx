@@ -35,10 +35,6 @@ import {
 
 import { Checkbox } from 'primereact/checkbox';
 
-type BookOutFormType = {
-  comment: string;
-};
-
 type BookingHistory = {
   status: string;
   date: string;
@@ -82,7 +78,7 @@ const ResidentSingleGuest = () => {
     handleSubmit,
     formState: { errors },
     formState,
-  } = useForm<BookOutFormType>({
+  } = useForm({
     resolver: yupResolver(bookOutDataSchema),
     mode: 'all',
   });
@@ -163,7 +159,7 @@ const ResidentSingleGuest = () => {
           summary: 'Follow up was successful',
         })
       );
-      getGuest();
+      await getGuest();
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
@@ -171,48 +167,14 @@ const ResidentSingleGuest = () => {
     setFollowUpLoading(false);
   };
 
-  const bookOutGuests = async (data: BookOutFormType) => {
+  const bookOutGuests = async () => {
     setBookOutLoading(true);
     try {
-      let guests: Array<NewGuestType> = [];
+      const url = followUpForGroup
+        ? `/bookings/${guest!.booking_info.id}/group/book-out`
+        : `/bookings/${guest!.id}/booked_guest/book-out`;
 
-      if (bookOutForGroup) {
-        guests = guest!.booking_info.guests!.map(
-          (singleGuest: SingleBookedGuestType) => {
-            return {
-              name: singleGuest.name,
-              phone_number: singleGuest.phone_number,
-              gender: singleGuest.gender,
-              phone_visible_to_security: singleGuest.phone_visible_to_security,
-            };
-          }
-        );
-      } else {
-        /**
-         * Book out current guest only
-         */
-
-        guests.push({
-          name: guest!.name,
-          phone_number: guest!.phone_number,
-          gender: guest!.gender,
-          phone_visible_to_security: guest!.phone_visible_to_security,
-        });
-      }
-
-      const data: ExtraBookingDataType = {
-        vehicle_make: guest!.booking_info.vehicle_make as string,
-        vehicle_plate_number: guest!.booking_info
-          .vehicle_plate_number as string,
-        comment: '',
-      };
-      const payload = {
-        ...data,
-        guests,
-        estate_id: estate.id,
-        action: 'book_out',
-      };
-      const response = await digiEstateAxiosInstance.post('/bookings', payload);
+      const response = await digiEstateAxiosInstance.post(url, {});
       setShowBookOutModal(false);
 
       updateToastDispatch(
@@ -222,7 +184,7 @@ const ResidentSingleGuest = () => {
           summary: 'Your guest(s) have been booked out',
         })
       );
-      router.push('/app/bookings');
+      await getGuest();
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
@@ -276,35 +238,35 @@ const ResidentSingleGuest = () => {
               </button>
             </div>
           )}
-        {guest?.status == 'booked' && (
-          <div className='text-right mb-4'>
-            <button
-              type='button'
-              onClick={() => {
-                setShowCancelModal(true);
-              }}
-              className='border-gray-600 border-2 text-gray-600 pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
-            >
-              {' '}
-              Cancel Booking
-            </button>
-          </div>
-        )}
-        {guest?.booking_info.action == 'book_in' &&
-          guest?.status == 'completed' && (
+        {!formLoading &&
+          (guest?.status == 'booked' || guest?.status == 'leaving') && (
             <div className='text-right mb-4'>
               <button
                 type='button'
                 onClick={() => {
-                  setShowBookOutModal(true);
+                  setShowCancelModal(true);
                 }}
-                className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+                className='border-gray-600 border-2 text-gray-600 pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
               >
                 {' '}
-                Book Out
+                Cancel Booking
               </button>
             </div>
           )}
+        {guest?.status == 'in' && (
+          <div className='text-right mb-4'>
+            <button
+              type='button'
+              onClick={() => {
+                setShowBookOutModal(true);
+              }}
+              className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+            >
+              {' '}
+              Book Out
+            </button>
+          </div>
+        )}
 
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
           <div className=''>
@@ -538,37 +500,21 @@ const ResidentSingleGuest = () => {
                       <h4 className='mb-4 font-semibold'>Book Out Guest</h4>
                     </div>
 
-                    <div className='mb-4'>
-                      <label className='text-black'>
-                        Extra Instructions
-                        <textarea
-                          {...register('comment')}
-                          name=''
-                          className='rei-text-text-area '
-                          id=''
-                          rows={4}
-                        ></textarea>
-                      </label>
-                      {errors['comment'] && (
-                        <ErrorMessage message={errors['comment']['message']!} />
-                      )}
-                    </div>
                     <div>
                       <hr className='h-0.5 mb-4 bg-gray-600' />
 
                       <div className='mb-4'>
-                        <input
-                          name='applyToGroup'
-                          id='applyToGroup'
-                          className=' mr-2'
-                          type='checkbox'
+                        <Checkbox
                           onChange={(event) => {
                             setBookOutForGroup(event.target.checked);
                           }}
+                          inputId='bookOutForGroup'
+                          name='bookOutForGroup'
                           checked={bookOutForGroup}
-                        />
+                          className='mr-2'
+                        ></Checkbox>
                         <label
-                          htmlFor='applyToGroup'
+                          htmlFor='bookOutForGroup'
                           className='text-gray-800 text-sm cursor-pointer'
                         >
                           Apply to group
