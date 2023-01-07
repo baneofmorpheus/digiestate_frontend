@@ -1,10 +1,8 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef, useCallback } from 'react';
-
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
-
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { Dialog } from 'primereact/dialog';
@@ -16,6 +14,7 @@ import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
+import { bookingStatuses } from 'helpers/reusable';
 
 type FilterData = {
   selectedPerPage: number;
@@ -30,18 +29,6 @@ const ResidentBookingList = () => {
   const paginationRef = useRef<any>(null);
   const [formLoading, setFormLoading] = useState(false);
   const updateToastDispatch = useDispatch();
-
-  const bookingStatuses = [
-    { label: 'All', value: 'all' },
-    { label: 'Booked', value: 'booked' },
-    { label: 'In', value: 'in' },
-    { label: 'Out', value: 'out' },
-    { label: 'Leaving', value: 'leaving' },
-    { label: 'Timed Out', value: 'timed_out' },
-    { label: 'Detained', value: 'detained' },
-    { label: 'Sent Back', value: 'sent_back' },
-    { label: 'Cancelled', value: 'cancelled' },
-  ];
 
   const [guests, setGuests] = useState<Array<SingleBookedGuestType>>([]);
 

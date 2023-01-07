@@ -95,31 +95,7 @@ const SideBar: NextPage = () => {
               Bookings
             </a>
           </Link>
-          {/* <div
-            className={`${
-              router.pathname == '/app/emergency' ? selectedRouteStyle : ''
-            } mb-4 pr-10 pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
-          >
-            {' '}
-            <Link href='#'>
-              <a className=' block'>
-                <FontAwesomeIcon className={` mr-2  `} icon={faTruckMedical} />
-                Emergency
-              </a>
-            </Link>
-          </div> */}
-          <Link href='/app/account'>
-            <a
-              className={`${
-                router.pathname.includes('/app/account')
-                  ? selectedRouteStyle
-                  : ''
-              } mb-4 pr-10 block pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
-            >
-              <FontAwesomeIcon className={` mr-2  `} icon={faUser} />
-              Account
-            </a>
-          </Link>
+
           <button
             className={` mb-4 pr-10 w-full pt-2 block text-right pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
             onClick={() => {
