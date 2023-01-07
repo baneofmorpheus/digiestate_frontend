@@ -38,7 +38,7 @@ const ResidentHome: NextPage = () => {
         const formattedEndDate = moment().format('Y-MM-DD');
 
         const response: any = await digiEstateAxiosInstance.get(
-          `/bookings/${estate.id}/guests?start_date=${formattedStartDate}&end_date=${formattedEndDate}&sort[by]=updated_at&sort[order]=desc&per_page=5`
+          `/bookings/${estate.id}/guests?start_date=${formattedStartDate}&end_date=${formattedEndDate}&sort[by]=updated_at&sort[order]=desc&per_page=25`
         );
         setRecentBookings(response.data.data.booked_guests);
       } catch (error: any) {
