@@ -12,7 +12,6 @@ import {
   faHouseUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
-import ErrorMessage from 'components/validation/error_msg';
 
 import PreviousPage from 'components/navigation/previous_page/PreviousPage';
 import * as yup from 'yup';
@@ -26,12 +25,7 @@ import { SelectButton } from 'primereact/selectbutton';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ProgressBar } from 'primereact/progressbar';
-import {
-  ExtraBookingDataType,
-  SingleBookedGuestType,
-  NewGuestType,
-  BookingStatusType,
-} from 'types';
+import { SingleBookedGuestType, BookingStatusType } from 'types';
 
 import { Checkbox } from 'primereact/checkbox';
 
@@ -223,8 +217,7 @@ const ResidentSingleGuest = () => {
 
         {!guest?.send_back_guest &&
           !guest?.detain_guest &&
-          guest?.booking_info.action == 'book_out' &&
-          guest?.status == 'pending' && (
+          guest?.status == 'leaving' && (
             <div className='text-right mb-4'>
               <button
                 type='button'
@@ -238,21 +231,20 @@ const ResidentSingleGuest = () => {
               </button>
             </div>
           )}
-        {!formLoading &&
-          (guest?.status == 'booked' || guest?.status == 'leaving') && (
-            <div className='text-right mb-4'>
-              <button
-                type='button'
-                onClick={() => {
-                  setShowCancelModal(true);
-                }}
-                className='border-gray-600 border-2 text-gray-600 pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
-              >
-                {' '}
-                Cancel Booking
-              </button>
-            </div>
-          )}
+        {!formLoading && guest?.status == 'booked' && (
+          <div className='text-right mb-4'>
+            <button
+              type='button'
+              onClick={() => {
+                setShowCancelModal(true);
+              }}
+              className='border-gray-600 border-2 text-gray-600 pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+            >
+              {' '}
+              Cancel Booking
+            </button>
+          </div>
+        )}
         {guest?.status == 'in' && (
           <div className='text-right mb-4'>
             <button
@@ -428,18 +420,17 @@ const ResidentSingleGuest = () => {
                         <hr className='h-0.5 mb-4 bg-gray-600' />
 
                         <div className='mb-4'>
-                          <input
-                            name='showPassword'
-                            id='showPassword'
-                            className=' mr-2'
-                            type='checkbox'
+                          <Checkbox
                             onChange={(event) => {
                               setFollowUpForGroup(event.target.checked);
                             }}
+                            inputId='followUpCheckbox'
+                            name='followUpCheckbox'
                             checked={followUpForGroup}
-                          />
+                            className='mr-2'
+                          ></Checkbox>
                           <label
-                            htmlFor='showPassword'
+                            htmlFor='followUpCheckbox'
                             className='text-gray-800 text-sm cursor-pointer'
                           >
                             Apply to group
