@@ -9,7 +9,6 @@ import {
   faUsers,
   faClipboardList,
   faUserPlus,
-  faUser,
   faAnglesRight,
   faHouseUser,
 } from '@fortawesome/free-solid-svg-icons';

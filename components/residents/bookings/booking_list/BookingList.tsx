@@ -103,7 +103,7 @@ const ResidentBookingList = () => {
     queryData.status = filterData.bookingStatus;
     queryData.per_page = filterData.selectedPerPage;
     queryData.name = filterData.name;
-    queryData['sort[by]'] = 'created_at';
+    queryData['sort[by]'] = 'updated_at';
     queryData['sort[order]'] = 'desc';
 
     setPerPage(selectedPerPage);

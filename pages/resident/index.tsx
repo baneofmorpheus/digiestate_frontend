@@ -130,7 +130,8 @@ const LoginData: NextPage<LoginDataPropType> = () => {
           role: response.data.data.role,
           user: {
             id: response.data.data.user.id,
-            profileImageLink: null,
+            profileImageLink:
+              response.data.data.user.resident_data.profile_image_link,
             firstName: response.data.data.user.first_name,
             lastName: response.data.data.user.last_name,
           },

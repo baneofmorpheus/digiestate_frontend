@@ -1,12 +1,10 @@
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
-import { logOut } from 'reducers/authentication';
-import { useState } from 'react';
+
 import PreviousPage from 'components/navigation/previous_page/PreviousPage';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,6 +13,8 @@ const Account = () => {
   const { user, role, estate } = useSelector(
     (state: any) => state.authentication
   );
+
+  console.log(user);
 
   const updateLoginDataDispatch = useDispatch();
 
