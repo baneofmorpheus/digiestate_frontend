@@ -111,7 +111,9 @@ const SelectSubscriptionPlan = () => {
 };
 
 SelectSubscriptionPlan.getLayout = function getLayout(page: NextPage) {
-  return <AuthenticatedLayout>{page}</AuthenticatedLayout>;
+  return (
+    <AuthenticatedLayout allowedRoles={['admin']}>{page}</AuthenticatedLayout>
+  );
 };
 
 export default SelectSubscriptionPlan;
