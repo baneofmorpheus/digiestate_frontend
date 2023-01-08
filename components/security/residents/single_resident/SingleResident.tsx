@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { useState, useEffect, useCallback } from 'react';
 import { ProgressBar } from 'primereact/progressbar';
 import { Dialog } from 'primereact/dialog';
-import { SelectButton } from 'primereact/selectbutton';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
@@ -27,11 +26,7 @@ const SecuritySingleResident = () => {
   const [followUpLoading, setFollowUpLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const [approveResident, setApproveResident] = useState<boolean>(true);
-  const approveResidentTypes = [
-    { label: 'Approve Resident', value: true },
-    { label: 'Reject Resident', value: false },
-  ];
+  const [approveResident, setApproveResident] = useState<string>('1');
 
   const [resident, setResident] = useState<UserType>();
   const [showFollowUpModal, setShowFollowUpModal] = useState<boolean>(false);
@@ -76,9 +71,6 @@ const SecuritySingleResident = () => {
     setShowFollowUpModal(false);
   };
 
-  const navigateToSingleDependent = (id: number) => {
-    return router.push(`/app/dependents/single/${id}`);
-  };
   const approveOrRejectResident = async () => {
     if (formLoading) {
       return;
@@ -87,7 +79,7 @@ const SecuritySingleResident = () => {
     try {
       const url = `/estates/${estate.id}/resident/${router.query['resident-id']}/approve-or-reject`;
       const data = {
-        approve_resident: !!approveResident,
+        approve_resident: approveResident == '1' ? true : false,
       };
       const response = await digiEstateAxiosInstance.post(url, data);
       setShowFollowUpModal(false);
@@ -147,7 +139,7 @@ const SecuritySingleResident = () => {
                       onClick={() => {
                         setShowFollowUpModal(true);
                       }}
-                      className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+                      className='bg-gray-600 hover:bg-black text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
                     >
                       {' '}
                       Respond to Request
@@ -238,13 +230,24 @@ const SecuritySingleResident = () => {
                           {' '}
                           What do you want to do?
                         </span>
-                        <SelectButton
+                        {/* <SelectButton
                           id='followUpSelect'
                           unselectable={false}
                           value={approveResident}
                           options={approveResidentTypes}
                           onChange={(e) => setApproveResident(e.value)}
-                        ></SelectButton>
+                        ></SelectButton> */}
+
+                        <select
+                          value={approveResident}
+                          onChange={(e) => setApproveResident(e.target.value)}
+                          className='rei-text-input'
+                          name='bookingStatus'
+                          id=''
+                        >
+                          <option value='1'>Approve Resident</option>
+                          <option value='0'>Reject Resident</option>
+                        </select>
                       </div>
                       <hr className='h-0.5 mb-4 bg-gray-600' />
                     </div>

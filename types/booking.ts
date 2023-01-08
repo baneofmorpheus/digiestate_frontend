@@ -37,7 +37,11 @@ export type SingleBookedGuestLogType = {
   created_at: string;
   updated_at: string;
 };
-
+export type BookingHistory = {
+  status: string;
+  date: string;
+  id: number;
+};
 export type SingleBookedGuestType = {
   id: number;
   name: string;

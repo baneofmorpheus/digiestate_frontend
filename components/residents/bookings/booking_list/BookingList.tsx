@@ -302,7 +302,7 @@ const ResidentBookingList = () => {
                     value={bookingStatus}
                     onChange={(e) => setBookingStatus(e.target.value)}
                     className='rei-text-input'
-                    name='perPage'
+                    name='bookingStatus'
                     id=''
                   >
                     {bookingStatuses.map((singleBookingStatus, index) => {

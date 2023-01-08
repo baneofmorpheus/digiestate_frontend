@@ -25,15 +25,13 @@ import { SelectButton } from 'primereact/selectbutton';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ProgressBar } from 'primereact/progressbar';
-import { SingleBookedGuestType, BookingStatusType } from 'types';
+import {
+  SingleBookedGuestType,
+  BookingHistory,
+  BookingStatusType,
+} from 'types';
 
 import { Checkbox } from 'primereact/checkbox';
-
-type BookingHistory = {
-  status: string;
-  date: string;
-  id: number;
-};
 
 const ResidentSingleGuest = () => {
   const [formLoading, setFormLoading] = useState(false);
@@ -363,6 +361,24 @@ const ResidentSingleGuest = () => {
                       </div>
                     </div>
                   </div>
+                  {!!guest.booking_info.comment && (
+                    <div className='shadow-lg border text-xs md:text-sm  rounded-lg pt-2 pb-2 mb-6 pl-4 pr-4'>
+                      <p className='font-bold mb-1'>Extra Instructions</p>
+                      <p className=''>{guest.booking_info.comment}</p>
+                    </div>
+                  )}
+                  {(!!guest.booking_info.vehicle_make ||
+                    !!guest.booking_info.vehicle_plate_number) && (
+                    <div className='shadow-lg border text-xs md:text-sm  rounded-lg pt-2 pb-2 mb-6 pl-4 pr-4'>
+                      <p className='font-bold mb-1'>Vehicle Info</p>
+                      <p className=''>
+                        Vehicle Make :{guest.booking_info.vehicle_make}
+                      </p>
+                      <p className=''>
+                        Plate Number :{guest.booking_info.vehicle_plate_number}
+                      </p>
+                    </div>
+                  )}
                   {guest.booking_info.type === 'group' && (
                     <div>
                       <h2> Group Members</h2>
