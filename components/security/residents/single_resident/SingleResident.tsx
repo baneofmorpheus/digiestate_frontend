@@ -27,7 +27,7 @@ const SecuritySingleResident = () => {
   const [followUpLoading, setFollowUpLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const [approveResident, setApproveResident] = useState<boolean>(false);
+  const [approveResident, setApproveResident] = useState<boolean>(true);
   const approveResidentTypes = [
     { label: 'Approve Resident', value: true },
     { label: 'Reject Resident', value: false },
@@ -198,7 +198,9 @@ const SecuritySingleResident = () => {
                     </div>
                   </div>
                   <div>
-                    <h4>Dependents</h4>
+                    {resident.estate_user!.dependents!.length > 0 && (
+                      <h4>Dependents</h4>
+                    )}
                     {resident.estate_user?.dependents?.map(
                       (singleDependent: SingleDependentType, index) => {
                         return (
@@ -232,7 +234,7 @@ const SecuritySingleResident = () => {
 
                       <hr className='h-0.5 mb-2 bg-gray-600' />
                       <div className='mb-2'>
-                        <span className='text-sm'>
+                        <span className='text-sm mb-1'>
                           {' '}
                           What do you want to do?
                         </span>

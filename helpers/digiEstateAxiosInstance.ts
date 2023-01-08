@@ -47,11 +47,11 @@ digiEstateAxiosInstance.interceptors.response.use(
     ) {
       store.dispatch(
         updateLoginData({
-          deviceToken: null,
-          userId: null,
+          user: null,
           loginToken: null,
           role: null,
           estate: null,
+          estateSubscription: null,
         })
       );
     }

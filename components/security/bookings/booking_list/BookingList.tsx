@@ -16,16 +16,19 @@ import { SingleBookedGuestType } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
+import { bookingStatuses } from 'helpers/reusable';
 
 type FilterData = {
   selectedPerPage: number;
   dateRange: Array<any>;
-  bookingMode: string;
+  bookingStatus: string;
+
   name: string;
 };
 
 const SecurityBookingList = () => {
   const [showFiltertModal, setShowFilterModal] = useState<boolean>(false);
+  const [bookingStatus, setBookingStatus] = useState<string>('all');
 
   const paginationRef = useRef<any>(null);
   const [formLoading, setFormLoading] = useState(false);
@@ -53,7 +56,7 @@ const SecurityBookingList = () => {
   const [filterData, setFilterData] = useState<FilterData>({
     selectedPerPage: 10,
     dateRange: [],
-    bookingMode: 'all',
+    bookingStatus: 'all',
     name: '',
   });
   const handleDialogHideEevent = () => {
@@ -73,7 +76,8 @@ const SecurityBookingList = () => {
     setFilterData({
       selectedPerPage: 10,
       dateRange: [],
-      bookingMode: 'all',
+      bookingStatus: 'all',
+
       name: '',
     });
   };
@@ -83,7 +87,8 @@ const SecurityBookingList = () => {
     setFilterData({
       selectedPerPage: selectedPerPage,
       dateRange: dateRange,
-      bookingMode: bookingMode,
+      bookingStatus: bookingStatus,
+
       name: selectedName || '',
     });
   };
@@ -107,7 +112,7 @@ const SecurityBookingList = () => {
         );
       }
     }
-    queryData.booking_type = filterData.bookingMode;
+    queryData.status = filterData.bookingStatus;
     queryData.per_page = filterData.selectedPerPage;
     queryData.name = filterData.name;
     queryData['sort[by]'] = 'created_at';
@@ -300,14 +305,23 @@ const SecurityBookingList = () => {
               <div className='mb-6 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
                 <h4 className='mb-4 font-bold'>Filter</h4>
                 <div className='mb-4'>
-                  <span className='text-sm'>Booking Action</span>
-                  <SelectButton
-                    id='bookingMode'
-                    unselectable={false}
-                    value={bookingMode}
-                    options={bookingTypes}
-                    onChange={(e) => setBookingMode(e.value)}
-                  ></SelectButton>
+                  <span className='text-sm'>Booking Status</span>
+
+                  <select
+                    value={bookingStatus}
+                    onChange={(e) => setBookingStatus(e.target.value)}
+                    className='rei-text-input'
+                    name='bookingStatus'
+                    id=''
+                  >
+                    {bookingStatuses.map((singleBookingStatus, index) => {
+                      return (
+                        <option key={index} value={singleBookingStatus.value}>
+                          {singleBookingStatus.label}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </div>
 
                 <div className='text-sm mb-4'>

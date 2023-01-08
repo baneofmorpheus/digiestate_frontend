@@ -1,5 +1,3 @@
-import { UserType } from './user';
-
 export type EstateUserType = {
   id: number;
   address: string;

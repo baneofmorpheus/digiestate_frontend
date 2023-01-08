@@ -42,23 +42,10 @@ const SideBar: NextPage = () => {
 
           {role !== 'resident' && (
             <>
-              <Link href='/app/residents/registrations'>
-                <a
-                  className={`${
-                    router.pathname.includes('/app/residents/registrations')
-                      ? selectedRouteStyle
-                      : ''
-                  } mb-4 pr-10 block pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
-                >
-                  <FontAwesomeIcon className={` mr-2  `} icon={faUserPlus} />
-                  Registrations
-                </a>
-              </Link>
               <Link href='/app/residents/'>
                 <a
                   className={`${
-                    router.pathname.includes('/app/residents/') &&
-                    router.pathname !== '/app/residents/registrations'
+                    router.pathname.includes('/app/residents')
                       ? selectedRouteStyle
                       : ''
                   } mb-4 pr-10 block pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
