@@ -1,28 +1,25 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef, useCallback } from 'react';
-
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
-
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
-import { SelectButton } from 'primereact/selectbutton';
 import { Dialog } from 'primereact/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { Calendar } from 'primereact/calendar';
 import { SingleBookedGuestType } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
-import Link from 'next/link';
 import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
+import { bookingStatuses } from 'helpers/reusable';
 
 type FilterData = {
   selectedPerPage: number;
   dateRange: Array<any>;
-  bookingMode: string;
+  bookingStatus: string;
   name: string;
 };
 
@@ -33,18 +30,12 @@ const ResidentBookingList = () => {
   const [formLoading, setFormLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const bookingTypes = [
-    { label: 'All', value: 'all' },
-    { label: 'Book In', value: 'book_in' },
-    { label: 'Book Out', value: 'book_out' },
-  ];
-
   const [guests, setGuests] = useState<Array<SingleBookedGuestType>>([]);
 
   const router = useRouter();
 
   const [dateRange, setDateRange] = useState<any>([]);
-  const [bookingMode, setBookingMode] = useState<string>('all');
+  const [bookingStatus, setBookingStatus] = useState<string>('all');
   const estate = useSelector((state: any) => state.authentication.estate);
   const [perPage, setPerPage] = useState<number>(10);
   const [selectedPerPage, setSelectedPerPage] = useState<number>(10);
@@ -55,7 +46,7 @@ const ResidentBookingList = () => {
   const [filterData, setFilterData] = useState<FilterData>({
     selectedPerPage: 10,
     dateRange: [],
-    bookingMode: 'all',
+    bookingStatus: 'all',
     name: '',
   });
   const handleDialogHideEevent = () => {
@@ -67,7 +58,7 @@ const ResidentBookingList = () => {
 
     setSelectedName('');
     setDateRange([]);
-    setBookingMode('all');
+    setBookingStatus('all');
     setSelectedPerPage(10);
     setCurrentPage(1);
     paginationRef.current.resetPagination();
@@ -75,7 +66,7 @@ const ResidentBookingList = () => {
     setFilterData({
       selectedPerPage: 10,
       dateRange: [],
-      bookingMode: 'all',
+      bookingStatus: 'all',
       name: '',
     });
   };
@@ -85,7 +76,7 @@ const ResidentBookingList = () => {
     setFilterData({
       selectedPerPage: selectedPerPage,
       dateRange: dateRange,
-      bookingMode: bookingMode,
+      bookingStatus: bookingStatus,
       name: selectedName || '',
     });
   };
@@ -109,10 +100,10 @@ const ResidentBookingList = () => {
         );
       }
     }
-    queryData.booking_type = filterData.bookingMode;
+    queryData.status = filterData.bookingStatus;
     queryData.per_page = filterData.selectedPerPage;
     queryData.name = filterData.name;
-    queryData['sort[by]'] = 'created_at';
+    queryData['sort[by]'] = 'updated_at';
     queryData['sort[order]'] = 'desc';
 
     setPerPage(selectedPerPage);
@@ -120,7 +111,7 @@ const ResidentBookingList = () => {
     const queryString = Object.keys(queryData)
       .map((key) => {
         /**
-         * If booking type is all dont include the filter at all
+         * If booking status is all dont include the filter at all
          */
 
         if (queryData[key] != 'all') {
@@ -303,14 +294,25 @@ const ResidentBookingList = () => {
               <div className='mb-6 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
                 <h4 className='mb-4 font-bold'>Filter</h4>
                 <div className='mb-4'>
-                  <span className='text-sm'>Booking Action</span>
-                  <SelectButton
-                    id='bookingMode'
-                    unselectable={false}
-                    value={bookingMode}
-                    options={bookingTypes}
-                    onChange={(e) => setBookingMode(e.value)}
-                  ></SelectButton>
+                  <label className='block text-sm' htmlFor='range'>
+                    Booking Status
+                  </label>
+
+                  <select
+                    value={bookingStatus}
+                    onChange={(e) => setBookingStatus(e.target.value)}
+                    className='rei-text-input'
+                    name='bookingStatus'
+                    id=''
+                  >
+                    {bookingStatuses.map((singleBookingStatus, index) => {
+                      return (
+                        <option key={index} value={singleBookingStatus.value}>
+                          {singleBookingStatus.label}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </div>
 
                 <div className='text-sm mb-4'>

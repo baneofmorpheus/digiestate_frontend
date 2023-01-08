@@ -1,11 +1,13 @@
 import { UserType } from './user';
-
 export type BookingStatusType = {
   timed_out: string;
-  pending: string;
-  completed: string;
   detained: string;
   sent_back: string;
+  in: string;
+  leaving: string;
+  booked: string;
+  cancelled: string;
+  out: string;
 };
 
 export type BookingActionType = {
@@ -29,6 +31,17 @@ export type SingleBooking = {
   updated_at: string;
 };
 
+export type SingleBookedGuestLogType = {
+  id: number;
+  status: keyof BookingStatusType;
+  created_at: string;
+  updated_at: string;
+};
+export type BookingHistory = {
+  status: string;
+  date: string;
+  id: number;
+};
 export type SingleBookedGuestType = {
   id: number;
   name: string;
@@ -41,6 +54,7 @@ export type SingleBookedGuestType = {
   booking_info: SingleBooking;
   status: string;
   time_checked_by_security: null | string;
+  logs?: Array<SingleBookedGuestLogType>;
   resident: UserType;
   created_at: string;
   updated_at: string;

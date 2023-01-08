@@ -1,28 +1,13 @@
 import type { NextPage } from 'next';
 import moment from 'moment';
 
-import {
-  SingleBookedGuestType,
-  BookingStatusType,
-  BookingActionType,
-} from 'types';
+import { bookingStatusLabels } from 'helpers/reusable';
+import { SingleBookedGuestType, BookingStatusType } from 'types';
 type BookedGuestPropType = {
   guest: SingleBookedGuestType;
   handleClick?: Function;
 };
 
-const bookingStatus: BookingStatusType = {
-  timed_out: 'Timed Out',
-  pending: 'Pending',
-  completed: 'Completed',
-  detained: 'Detained',
-  sent_back: 'Sent Back',
-};
-
-const bookingAction: BookingActionType = {
-  book_in: 'Book In',
-  book_out: 'Book Out',
-};
 const BookedGuest: NextPage<BookedGuestPropType> = ({ guest, handleClick }) => {
   return (
     <div
@@ -43,13 +28,6 @@ const BookedGuest: NextPage<BookedGuestPropType> = ({ guest, handleClick }) => {
             {!!guest.phone_number ? guest.phone_number : 'XXX-XXXXX'}-
             <span className='capitalize'>{guest.gender}</span>
           </p>
-          <p>
-            {
-              bookingAction[
-                guest.booking_info.action as keyof BookingActionType
-              ]
-            }
-          </p>
           <span className='block'>
             {' '}
             {moment(guest.created_at).format('DD-MMM-YYYY hh:mm a')}
@@ -58,7 +36,7 @@ const BookedGuest: NextPage<BookedGuestPropType> = ({ guest, handleClick }) => {
       </div>
       <div className='text-gray-600 w-1/5 flex-col flex gap-y-1 items-center justify-end gap-x-4 '>
         <p className='text-xs'>
-          {bookingStatus[guest.status as keyof BookingStatusType]}
+          {bookingStatusLabels[guest.status as keyof BookingStatusType]}
         </p>
         <span className='bg-gray-600 capitalize text-xs inline-block text-digiDefault pl-2 pr-2 pt-1 pb-1 rounded-lg'>
           {guest.booking_info.type}

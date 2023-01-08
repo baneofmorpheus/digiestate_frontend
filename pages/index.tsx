@@ -1,22 +1,23 @@
 import type { NextPage } from 'next';
 import UnauthenticatedLayout from 'components/layouts/unauthenticated/Unauthenticated';
-import Image from 'next/image';
-import giraffeImage from 'images/home-girrafe.png';
+
 import Link from 'next/link';
 import { useRef } from 'react';
 import { Toast as ToastType } from 'primereact/toast';
 import { Toast } from 'primereact/toast';
-
+import Lottie from 'lottie-react';
+import houseLottie from 'lottie/house.json';
 const Home = () => {
   const toast = useRef<ToastType>(null);
   return (
-    <div className=' pl-2 pr-2  lg:-mt-20 lg:flex-row flex flex-col justify-between items-center '>
-      <div>
+    <div className=' pl-2 lg:container min-h-screen pr-2 pb-10  lg:-mt-20 lg:flex-row gap-y-20 lg:gap-y-0 flex flex-col justify-between items-center '>
+      <div className=' lg:w-1/2'>
         <div>
+          <p className='text-gray-600'>Welcome to</p>
+
           <h2 className='text-4xl mb-2'>DigiEstate!!</h2>
-          <h2 className='text-4xl mb-2'>Estate Security Management</h2>
-          <p className='mb-4'>At your fingertips.</p>
-          <p className='mb-8'>
+          <h2 className='text-4xl mb-2'>Estate Security Management App</h2>
+          <p className='mb-8 text-gray-600'>
             Estate platforms available for you to login as the following users:{' '}
           </p>
 
@@ -37,16 +38,22 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className='text-right'>
-        <Image
-          alt=''
-          className=''
-          width={600}
-          height={700}
-          src={giraffeImage}
-        />
+      <div className='lg:w-1/2 '>
+        <div
+          id='lottie-container'
+          className=' rounded-full p-8 overflow-hidden shadow-2xl '
+        >
+          <Lottie animationData={houseLottie} loop={true} />
+        </div>
       </div>
       <Toast ref={toast}></Toast>
+      <style jsx>
+        {`
+          #lottie-container {
+            background-color: #f2f2f0;
+          }
+        `}
+      </style>
     </div>
   );
 };

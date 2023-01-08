@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect, useCallback } from 'react';
 import PreviousPage from 'components/navigation/previous_page/PreviousPage';
+import { Timeline } from 'primereact/timeline';
+import { bookingStatusLabels } from 'helpers/reusable';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,30 +16,37 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
-import { SingleBookedGuestType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import { Dialog } from 'primereact/dialog';
-import { SelectButton } from 'primereact/selectbutton';
 import moment from 'moment';
 import Link from 'next/link';
+import { Checkbox } from 'primereact/checkbox';
 
 import { ProgressBar } from 'primereact/progressbar';
+import {
+  SingleBookedGuestType,
+  BookingHistory,
+  BookingStatusType,
+} from 'types';
+
 const SecuritySingleGuest = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [followUpLoading, setFollowUpLoading] = useState(false);
   const updateToastDispatch = useDispatch();
-
-  const [completeBookingType, setCompleteBookingType] =
-    useState<string>('completed');
-  const [completeBookingTypes, setCompleteBookingTypes] = useState<any>([
-    { label: 'Completed', value: 'completed' },
+  const [bookingStatuses, setBookingStatuses] = useState([
+    { label: 'Book In', value: 'in' },
+    { label: 'Book Out', value: 'out' },
+    { label: 'Detained', value: 'detained' },
+    { label: 'Sent Back', value: 'sent_back' },
   ]);
 
   const [guest, setGuest] = useState<SingleBookedGuestType>();
+  const [bookingStatus, setBookingStatus] = useState<string>();
   const [showFollowUpModal, setShowFollowUpModal] = useState<boolean>(false);
   const [followUpForGroup, setFollowUpForGroup] = useState<boolean>(false);
   const router = useRouter();
+  const [bookingHistory, setBookingHistory] = useState<Array<BookingHistory>>();
 
   const estate = useSelector((state: any) => state.authentication.estate);
 
@@ -48,25 +57,35 @@ const SecuritySingleGuest = () => {
       const response = await digiEstateAxiosInstance.get(
         `/bookings/${estate.id}/guests/${bookedGuestId}`
       );
-      const guest = response.data.data;
-      guest?.booking_info.guests.forEach(
+      const guest: SingleBookedGuestType = response.data.data;
+      guest?.booking_info.guests!.forEach(
         (singleGuest: SingleBookedGuestType) => {
           singleGuest.booking_info = guest?.booking_info;
         }
       );
       setGuest(guest);
+      const bookingHistory = guest.logs!.map((singleLog) => {
+        return {
+          id: singleLog.id,
+          status:
+            bookingStatusLabels[singleLog.status as keyof BookingStatusType],
+          date: moment(singleLog.created_at).format('DD-MMM-YYYY hh:mm a'),
+        };
+      });
 
-      if (guest?.booking_info.action === 'book_out') {
-        setCompleteBookingTypes([
-          { label: 'Completed', value: 'completed' },
-          ...[guest.detain_guest && { label: 'Detained', value: 'detained' }],
-          ...[
-            guest.send_back_guest && {
-              label: 'Sent Back',
-              value: 'sent_back',
-            },
-          ],
+      setBookingHistory(bookingHistory);
+
+      if (guest?.status === 'booked') {
+        setBookingStatuses([{ label: 'Book In', value: 'in' }]);
+        setBookingStatus('in');
+      }
+      if (guest?.status === 'leaving') {
+        setBookingStatuses([
+          { label: 'Book Out', value: 'out' },
+          { label: 'Detained', value: 'detained' },
+          { label: 'Sent Back', value: 'sent_back' },
         ]);
+        setBookingStatus('out');
       }
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
@@ -101,8 +120,11 @@ const SecuritySingleGuest = () => {
         ? `/bookings/${guest?.booking_info.id}/complete-booking`
         : `/bookings/${guest?.id}/complete`;
       const data = {
-        status: completeBookingType,
+        status: bookingStatus,
       };
+      console.log('log out');
+      console.log(data);
+
       const response = await digiEstateAxiosInstance.post(url, data);
       setShowFollowUpModal(false);
 
@@ -125,17 +147,17 @@ const SecuritySingleGuest = () => {
       <div className=' '>
         <PreviousPage label='Single Guest' />
 
-        {guest?.status === 'pending' && (
+        {(guest?.status === 'booked' || guest?.status === 'leaving') && (
           <div className='text-right mb-4'>
             <button
               type='button'
               onClick={() => {
                 setShowFollowUpModal(true);
               }}
-              className='bg-gray-600 text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+              className='bg-gray-600 hover:bg-black text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
             >
               {' '}
-              Finalize Booking
+              Approve Booking
             </button>
           </div>
         )}
@@ -169,63 +191,105 @@ const SecuritySingleGuest = () => {
                   <div>
                     <BookedGuest guest={guest} />
                   </div>
+                  <div className='mb-8'>
+                    <Timeline
+                      value={bookingHistory}
+                      align='left'
+                      className='!text-xs !md:text-sm'
+                      content={(item) => `${item.status} at ${item.date}`}
+                    />
+                  </div>
                   <div className='shadow-lg border text-xs md:text-sm  rounded-lg pt-2 pb-2 mb-6 pl-4 pr-4'>
                     <div className='mt-4 ml-auto    mb-2 '>
-                      <p className='mb-2'>
-                        <FontAwesomeIcon
-                          className={` mr-4 text-xl text-gray-600 `}
-                          icon={faHandcuffs}
-                        />
-                        <span className=''>
-                          {!!guest.detain_guest ? 'Yes' : 'No'} (Detain)
-                        </span>
-                      </p>
-                      <p className='mb-2'>
-                        <FontAwesomeIcon
-                          className={` mr-4 text-xl text-gray-600`}
-                          icon={faPersonWalkingArrowLoopLeft}
-                        />
-                        {!!guest.send_back_guest ? 'Yes' : 'No'} (Send Back)
-                      </p>
-
-                      {!!guest.time_checked_by_security && (
-                        <p>
-                          <FontAwesomeIcon
-                            className={` mr-4 text-xl text-gray-600`}
-                            icon={faClock}
-                          />
-                          {moment(guest.time_checked_by_security).format(
-                            'DD-MMM-YYYY hh:mm a'
-                          )}{' '}
-                          (Check in/out)
-                        </p>
-                      )}
-                      <p className='mb-2'>
-                        <Link
-                          href={`/app/residents/single/${guest.resident.id}`}
-                        >
-                          <a>
+                      <div className='flex flex-col mb-2'>
+                        <div className='flex gap-x-1 items-center'>
+                          <div className='w-10 text-center'>
                             <FontAwesomeIcon
-                              className={` mr-4  text-xl text-gray-600`}
+                              className={`  text-xl text-gray-600 `}
+                              icon={faHandcuffs}
+                            />
+                          </div>
+                          <div>
+                            <span className=''>
+                              {!!guest.detain_guest ? 'Yes' : 'No'} (Detain
+                              Guest)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className='flex flex-col mb-2'>
+                        <div className='flex gap-x-1 items-center'>
+                          <div className='w-10 text-center'>
+                            <FontAwesomeIcon
+                              className={`  text-xl text-gray-600`}
+                              icon={faPersonWalkingArrowLoopLeft}
+                            />
+                          </div>
+                          <div>
+                            <span className=''>
+                              {!!guest.send_back_guest ? 'Yes' : 'No'} (Send
+                              Back Guest)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className='flex flex-col mb-2'>
+                        <div className='flex gap-x-1 items-center'>
+                          <div className='w-10 text-center'>
+                            <FontAwesomeIcon
+                              className={`   text-xl text-gray-600`}
                               icon={faHouseUser}
                             />{' '}
-                            <span className='underline'>
-                              {guest.resident.first_name}{' '}
-                              {guest.resident.last_name} (Resident)
-                            </span>
-                          </a>
-                        </Link>
-                      </p>
-                      <p className='mb-2'>
-                        {' '}
-                        <FontAwesomeIcon
-                          className={` mr-4 text-xl text-gray-600`}
-                          icon={faLocationDot}
-                        />{' '}
-                        {guest?.address}
-                      </p>
+                          </div>
+                          <div>
+                            <Link
+                              href={`/app/residents/single/${guest.resident.id}`}
+                            >
+                              <a>
+                                <span className='underline'>
+                                  {guest.resident.first_name}{' '}
+                                  {guest.resident.last_name} (Resident)
+                                </span>
+                              </a>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                      <div className='flex flex-col mb-2'>
+                        <div className='flex gap-x-1 items-center'>
+                          <div className='w-10 text-center'>
+                            <FontAwesomeIcon
+                              className={`  text-xl text-gray-600`}
+                              icon={faLocationDot}
+                            />{' '}
+                          </div>
+                          <div>
+                            <span className=''>{guest?.address} (Address)</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  {!!guest.booking_info.comment && (
+                    <div className='shadow-lg border text-xs md:text-sm  rounded-lg pt-2 pb-2 mb-6 pl-4 pr-4'>
+                      <p className='font-bold mb-1'>Extra Instructions</p>
+                      <p className=''>{guest.booking_info.comment}</p>
+                    </div>
+                  )}
+                  {(!!guest.booking_info.vehicle_make ||
+                    !!guest.booking_info.vehicle_plate_number) && (
+                    <div className='shadow-lg border text-xs md:text-sm  rounded-lg pt-2 pb-2 mb-6 pl-4 pr-4'>
+                      <p className='font-bold mb-1'>Vehicle Info</p>
+                      <p className=''>
+                        Vehicle Make :{guest.booking_info.vehicle_make}
+                      </p>
+                      <p className=''>
+                        Plate Number :{guest.booking_info.vehicle_plate_number}
+                      </p>
+                    </div>
+                  )}
+
                   {guest.booking_info.type === 'group' && (
                     <div>
                       <h2> Group Members</h2>
@@ -265,16 +329,27 @@ const SecuritySingleGuest = () => {
                 <div>
                   <form className='lg:w-1/2 ml-auto mr-auto'>
                     <div className='mb-4 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
-                      <h4 className='mb-4 font-semibold'>Finalize Booking</h4>
+                      <h4 className='mb-4 font-semibold'>Approve Booking</h4>
                       <div className=''>
                         <span className='text-sm'> Action</span>
-                        <SelectButton
-                          id='followUpSelect'
-                          unselectable={false}
-                          value={completeBookingType}
-                          options={completeBookingTypes}
-                          onChange={(e) => setCompleteBookingType(e.value)}
-                        ></SelectButton>
+                        <select
+                          value={bookingStatus}
+                          onChange={(e) => setBookingStatus(e.target.value)}
+                          className='rei-text-input'
+                          name='bookingStatus'
+                          id=''
+                        >
+                          {bookingStatuses.map((singleBookingStatus, index) => {
+                            return (
+                              <option
+                                key={index}
+                                value={singleBookingStatus.value}
+                              >
+                                {singleBookingStatus.label}
+                              </option>
+                            );
+                          })}
+                        </select>
                       </div>
                     </div>
                     {guest?.booking_info.type === 'group' && (
@@ -282,18 +357,17 @@ const SecuritySingleGuest = () => {
                         <hr className='h-0.5 mb-4 bg-gray-600' />
 
                         <div className='mb-4'>
-                          <input
-                            name='showPassword'
-                            id='showPassword'
-                            className=' mr-2'
-                            type='checkbox'
+                          <Checkbox
                             onChange={(event) => {
                               setFollowUpForGroup(event.target.checked);
                             }}
+                            inputId='applyToGroup'
+                            name='applyToGroup'
                             checked={followUpForGroup}
-                          />
+                            className='mr-2'
+                          ></Checkbox>
                           <label
-                            htmlFor='showPassword'
+                            htmlFor='applyToGroup'
                             className='text-gray-800 text-sm cursor-pointer'
                           >
                             Apply to group
