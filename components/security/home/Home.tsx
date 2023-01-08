@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { useState, useEffect, useRef } from 'react';
@@ -11,16 +10,15 @@ import { SingleBookedGuestType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { Dialog } from 'primereact/dialog';
-import { SelectButton } from 'primereact/selectbutton';
 import Pagination from 'components/utility/pagination/Pagination';
 
 import moment from 'moment';
 
 type FilterData = {
   selectedPerPage: number;
-  bookingMode: string;
+  bookingStatus: string;
   name_or_code: string;
 };
 
@@ -37,22 +35,16 @@ const SecurityHome: NextPage = () => {
     useState<boolean>(false);
   const [showFiltertModal, setShowFilterModal] = useState<boolean>(false);
   const [selectedPerPage, setSelectedPerPage] = useState<number>(10);
-  const [bookingMode, setBookingMode] = useState<string>('all');
   const [selectedNameOrCode, setSelectedNameOrCode] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [bookingStatus, setBookingStatus] = useState<string>('all');
 
   const [recentBookings, setRecentBookings] = useState<Array<any>>([]);
   const [filterData, setFilterData] = useState<FilterData>({
     selectedPerPage: 10,
-    bookingMode: 'all',
+    bookingStatus: 'all',
     name_or_code: '',
   });
-
-  const bookingTypes = [
-    { label: 'All', value: 'all' },
-    { label: 'Book In', value: 'book_in' },
-    { label: 'Book Out', value: 'book_out' },
-  ];
 
   const handleNameFilterSubmit = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Enter') {
@@ -70,14 +62,14 @@ const SecurityHome: NextPage = () => {
     setShowFilterModal(false);
 
     setSelectedNameOrCode('');
-    setBookingMode('all');
+    setBookingStatus('all');
     setSelectedPerPage(10);
     setCurrentPage(1);
     paginationRef.current.resetPagination();
 
     setFilterData({
       selectedPerPage: 10,
-      bookingMode: 'all',
+      bookingStatus: 'all',
       name_or_code: '',
     });
   };
@@ -91,7 +83,7 @@ const SecurityHome: NextPage = () => {
 
     setFilterData({
       selectedPerPage: selectedPerPage,
-      bookingMode: bookingMode,
+      bookingStatus: bookingStatus,
       name_or_code: selectedNameOrCode || '',
     });
   };
@@ -111,10 +103,10 @@ const SecurityHome: NextPage = () => {
       queryData.start_date = formattedStartDate;
       queryData.end_date = formattedEndDate;
 
-      queryData.booking_type = filterData.bookingMode;
+      queryData.status = 'booked,leaving';
       queryData.per_page = filterData.selectedPerPage;
       queryData.name_or_code = filterData.name_or_code;
-      queryData['sort[by]'] = 'created_at';
+      queryData['sort[by]'] = 'updated_at';
       queryData['sort[order]'] = 'desc';
 
       setPerPage(selectedPerPage);
@@ -209,16 +201,6 @@ const SecurityHome: NextPage = () => {
           <form className='lg:w-1/2 ml-auto mr-auto'>
             <div className='mb-6 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
               <h4 className='mb-4 font-bold'>Filter</h4>
-              <div className='mb-4'>
-                <span className='text-sm'>Booking Action</span>
-                <SelectButton
-                  id='bookingMode'
-                  unselectable={false}
-                  value={bookingMode}
-                  options={bookingTypes}
-                  onChange={(e) => setBookingMode(e.value)}
-                ></SelectButton>
-              </div>
 
               <div className='text-sm mb-4'>
                 <label className='block' htmlFor='range'>
@@ -331,20 +313,20 @@ const SecurityHome: NextPage = () => {
           -webkit-appearance: none;
         }
 
-        #bookingMode > div {
+        #bookingStatus > div {
           height: 2rem !important;
           font-family: 'Lato', sans-serif;
           font-weight: normal;
         }
-        #bookingMode .p-button-label {
+        #bookingStatus .p-button-label {
           font-weight: normal !important;
           font-size: 0.8rem;
         }
-        #bookingMode .p-button.p-highlight {
+        #bookingStatus .p-button.p-highlight {
           background: #4b5563;
           color: #fff2d9;
         }
-        #bookingMode {
+        #bookingStatus {
           text-align: left;
         }
 

@@ -13,6 +13,11 @@
     @apply flex password-container border-gray-400 rounded-lg border  flex-row content-center w-full;
   }
 }
+
+:root {
+  --grey-300: #4b5563;
+  --grey-300-light: rgba(75, 85, 99, 0.2);
+}
 html,
 body {
   padding: 0;
@@ -48,6 +53,31 @@ a {
   font-size: 1rem !important;
 }
 
+.p-timeline .p-timeline-event-marker {
+  border: 2px solid #4b5563 !important;
+}
+.p-timeline .p-timeline-event-opposite {
+  display: none;
+}
+
+.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
+  border-color: var(--grey-300) !important;
+}
+
+.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
+  border-color: var(--grey-300) !important;
+  color: #ffffff;
+}
+
+.p-checkbox .p-checkbox-box.p-highlight {
+  border-color: var(--grey-300) !important;
+  background: var(--grey-300) !important;
+}
+
+.p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+  box-shadow: 0 0 0 0.2rem var(--grey-300-light) !important;
+  border-color: var(--grey-300) !important;
+}
 @media (prefers-color-scheme: dark) {
   html {
     /* color-scheme: dark; */

@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 import ErrorMessage from 'components/validation/error_msg';
@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PreviousPage from 'components/navigation/previous_page/PreviousPage';
 
 import { Accordion, AccordionTab } from 'primereact/accordion';
+import { Checkbox } from 'primereact/checkbox';
 
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { updateToastData } from 'reducers/utility';
@@ -149,18 +150,20 @@ const BookGuests = () => {
   const addGuest = (data: any) => {
     setShowBookGuestsModal(false);
     setGuests([...guests, currentGuest]);
-    setCurrentGuest({
-      name: '',
-      phone_number: '',
-      phone_visible_to_security: false,
-      gender: '',
-    });
-    resetAddGuest({
-      name: '',
-      phone_number: '',
-      phone_visible_to_security: false,
-      gender: '',
-    });
+    setTimeout(() => {
+      setCurrentGuest({
+        name: '',
+        phone_number: '',
+        phone_visible_to_security: false,
+        gender: '',
+      });
+      resetAddGuest({
+        name: '',
+        phone_number: '',
+        phone_visible_to_security: false,
+        gender: '',
+      });
+    }, 1000);
   };
   return (
     <div className=' pt-10 pl-2 pr-2'>
@@ -299,7 +302,7 @@ const BookGuests = () => {
                       Extra Instructions
                       <textarea
                         {...register('comment')}
-                        name=''
+                        name='comment'
                         className='rei-text-text-area '
                         id=''
                         rows={4}
@@ -413,21 +416,20 @@ const BookGuests = () => {
                   )}
                 </div>
                 <div>
-                  <input
-                    name='showPassword'
-                    id='showPassword'
-                    className=' mr-2'
-                    type='checkbox'
+                  <Checkbox
                     onChange={(event) => {
                       setCurrentGuest({
                         ...currentGuest,
                         phone_visible_to_security: event.target.checked,
                       });
                     }}
+                    inputId='showPhoneToSecurity'
+                    name='showPhoneToSecurity'
                     checked={currentGuest.phone_visible_to_security}
-                  />
+                    className='mr-2'
+                  ></Checkbox>
                   <label
-                    htmlFor='showPassword'
+                    htmlFor='showPhoneToSecurity'
                     className='text-gray-800 text-sm cursor-pointer'
                   >
                     Show Phone Number to Security

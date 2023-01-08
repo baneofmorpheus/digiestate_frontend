@@ -44,12 +44,18 @@ const ExtraSidebar: NextPage<PropType> = ({
           <h4 className='font-medium mb-6'>Extra Features</h4>
           {role !== 'resident' && (
             <>
-              <Link href='/app'>
-                <a className=' block mb-2 '>
-                  <FontAwesomeIcon className={` mr-4  `} icon={faUserPlus} />
-                  <span className=''>Registrations</span>
-                </a>
-              </Link>
+              <button
+                type='button'
+                className='block text-start mb-2 w-full'
+                onClick={() => {
+                  setSideBarVisibile(false);
+                  router.push('/app/residents/registrations');
+                }}
+              >
+                <FontAwesomeIcon className={` mr-4  `} icon={faUserPlus} />
+
+                <span className=''>Pending Registrations</span>
+              </button>
               <hr className='h-0.5 mb-4 bg-gray-200' />
             </>
           )}

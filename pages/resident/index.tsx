@@ -122,6 +122,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
       );
 
       const estate = response.data.data.estate;
+      const estateSubscription = response.data.data.estate_subscription;
 
       updateLoginDispatch(
         updateLoginData({
@@ -138,13 +139,38 @@ const LoginData: NextPage<LoginDataPropType> = () => {
             id: estate.id,
             name: estate.name,
             code: estate.code,
-            image_link: estate.image_link,
+            imageLink: estate.image_link,
+          },
+          estateSubscription: {
+            id: estateSubscription.id,
+            admin: {
+              id: estateSubscription.admin.id,
+              firstName: estateSubscription.admin.first_name,
+              lastName: estateSubscription.admin.last_name,
+            },
+            startDate: estateSubscription.string,
+            expiryDate: estateSubscription.string,
+            isRenewable: estateSubscription.is_renewable,
+            status: estateSubscription.status,
+            subscriptionPlan: {
+              id: estateSubscription.subscription_plan.id,
+              name: estateSubscription.subscription_plan.name,
+              numberOfMonths:
+                estateSubscription.subscription_plan.number_of_months,
+              amountInNaira:
+                estateSubscription.subscription_plan.amount_in_naira,
+              vatPercentage:
+                estateSubscription.subscription_plan.vat_percentage,
+              code: estateSubscription.subscription_plan.code,
+            },
           },
         })
       );
 
       return router.push(`/app`);
     } catch (error: any) {
+      console.log(error);
+
       if (
         error.response?.status === 403 &&
         error.response.data.error_action === 'VERIFY_EMAIL'

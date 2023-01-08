@@ -93,7 +93,7 @@ const PendingResidentsList = () => {
     queryData.name = filterData.name;
     queryData['sort[by]'] = 'created_at';
     queryData['sort[order]'] = 'desc';
-    queryData['approved'] = false;
+    queryData['approval_status'] = 'pending';
 
     setPerPage(selectedPerPage);
     queryData.page = currentPage;
