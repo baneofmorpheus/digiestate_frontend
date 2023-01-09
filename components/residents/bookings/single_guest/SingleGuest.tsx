@@ -40,12 +40,6 @@ const ResidentSingleGuest = () => {
   const [cancelBookingLoading, setCancelBookingLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const [followUpType, setFollowUpType] = useState<string>('send_back_guest');
-  const followUpTypes = [
-    { label: 'Send Back', value: 'send_back_guest' },
-    { label: 'Detain', value: 'detain_guest' },
-  ];
-
   const [guest, setGuest] = useState<SingleBookedGuestType>();
   const [showFollowUpModal, setShowFollowUpModal] = useState<boolean>(false);
   const [showBookOutModal, setShowBookOutModal] = useState<boolean>(false);
@@ -54,6 +48,13 @@ const ResidentSingleGuest = () => {
   const [bookOutForGroup, setBookOutForGroup] = useState<boolean>(false);
   const [cancelGroupBooking, setCancelGroupBooking] = useState<boolean>(false);
   const [bookingHistory, setBookingHistory] = useState<Array<BookingHistory>>();
+  const [bookingStatus, setBookingStatus] = useState<string>('detain_guest');
+
+  const [bookingStatuses, setBookingStatuses] = useState([
+    { label: 'Send Back', value: 'send_back_guest' },
+    { label: 'Detain', value: 'detain_guest' },
+  ]);
+
   const router = useRouter();
 
   const estate = useSelector((state: any) => state.authentication.estate);
@@ -139,7 +140,7 @@ const ResidentSingleGuest = () => {
         ? `/bookings/${guest!.booking_info.id}/group/follow-up`
         : `/bookings/${guest!.id}/booked_guest/follow-up`;
       const data = {
-        [followUpType]: true,
+        [bookingStatus]: true,
       };
       const response = await digiEstateAxiosInstance.post(url, data);
       setShowFollowUpModal(false);
@@ -421,13 +422,25 @@ const ResidentSingleGuest = () => {
                       <h4 className='mb-4 font-semibold'>Follow Up</h4>
                       <div className=''>
                         <span className='text-sm'> Action</span>
-                        <SelectButton
-                          id='followUpSelect'
-                          unselectable={false}
-                          value={followUpType}
-                          options={followUpTypes}
-                          onChange={(e) => setFollowUpType(e.value)}
-                        ></SelectButton>
+
+                        <select
+                          value={bookingStatus}
+                          onChange={(e) => setBookingStatus(e.target.value)}
+                          className='rei-text-input'
+                          name='bookingStatus'
+                          id=''
+                        >
+                          {bookingStatuses.map((singleBookingStatus, index) => {
+                            return (
+                              <option
+                                key={index}
+                                value={singleBookingStatus.value}
+                              >
+                                {singleBookingStatus.label}
+                              </option>
+                            );
+                          })}
+                        </select>
                       </div>
                     </div>
 
