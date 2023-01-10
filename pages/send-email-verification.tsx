@@ -47,7 +47,7 @@ const SendEmailVerification = () => {
     <div className='flex min-h-screen justify-end '>
       <div className='lg:w-1/2 md:pt-20 pt-10 w-full bg-digiDefault '>
         <h1 className='text-center text-2xl mb-8  lato-font'>Verify Email</h1>
-        <p className='text-center mb-2'>
+        <p className='text-center mb-2 text-gray-600'>
           A verification email has been sent to your email address. <br />
           Follow the instructions to verify your account. <br />
           You can close this page.
@@ -63,11 +63,7 @@ const SendEmailVerification = () => {
         </div>
         <div className='text-sm  text-center'>
           <span className='mr-1 '>Did not get the email ?</span>{' '}
-          <button
-            type='button'
-            onClick={resendVerificationMail}
-            className='animate-bounce'
-          >
+          <button type='button' onClick={resendVerificationMail} className=''>
             <span className='text-reiGreen underline '>Resend email</span>
           </button>
           <Link href='/'>
