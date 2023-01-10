@@ -26,7 +26,7 @@ type FilterData = {
 
   name: string;
 };
-const PendingResidentsList = () => {
+const ApprovedResidentsList = () => {
   const role = useSelector((state: any) => state.authentication.role);
 
   const [showFiltertModal, setShowFilterModal] = useState<boolean>(false);
@@ -93,7 +93,7 @@ const PendingResidentsList = () => {
     queryData.name = filterData.name;
     queryData['sort[by]'] = 'created_at';
     queryData['sort[order]'] = 'desc';
-    queryData['approved'] = true;
+    queryData['approval_status'] = 'approved';
 
     setPerPage(selectedPerPage);
     queryData.page = currentPage;
@@ -376,7 +376,7 @@ const PendingResidentsList = () => {
   );
 };
 
-PendingResidentsList.getLayout = function getLayout(page: NextPage) {
+ApprovedResidentsList.getLayout = function getLayout(page: NextPage) {
   return (
     <AuthenticatedLayout allowedRoles={['admin', 'security']}>
       {page}
@@ -384,4 +384,4 @@ PendingResidentsList.getLayout = function getLayout(page: NextPage) {
   );
 };
 
-export default PendingResidentsList;
+export default ApprovedResidentsList;

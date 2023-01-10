@@ -6,6 +6,7 @@ import ResidentHome from 'components/residents/home/Home';
 import moment from 'moment';
 
 import SecurityHome from 'components/security/home/Home';
+import AdminHome from 'components/admin/home/Home';
 
 import { useSelector } from 'react-redux';
 
@@ -37,6 +38,10 @@ const App = () => {
         break;
       case 'security':
         setComponentToDisplay(<SecurityHome />);
+
+        break;
+      case 'admin':
+        setComponentToDisplay(<AdminHome />);
 
         break;
 
