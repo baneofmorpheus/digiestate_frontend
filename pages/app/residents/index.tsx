@@ -6,20 +6,16 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
-import moment from 'moment';
 
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
-import { SelectButton } from 'primereact/selectbutton';
 import { Dialog } from 'primereact/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import { Calendar } from 'primereact/calendar';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { UserType } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import Resident from 'components/reusable/resident/Resident';
-import Link from 'next/link';
 
 type FilterData = {
   selectedPerPage: number;
