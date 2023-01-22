@@ -21,6 +21,10 @@ const BookingsList = () => {
         setComponentToDisplay(<SecurityBookingList />);
 
         break;
+      case 'admin':
+        setComponentToDisplay(<SecurityBookingList />);
+
+        break;
 
       default:
         setComponentToDisplay(

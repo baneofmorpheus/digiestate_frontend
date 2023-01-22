@@ -22,6 +22,10 @@ const SingleSecurity = () => {
         setComponentToDisplay(<SingleDependent />);
 
         break;
+      case 'admin':
+        setComponentToDisplay(<SingleDependent />);
+
+        break;
 
       default:
         setComponentToDisplay(
