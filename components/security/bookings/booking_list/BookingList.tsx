@@ -423,11 +423,6 @@ const SecurityBookingList = () => {
         #filterDialog {
           margin: 0;
         }
-        @media screen and (max-width: 325px) {
-          .filter-icon {
-            display: none;
-          }
-        }
       `}</style>
     </div>
   );
