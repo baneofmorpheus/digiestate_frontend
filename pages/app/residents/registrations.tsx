@@ -6,20 +6,16 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
-import moment from 'moment';
 
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
-import { SelectButton } from 'primereact/selectbutton';
 import { Dialog } from 'primereact/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import { Calendar } from 'primereact/calendar';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { UserType } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import Resident from 'components/reusable/resident/Resident';
-import Link from 'next/link';
 
 type FilterData = {
   selectedPerPage: number;
@@ -35,18 +31,10 @@ const PendingResidentsList = () => {
   const [formLoading, setFormLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const bookingTypes = [
-    { label: 'All', value: 'all' },
-    { label: 'Book In', value: 'book_in' },
-    { label: 'Book Out', value: 'book_out' },
-  ];
-
   const [residents, setResidents] = useState<Array<UserType>>([]);
 
   const router = useRouter();
 
-  const [dateRange, setDateRange] = useState<any>([]);
-  const [bookingMode, setBookingMode] = useState<string>('all');
   const estate = useSelector((state: any) => state.authentication.estate);
   const [perPage, setPerPage] = useState<number>(10);
   const [selectedPerPage, setSelectedPerPage] = useState<number>(10);
@@ -66,8 +54,7 @@ const PendingResidentsList = () => {
     setShowFilterModal(false);
 
     setSelectedName('');
-    setDateRange([]);
-    setBookingMode('all');
+
     setSelectedPerPage(10);
     setCurrentPage(1);
     paginationRef.current.resetPagination();
