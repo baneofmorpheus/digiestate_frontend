@@ -132,7 +132,7 @@ const SecuritySingleResident = () => {
 
               {!formLoading &&
                 !!resident &&
-                !resident.estate_user?.is_approved && (
+                resident.estate_user?.approval_status == 'pending' && (
                   <div className='text-right mb-4'>
                     <button
                       type='button'

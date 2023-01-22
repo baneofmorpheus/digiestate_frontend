@@ -10,6 +10,7 @@ import {
   faClipboardList,
   faAnglesRight,
   faHouseUser,
+  faLock,
 } from '@fortawesome/free-solid-svg-icons';
 
 import Link from 'next/link';
@@ -52,7 +53,7 @@ const MobileMenu: NextPage = () => {
         {role !== 'resident' && (
           <div
             className={`${
-              router.pathname.includes('/app/residents/') &&
+              router.pathname.includes('/app/residents') &&
               router.pathname !== '/app/residents/registrations'
                 ? selectedRouteStyle
                 : 'text-gray-400'
@@ -68,21 +69,40 @@ const MobileMenu: NextPage = () => {
           </div>
         )}
 
-        <div
-          className={`${
-            router.pathname.includes('/app/dependents')
-              ? selectedRouteStyle
-              : 'text-gray-400'
-          }    w-1/4   cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
-        >
-          {' '}
-          <Link href='/app/dependents'>
-            <a className='text-center block pt-4 pb-4'>
-              <FontAwesomeIcon className={` mr-2  `} icon={faUsers} />
-              <span className='block'>Dependents</span>
-            </a>
-          </Link>
-        </div>
+        {!['admin'].includes(role) && (
+          <div
+            className={`${
+              router.pathname.includes('/app/dependents')
+                ? selectedRouteStyle
+                : 'text-gray-400'
+            }    w-1/4   cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
+          >
+            {' '}
+            <Link href='/app/dependents'>
+              <a className='text-center block pt-4 pb-4'>
+                <FontAwesomeIcon className={` mr-2  `} icon={faUsers} />
+                <span className='block'>Dependents</span>
+              </a>
+            </Link>
+          </div>
+        )}
+        {['admin'].includes(role) && (
+          <div
+            className={`${
+              router.pathname.includes('/app/security')
+                ? selectedRouteStyle
+                : 'text-gray-400'
+            }    w-1/4   cursor-pointer transition-all duration-700 hover:bg-gray-600  hover:text-digiDefault`}
+          >
+            {' '}
+            <Link href='/app/security'>
+              <a className='text-center block pt-4 pb-4'>
+                <FontAwesomeIcon className={` mr-2  `} icon={faLock} />
+                <span className='block'>Security</span>
+              </a>
+            </Link>
+          </div>
+        )}
 
         <div
           className={`

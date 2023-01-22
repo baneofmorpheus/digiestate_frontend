@@ -11,6 +11,7 @@ import {
   faUserPlus,
   faAnglesRight,
   faHouseUser,
+  faLock,
 } from '@fortawesome/free-solid-svg-icons';
 import ExtraSidebar from '../extra_sidebar/ExtraSidebar';
 
@@ -55,6 +56,20 @@ const SideBar: NextPage = () => {
                 </a>
               </Link>
             </>
+          )}
+          {['admin'].includes(role) && (
+            <Link href='/app/security'>
+              <a
+                className={`${
+                  router.pathname.includes('/app/security')
+                    ? selectedRouteStyle
+                    : ''
+                } mb-4 pr-10 block pt-2 pb-2 cursor-pointer transition-all duration-700 hover:bg-gray-600 hover:border-r-4 hover:border-black hover:text-digiDefault`}
+              >
+                <FontAwesomeIcon className={` mr-2  `} icon={faLock} />
+                Security
+              </a>
+            </Link>
           )}
 
           <Link href='/app/dependents'>

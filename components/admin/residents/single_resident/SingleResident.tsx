@@ -21,7 +21,7 @@ import Dependent from 'components/reusable/dependent/Dependent';
 
 import { SingleDependentType } from 'types';
 
-const SecuritySingleResident = () => {
+const AdminSingleResident = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [followUpLoading, setFollowUpLoading] = useState(false);
   const updateToastDispatch = useDispatch();
@@ -132,7 +132,7 @@ const SecuritySingleResident = () => {
 
               {!formLoading &&
                 !!resident &&
-                !resident.estate_user?.is_approved && (
+                resident.estate_user?.approval_status == 'pending' && (
                   <div className='text-right mb-4'>
                     <button
                       type='button'
@@ -317,4 +317,4 @@ const SecuritySingleResident = () => {
   );
 };
 
-export default SecuritySingleResident;
+export default AdminSingleResident;
