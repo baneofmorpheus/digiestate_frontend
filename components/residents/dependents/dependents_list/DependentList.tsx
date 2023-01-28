@@ -3,12 +3,12 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
-
+import EmptyState from 'components/utility/empty_state/EmptyState';
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { Dialog } from 'primereact/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import { DependentListType, SingleDependentType } from 'types/';
@@ -223,7 +223,7 @@ const ResidentDependentList = () => {
 
               {!formLoading && dependents.length < 1 && (
                 <div className='bg-gray-600 mb-2 text-digiDefault text-xs md:text-sm text-center  pt-2 pb-2'>
-                  <p>No dependents found</p>
+                  <EmptyState message='No dependents found' />
                 </div>
               )}
               {!formLoading &&

@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import PreviousPage from 'components/navigation/previous_page/PreviousPage';
 import { Timeline } from 'primereact/timeline';
 import { bookingStatusLabels } from 'helpers/reusable';
-
+import EmptyState from 'components/utility/empty_state/EmptyState';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +12,6 @@ import {
   faLocationDot,
   faPersonWalkingArrowLoopLeft,
   faHouseUser,
-  faClock,
 } from '@fortawesome/free-solid-svg-icons';
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
@@ -183,7 +182,7 @@ const SecuritySingleGuest = () => {
 
               {!formLoading && !guest && (
                 <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                  <p>No guest found matching that info</p>
+                  <EmptyState message='No guest found matching that info' />
                 </div>
               )}
               {!formLoading && !!guest && (
