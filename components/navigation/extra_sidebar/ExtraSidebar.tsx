@@ -11,6 +11,7 @@ import {
   faCircleQuestion,
   faMoneyBill1Wave,
   faEnvelope,
+  faUserTie,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Sidebar } from 'primereact/sidebar';
@@ -55,6 +56,23 @@ const ExtraSidebar: NextPage<PropType> = ({
                 <FontAwesomeIcon className={` mr-4  `} icon={faUserPlus} />
 
                 <span className=''>Pending Registrations</span>
+              </button>
+              <hr className='h-0.5 mb-4 bg-gray-200' />
+            </>
+          )}
+          {role === 'admin' && (
+            <>
+              <button
+                type='button'
+                className='block text-start mb-2 w-full'
+                onClick={() => {
+                  setSideBarVisibile(false);
+                  router.push('/app/admins/new');
+                }}
+              >
+                <FontAwesomeIcon className={` mr-4  `} icon={faUserTie} />
+
+                <span className=''>Register Admin</span>
               </button>
               <hr className='h-0.5 mb-4 bg-gray-200' />
             </>
