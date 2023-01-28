@@ -31,8 +31,8 @@ const LoginData: NextPage<LoginDataPropType> = () => {
   const updateToastDispatch = useDispatch();
   const router = useRouter();
 
-  const loginToken = useSelector(
-    (state: any) => state.authentication.loginToken
+  const {loginToken,role} = useSelector(
+    (state: any) => state.authentication
   );
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
       }
     };
 
-    if (loginToken) {
+    if (loginToken && role =='security') {
       router.push('/app');
       return;
     }

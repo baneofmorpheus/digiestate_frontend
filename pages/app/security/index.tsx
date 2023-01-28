@@ -3,6 +3,7 @@ import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated'
 
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
@@ -306,6 +307,7 @@ const SecurityList = () => {
               </form>
             </div>
           </Dialog>
+          <NewItemButton link='/app/security/new' />
         </div>
         <style global jsx>{`
           @keyframes p-progress-spinner-color {
