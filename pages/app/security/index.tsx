@@ -118,6 +118,7 @@ const SecurityList = () => {
     updateToastDispatch,
     filterData,
     selectedPerPage,
+    selectedApprovalStatus,
   ]);
 
   useEffect(() => {
