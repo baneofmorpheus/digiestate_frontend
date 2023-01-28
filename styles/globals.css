@@ -87,3 +87,8 @@ a {
     /* background: black; */
   }
 }
+@media screen and (max-width: 375px) {
+  .filter-icon {
+    display: none !important;
+  }
+}

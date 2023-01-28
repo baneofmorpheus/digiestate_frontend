@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useState, useRef, useEffect } from 'react';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
 import SecuritySingleResident from 'components/security/residents/single_resident/SingleResident';
+import AdminSingleResident from 'components/admin/residents/single_resident/SingleResident';
 import { Toast as ToastType } from 'primereact/toast';
 
 import { useSelector } from 'react-redux';
@@ -16,6 +17,10 @@ const SingleSecurity = () => {
     switch (role) {
       case 'security':
         setComponentToDisplay(<SecuritySingleResident />);
+
+        break;
+      case 'admin':
+        setComponentToDisplay(<AdminSingleResident />);
 
         break;
 

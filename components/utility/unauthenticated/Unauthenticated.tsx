@@ -22,7 +22,7 @@ const Unauthenticated: NextPage = () => {
                 Security
               </a>
             </Link>
-            <Link href='#'>
+            <Link href='/admin'>
               <a className='bg-gray-600 hover:bg-black text-white pl-4 pr-4 rounded-lg pb-1 pt-1'>
                 Admin
               </a>

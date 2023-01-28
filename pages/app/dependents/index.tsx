@@ -19,6 +19,10 @@ const DependentList = () => {
         setComponentToDisplay(<SecurityDependentList />);
 
         break;
+      case 'admin':
+        setComponentToDisplay(<SecurityDependentList />);
+
+        break;
 
       default:
         setComponentToDisplay(

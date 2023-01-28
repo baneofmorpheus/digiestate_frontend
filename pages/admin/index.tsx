@@ -58,7 +58,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
       }
     };
 
-    if (loginToken && role =='security') {
+    if (loginToken && role ==='admin') {
       router.push('/app');
       return;
     }
@@ -109,7 +109,7 @@ const LoginData: NextPage<LoginDataPropType> = () => {
       data.device_id = deviceToken;
 
       const response = await digiEstateAxiosInstance.post(
-        '/estate-security/login',
+        '/estate-admin/login',
         data
       );
 
@@ -286,10 +286,17 @@ const LoginData: NextPage<LoginDataPropType> = () => {
             )}
           </button>
         </div>
-
+        <div className='text-sm mb-2  text-center'>
+          <span className='mr-1 '>Do not have an account ?</span>{' '}
+          <Link href='/resident/register'>
+            <a className=''>
+              <span className='text-reiGreen underline'>Register</span>
+            </a>
+          </Link>
+        </div>
         <Link href='/'>
           <a className='block text-center text-xs'>
-            <span className='underline'>Go Home</span>
+            <span className='text-reiGreen underline'>Go Home</span>
           </a>
         </Link>
       </div>
@@ -297,12 +304,12 @@ const LoginData: NextPage<LoginDataPropType> = () => {
   );
 };
 
-const LoginSecurity = () => {
+const LoginAdmin = () => {
   return (
     <div className='flex min-h-screen justify-end '>
       <div className='lg:w-1/2 md:pt-20 pt-10 w-full bg-digiDefault '>
         <h1 className='text-center text-2xl mb-8  lato-font'>
-          Login As Estate Security
+          Login As Estate Admin
         </h1>
 
         <LoginData />
@@ -337,8 +344,8 @@ const LoginSecurity = () => {
   );
 };
 
-LoginSecurity.getLayout = function getLayout(page: NextPage) {
+LoginAdmin.getLayout = function getLayout(page: NextPage) {
   return <UnauthenticatedLayout>{page}</UnauthenticatedLayout>;
 };
 
-export default LoginSecurity;
+export default LoginAdmin;

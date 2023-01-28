@@ -3,6 +3,7 @@ import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated'
 
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,23 +16,21 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { UserType } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
-import Resident from 'components/reusable/resident/Resident';
+import Security from 'components/reusable/security/Security';
 
 type FilterData = {
   selectedPerPage: number;
-
+  selectedApprovalStatus: string;
   name: string;
 };
-const PendingResidentsList = () => {
-  const role = useSelector((state: any) => state.authentication.role);
-
+const SecurityList = () => {
   const [showFiltertModal, setShowFilterModal] = useState<boolean>(false);
 
   const paginationRef = useRef<any>(null);
   const [formLoading, setFormLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const [residents, setResidents] = useState<Array<UserType>>([]);
+  const [security, setSecurity] = useState<Array<UserType>>([]);
 
   const router = useRouter();
 
@@ -42,9 +41,12 @@ const PendingResidentsList = () => {
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [selectedName, setSelectedName] = useState<string>('');
+  const [selectedApprovalStatus, setSelectedApprovalStatus] =
+    useState<string>('all');
   const [filterData, setFilterData] = useState<FilterData>({
     selectedPerPage: 10,
     name: '',
+    selectedApprovalStatus: 'all',
   });
   const handleDialogHideEevent = () => {
     setShowFilterModal(false);
@@ -62,6 +64,7 @@ const PendingResidentsList = () => {
     setFilterData({
       selectedPerPage: 10,
       name: '',
+      selectedApprovalStatus: 'all',
     });
   };
   const applyFilter = () => {
@@ -70,34 +73,37 @@ const PendingResidentsList = () => {
     setFilterData({
       selectedPerPage: selectedPerPage,
       name: selectedName || '',
+      selectedApprovalStatus,
     });
   };
 
-  const getResidents = useCallback(async () => {
+  const getSecurity = useCallback(async () => {
     const queryData: any = {};
 
     queryData.per_page = filterData.selectedPerPage;
     queryData.name = filterData.name;
     queryData['sort[by]'] = 'created_at';
     queryData['sort[order]'] = 'desc';
-    queryData['approval_status'] = 'pending';
+    queryData['approval_status'] = selectedApprovalStatus;
 
     setPerPage(selectedPerPage);
     queryData.page = currentPage;
     const queryString = Object.keys(queryData)
       .map((key) => {
-        return (
-          encodeURIComponent(key) + '=' + encodeURIComponent(queryData[key])
-        );
+        if (queryData[key] != 'all') {
+          return (
+            encodeURIComponent(key) + '=' + encodeURIComponent(queryData[key])
+          );
+        }
       })
       .join('&');
 
     setFormLoading(true);
     try {
       const response = await digiEstateAxiosInstance.get(
-        `/estates/${estate.id}/residents?${queryString}`
+        `/estates/${estate.id}/security?${queryString}`
       );
-      setResidents(response.data.data.users);
+      setSecurity(response.data.data.users);
 
       setTotalRecords(response.data.data.links.total);
       setTotalPages(response.data.data.links.last_page);
@@ -112,28 +118,29 @@ const PendingResidentsList = () => {
     updateToastDispatch,
     filterData,
     selectedPerPage,
+    selectedApprovalStatus,
   ]);
 
   useEffect(() => {
-    getResidents();
+    getSecurity();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    getResidents();
+    getSecurity();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterData]);
 
   useEffect(() => {
-    getResidents();
+    getSecurity();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const navigateToSingleResident = (resident: UserType) => {
-    router.push(`/app/residents/single/${resident.id}`);
+  const navigateToSingleSecurity = (security: UserType) => {
+    router.push(`/app/security/single/${security.id}`);
   };
   const handleNameFilterSubmit = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Enter') {
@@ -147,7 +154,7 @@ const PendingResidentsList = () => {
         <div className=' '>
           <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
             <div className='flex mb-2 justify-between'>
-              <h2 className='  lato-font'>Pending Residents </h2>
+              <h2 className='  lato-font'> Security </h2>
             </div>
             <div className=''>
               <div className='flex  mb-6'>
@@ -221,18 +228,18 @@ const PendingResidentsList = () => {
                   </div>
                 )}
 
-                {!formLoading && residents.length < 1 && (
+                {!formLoading && security.length < 1 && (
                   <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                    <p>No guests found</p>
+                    <p>No security found</p>
                   </div>
                 )}
                 {!formLoading &&
-                  residents.map((singleResident, index) => {
+                  security.map((singleSecurity, index) => {
                     return (
-                      <Resident
+                      <Security
                         key={index}
-                        handleClick={navigateToSingleResident}
-                        resident={singleResident}
+                        handleClick={navigateToSingleSecurity}
+                        security={singleSecurity}
                       />
                     );
                   })}
@@ -267,13 +274,28 @@ const PendingResidentsList = () => {
 
                   <div className='text-sm mb-4'>
                     <label className='block' htmlFor='range'>
+                      Approval Status
+                    </label>
+                    <select
+                      value={selectedApprovalStatus}
+                      className='rei-text-input'
+                      name='approvalStatus'
+                      onChange={(e) =>
+                        setSelectedApprovalStatus(e.target.value)
+                      }
+                      id=''
+                    >
+                      <option value='all'>All</option>
+                      <option value='approved'>Approved</option>
+                      <option value='revoked'>Revoked</option>
+                    </select>
+                  </div>
+                  <div className='text-sm mb-4'>
+                    <label className='block' htmlFor='range'>
                       Number of Results Per Page
                     </label>
                     <select
                       value={selectedPerPage}
-                      onChange={(e) =>
-                        setSelectedPerPage(Number(e.target.value))
-                      }
                       className='rei-text-input'
                       name='perPage'
                       id=''
@@ -306,6 +328,7 @@ const PendingResidentsList = () => {
               </form>
             </div>
           </Dialog>
+          <NewItemButton link='/app/security/new' />
         </div>
         <style global jsx>{`
           @keyframes p-progress-spinner-color {
@@ -352,18 +375,13 @@ const PendingResidentsList = () => {
           #filterDialog {
             margin: 0;
           }
-          @media screen and (max-width: 325px) {
-            .filter-icon {
-              display: none;
-            }
-          }
         `}</style>
       </div>
     </div>
   );
 };
 
-PendingResidentsList.getLayout = function getLayout(page: NextPage) {
+SecurityList.getLayout = function getLayout(page: NextPage) {
   return (
     <AuthenticatedLayout allowedRoles={['admin', 'security']}>
       {page}
@@ -371,4 +389,4 @@ PendingResidentsList.getLayout = function getLayout(page: NextPage) {
   );
 };
 
-export default PendingResidentsList;
+export default SecurityList;
