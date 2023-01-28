@@ -20,12 +20,10 @@ import Security from 'components/reusable/security/Security';
 
 type FilterData = {
   selectedPerPage: number;
-
+  selectedApprovalStatus: string;
   name: string;
 };
 const SecurityList = () => {
-  const role = useSelector((state: any) => state.authentication.role);
-
   const [showFiltertModal, setShowFilterModal] = useState<boolean>(false);
 
   const paginationRef = useRef<any>(null);
@@ -43,9 +41,12 @@ const SecurityList = () => {
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [selectedName, setSelectedName] = useState<string>('');
+  const [selectedApprovalStatus, setSelectedApprovalStatus] =
+    useState<string>('all');
   const [filterData, setFilterData] = useState<FilterData>({
     selectedPerPage: 10,
     name: '',
+    selectedApprovalStatus: 'all',
   });
   const handleDialogHideEevent = () => {
     setShowFilterModal(false);
@@ -63,6 +64,7 @@ const SecurityList = () => {
     setFilterData({
       selectedPerPage: 10,
       name: '',
+      selectedApprovalStatus: 'all',
     });
   };
   const applyFilter = () => {
@@ -71,6 +73,7 @@ const SecurityList = () => {
     setFilterData({
       selectedPerPage: selectedPerPage,
       name: selectedName || '',
+      selectedApprovalStatus,
     });
   };
 
@@ -81,15 +84,17 @@ const SecurityList = () => {
     queryData.name = filterData.name;
     queryData['sort[by]'] = 'created_at';
     queryData['sort[order]'] = 'desc';
-    queryData['approval_status'] = 'approved';
+    queryData['approval_status'] = selectedApprovalStatus;
 
     setPerPage(selectedPerPage);
     queryData.page = currentPage;
     const queryString = Object.keys(queryData)
       .map((key) => {
-        return (
-          encodeURIComponent(key) + '=' + encodeURIComponent(queryData[key])
-        );
+        if (queryData[key] != 'all') {
+          return (
+            encodeURIComponent(key) + '=' + encodeURIComponent(queryData[key])
+          );
+        }
       })
       .join('&');
 
@@ -268,13 +273,28 @@ const SecurityList = () => {
 
                   <div className='text-sm mb-4'>
                     <label className='block' htmlFor='range'>
+                      Approval Status
+                    </label>
+                    <select
+                      value={selectedApprovalStatus}
+                      className='rei-text-input'
+                      name='approvalStatus'
+                      onChange={(e) =>
+                        setSelectedApprovalStatus(e.target.value)
+                      }
+                      id=''
+                    >
+                      <option value='all'>All</option>
+                      <option value='approved'>Approved</option>
+                      <option value='revoked'>Revoked</option>
+                    </select>
+                  </div>
+                  <div className='text-sm mb-4'>
+                    <label className='block' htmlFor='range'>
                       Number of Results Per Page
                     </label>
                     <select
                       value={selectedPerPage}
-                      onChange={(e) =>
-                        setSelectedPerPage(Number(e.target.value))
-                      }
                       className='rei-text-input'
                       name='perPage'
                       id=''
