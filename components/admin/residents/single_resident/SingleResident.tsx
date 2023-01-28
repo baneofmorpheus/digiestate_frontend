@@ -21,7 +21,7 @@ import Dependent from 'components/reusable/dependent/Dependent';
 
 import { SingleDependentType } from 'types';
 
-const SecuritySingleResident = () => {
+const AdminSingleResident = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [followUpLoading, setFollowUpLoading] = useState(false);
   const updateToastDispatch = useDispatch();
@@ -317,4 +317,4 @@ const SecuritySingleResident = () => {
   );
 };
 
-export default SecuritySingleResident;
+export default AdminSingleResident;

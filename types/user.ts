@@ -10,19 +10,8 @@ export type UserType = {
   status: string;
   verified: string;
   resident_data?: ResidentType;
-  estate_user?: EstateUserTypeWithDependents;
-  created_at: string;
-};
-export type UserTypeWithoutEstateUser = {
-  id: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  middle_name: string;
-  phone_number: string;
-  status: string;
-  verified: string;
-  resident_data?: ResidentType;
+  estate_user?: EstateUserType & EstateUserDependentsType;
+  security_estate_user?: EstateUserType;
   created_at: string;
 };
 
@@ -54,23 +43,21 @@ export type EstateUserType = {
   id: number;
   estate_id: number;
   user_id: number;
-  role: string;
+  role: 'admin' | 'security' | 'superadmin' | 'resident';
   address: string;
   type: string;
-  is_approved: boolean;
+  approval_status: string;
   created_at: string;
   updated_at: string;
 };
 
-type EstateUserUserType = {
-  user?: UserTypeWithoutEstateUser;
+/**
+ * Estate user type for dependents
+ */
+export type DependentEstateUserType = EstateUserType & {
+  user?: Omit<UserType, 'estate_user' | 'security_estate_user'>;
 };
-
-export type DependentEstateUserType = EstateUserType & EstateUserUserType;
 
 type EstateUserDependentsType = {
   dependents?: DependentListType;
 };
-
-export type EstateUserTypeWithDependents = EstateUserType &
-  EstateUserDependentsType;

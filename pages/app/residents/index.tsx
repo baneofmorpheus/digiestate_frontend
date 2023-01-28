@@ -6,27 +6,23 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
-import moment from 'moment';
 
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
-import { SelectButton } from 'primereact/selectbutton';
 import { Dialog } from 'primereact/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import { Calendar } from 'primereact/calendar';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { UserType } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import Resident from 'components/reusable/resident/Resident';
-import Link from 'next/link';
 
 type FilterData = {
   selectedPerPage: number;
 
   name: string;
 };
-const PendingResidentsList = () => {
+const ApprovedResidentsList = () => {
   const role = useSelector((state: any) => state.authentication.role);
 
   const [showFiltertModal, setShowFilterModal] = useState<boolean>(false);
@@ -93,7 +89,7 @@ const PendingResidentsList = () => {
     queryData.name = filterData.name;
     queryData['sort[by]'] = 'created_at';
     queryData['sort[order]'] = 'desc';
-    queryData['approved'] = true;
+    queryData['approval_status'] = 'approved';
 
     setPerPage(selectedPerPage);
     queryData.page = currentPage;
@@ -376,7 +372,7 @@ const PendingResidentsList = () => {
   );
 };
 
-PendingResidentsList.getLayout = function getLayout(page: NextPage) {
+ApprovedResidentsList.getLayout = function getLayout(page: NextPage) {
   return (
     <AuthenticatedLayout allowedRoles={['admin', 'security']}>
       {page}
@@ -384,4 +380,4 @@ PendingResidentsList.getLayout = function getLayout(page: NextPage) {
   );
 };
 
-export default PendingResidentsList;
+export default ApprovedResidentsList;

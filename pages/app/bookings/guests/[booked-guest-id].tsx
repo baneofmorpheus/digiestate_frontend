@@ -23,6 +23,10 @@ const SingleGuest = () => {
         setComponentToDisplay(<SecuritySingleGuest />);
 
         break;
+      case 'admin':
+        setComponentToDisplay(<SecuritySingleGuest />);
+
+        break;
 
       default:
         setComponentToDisplay(
