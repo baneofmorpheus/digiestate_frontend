@@ -1,13 +1,11 @@
 import type { NextPage } from 'next';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
-
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
-
+import EmptyState from 'components/utility/empty_state/EmptyState';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { Dialog } from 'primereact/dialog';
@@ -230,7 +228,7 @@ const SecurityList = () => {
 
                 {!formLoading && security.length < 1 && (
                   <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                    <p>No security found</p>
+                    <EmptyState message='No security found' />
                   </div>
                 )}
                 {!formLoading &&

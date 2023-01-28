@@ -16,7 +16,6 @@ import {
   faLocationDot,
   faMarsAndVenus,
 } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 import { updateToastData } from 'reducers/utility';
@@ -27,6 +26,8 @@ import { Image } from 'primereact/image';
 import Link from 'next/link';
 import ErrorMessage from 'components/validation/error_msg';
 import { ProgressBar } from 'primereact/progressbar';
+import EmptyState from 'components/utility/empty_state/EmptyState';
+
 const SingleDependent = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] =
@@ -273,7 +274,7 @@ const SingleDependent = () => {
 
               {!formLoading && !dependent && (
                 <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                  <p>No dependent found matching that info</p>
+                  <EmptyState message='No dependent found matching that info' />
                 </div>
               )}
               {!formLoading && !!dependent && (

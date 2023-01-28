@@ -9,7 +9,7 @@ type EmptyStateProp = {
 const EmptyState: NextPage<EmptyStateProp> = ({ message }) => {
   return (
     <div>
-      <Lottie animationData={emptyLottie} loop={true} />
+      <Lottie style={{ height: 400 }} animationData={emptyLottie} loop={true} />
 
       <p className='text-sm text-gray-600'>{message}</p>
     </div>

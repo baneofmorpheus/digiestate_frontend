@@ -272,7 +272,6 @@ const SecurityHome: NextPage = () => {
         {!loadingRecentBooking && recentBookings.length < 1 && (
           <div className='text-center  pt-2 pb-2 mb-2'>
             <EmptyState message='No recent bookings found' />
-            {/* <p>No recent bookings found</p> */}
           </div>
         )}
 

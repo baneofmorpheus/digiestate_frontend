@@ -12,6 +12,7 @@ import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import { DependentListType, SingleDependentType } from 'types/';
 import Dependent from 'components/reusable/dependent/Dependent';
+import EmptyState from 'components/utility/empty_state/EmptyState';
 
 type FilterData = {
   selectedPerPage: number;
@@ -215,7 +216,7 @@ const SecurityDependentList = () => {
 
               {!formLoading && dependents.length < 1 && (
                 <div className='bg-gray-600 mb-2 text-digiDefault text-xs md:text-sm text-center  pt-2 pb-2'>
-                  <p>No dependents found</p>
+                  <EmptyState message='No dependents found' />
                 </div>
               )}
               {!formLoading &&

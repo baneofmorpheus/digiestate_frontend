@@ -18,7 +18,7 @@ import { Skeleton } from 'primereact/skeleton';
 import { Image } from 'primereact/image';
 import PreviousPage from 'components/navigation/previous_page/PreviousPage';
 import Dependent from 'components/reusable/dependent/Dependent';
-
+import EmptyState from 'components/utility/empty_state/EmptyState';
 import { SingleDependentType } from 'types';
 
 const AdminSingleResident = () => {
@@ -126,7 +126,7 @@ const AdminSingleResident = () => {
 
               {!formLoading && !resident && (
                 <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                  <p>No resident found matching that info</p>
+                  <EmptyState message='No resident found matching that info' />
                 </div>
               )}
 
