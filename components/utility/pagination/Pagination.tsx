@@ -1,14 +1,8 @@
-import { Paginator, PaginatorTemplate } from 'primereact/paginator';
+import { Paginator } from 'primereact/paginator';
 import type { NextPage } from 'next';
-import {
-  useState,
-  useEffect,
-  useRef,
-  forwardRef,
-  useImperativeHandle,
-} from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { PaginatorPageState } from 'primereact';
-
+import { clsx } from 'clsx';
 type PaginationProp = {
   onPageChange: Function;
   totalRecords: number;
@@ -40,18 +34,18 @@ const Pagination: NextPage<PaginationProp> = forwardRef(
       setCurrentPage(1);
     }, [totalRecords, totalPages]);
     return (
-      <div>
+      <div className={clsx(totalRecords < 1 && 'hidden')}>
         <Paginator
           first={firstPage}
           template={'PrevPageLink PageLinks  NextPageLink'}
-          className='!text-xs pagination-component'
+          className={`!text-xs pagination-component`}
           rows={rowsPerPage}
           totalRecords={totalRecords}
           onPageChange={handlePageChange}
         ></Paginator>
         <p className='text-center text-xs text-gray-600'>
           {' '}
-          Page {currentPage} / {totalPages}{' '}
+          Page {currentPage} / {totalPages}
         </p>
         <style jsx global>{`
           .pagination-component .p-dropdown-label.p-inputtext,

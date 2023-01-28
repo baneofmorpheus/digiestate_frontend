@@ -14,6 +14,7 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { Dialog } from 'primereact/dialog';
 import Pagination from 'components/utility/pagination/Pagination';
 
+import EmptyState from 'components/utility/empty_state/EmptyState';
 import moment from 'moment';
 
 type FilterData = {
@@ -269,8 +270,9 @@ const SecurityHome: NextPage = () => {
       )}
       <div className='recent-bookings'>
         {!loadingRecentBooking && recentBookings.length < 1 && (
-          <div className='text-center text-xs md:text-sm bg-gray-600 text-digiDefault pt-2 pb-2 mb-2'>
-            <p>No recent bookings found</p>
+          <div className='text-center  pt-2 pb-2 mb-2'>
+            <EmptyState message='No recent bookings found' />
+            {/* <p>No recent bookings found</p> */}
           </div>
         )}
 
