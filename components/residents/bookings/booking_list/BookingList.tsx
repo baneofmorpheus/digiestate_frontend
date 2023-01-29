@@ -15,6 +15,7 @@ import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
 import { bookingStatuses } from 'helpers/reusable';
+import EmptyState from 'components/utility/empty_state/EmptyState';
 
 type FilterData = {
   selectedPerPage: number;
@@ -251,8 +252,8 @@ const ResidentBookingList = () => {
               )}
 
               {!formLoading && guests.length < 1 && (
-                <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                  <p>No guests found</p>
+                <div className=' mb-2 text-center  pt-2 pb-2'>
+                  <EmptyState message='No guests found' />
                 </div>
               )}
               {!formLoading &&

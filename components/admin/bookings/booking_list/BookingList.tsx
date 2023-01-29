@@ -7,7 +7,6 @@ import moment from 'moment';
 
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
-import { SelectButton } from 'primereact/selectbutton';
 import { Dialog } from 'primereact/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
@@ -17,6 +16,7 @@ import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import { bookingStatuses } from 'helpers/reusable';
+import EmptyState from 'components/utility/empty_state/EmptyState';
 
 type FilterData = {
   selectedPerPage: number;
@@ -33,12 +33,6 @@ const SecurityBookingList = () => {
   const paginationRef = useRef<any>(null);
   const [formLoading, setFormLoading] = useState(false);
   const updateToastDispatch = useDispatch();
-
-  const bookingTypes = [
-    { label: 'All', value: 'all' },
-    { label: 'Book In', value: 'book_in' },
-    { label: 'Book Out', value: 'book_out' },
-  ];
 
   const [guests, setGuests] = useState<Array<SingleBookedGuestType>>([]);
 
@@ -262,8 +256,8 @@ const SecurityBookingList = () => {
               )}
 
               {!formLoading && guests.length < 1 && (
-                <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                  <p>No guests found</p>
+                <div className=' mb-2 text-center  pt-2 pb-2'>
+                  <EmptyState message='No guests found' />
                 </div>
               )}
               {!formLoading &&

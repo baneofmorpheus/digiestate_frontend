@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -10,9 +9,8 @@ import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { SingleBookedGuestType } from 'types';
 import { Skeleton } from 'primereact/skeleton';
 import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
+import EmptyState from 'components/utility/empty_state/EmptyState';
 import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
 import moment from 'moment';
 
@@ -85,8 +83,8 @@ const ResidentHome: NextPage = () => {
       )}
       <div className='recent-bookings'>
         {!loadingRecentBooking && recentBookings.length < 1 && (
-          <div className='text-center text-xs md:text-sm bg-gray-600 text-digiDefault pt-2 pb-2 mb-2'>
-            <p>No recent bookings found</p>
+          <div className='text-center  pt-2 pb-2 mb-2'>
+            <EmptyState message='No recent bookings found' />
           </div>
         )}
 

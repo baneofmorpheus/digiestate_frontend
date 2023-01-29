@@ -16,6 +16,7 @@ import { UserType } from 'types';
 import Pagination from 'components/utility/pagination/Pagination';
 import { Skeleton } from 'primereact/skeleton';
 import Resident from 'components/reusable/resident/Resident';
+import EmptyState from 'components/utility/empty_state/EmptyState';
 
 type FilterData = {
   selectedPerPage: number;
@@ -222,8 +223,8 @@ const PendingResidentsList = () => {
                 )}
 
                 {!formLoading && residents.length < 1 && (
-                  <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                    <p>No guests found</p>
+                  <div className='mb-2  text-center  pt-2 pb-2'>
+                    <EmptyState message='No guests found' />
                   </div>
                 )}
                 {!formLoading &&

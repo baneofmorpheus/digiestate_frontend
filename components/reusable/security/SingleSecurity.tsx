@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { ProgressSpinner } from 'primereact/progressspinner';
-
+import EmptyState from 'components/utility/empty_state/EmptyState';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -116,8 +116,8 @@ const SingleSecurity = () => {
               )}
 
               {!formLoading && !security && (
-                <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                  <p>No security found matching that info</p>
+                <div className='mb-2  text-center  pt-2 pb-2'>
+                  <EmptyState message='No security found matching that info' />
                 </div>
               )}
 

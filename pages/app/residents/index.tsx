@@ -6,7 +6,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
-
+import EmptyState from 'components/utility/empty_state/EmptyState';
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 import { Dialog } from 'primereact/dialog';
@@ -231,8 +231,8 @@ const ApprovedResidentsList = () => {
                 )}
 
                 {!formLoading && residents.length < 1 && (
-                  <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                    <p>No guests found</p>
+                  <div className=' mb-2  text-center  pt-2 pb-2'>
+                    <EmptyState message='No guests found' />
                   </div>
                 )}
                 {!formLoading &&

@@ -29,7 +29,7 @@ import {
   BookingHistory,
   BookingStatusType,
 } from 'types';
-
+import EmptyState from 'components/utility/empty_state/EmptyState';
 import { Checkbox } from 'primereact/checkbox';
 
 const ResidentSingleGuest = () => {
@@ -278,8 +278,8 @@ const ResidentSingleGuest = () => {
               )}
 
               {!formLoading && !guest && (
-                <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
-                  <p>No guest found matching that info</p>
+                <div className=' mb-2 text-center  pt-2 pb-2'>
+                  <EmptyState message='No guest found matching that info' />
                 </div>
               )}
               {!formLoading && !!guest && (
