@@ -34,12 +34,6 @@ const SecurityBookingList = () => {
   const [formLoading, setFormLoading] = useState(false);
   const updateToastDispatch = useDispatch();
 
-  const bookingTypes = [
-    { label: 'All', value: 'all' },
-    { label: 'Book In', value: 'book_in' },
-    { label: 'Book Out', value: 'book_out' },
-  ];
-
   const [guests, setGuests] = useState<Array<SingleBookedGuestType>>([]);
 
   const router = useRouter();
@@ -262,7 +256,7 @@ const SecurityBookingList = () => {
               )}
 
               {!formLoading && guests.length < 1 && (
-                <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
+                <div className=' mb-2 text-center  pt-2 pb-2'>
                   <EmptyState message='No guests found' />
                 </div>
               )}

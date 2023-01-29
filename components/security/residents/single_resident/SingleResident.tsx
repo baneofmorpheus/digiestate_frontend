@@ -125,7 +125,7 @@ const SecuritySingleResident = () => {
               )}
 
               {!formLoading && !resident && (
-                <div className='bg-gray-600 mb-2 text-digiDefault text-center text-sm pt-2 pb-2'>
+                <div className=' mb-2  text-center pt-2 pb-2'>
                   <EmptyState message='No resident found matching that info' />
                 </div>
               )}
