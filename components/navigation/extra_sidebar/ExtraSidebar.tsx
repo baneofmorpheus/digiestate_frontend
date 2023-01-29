@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOut } from 'reducers/authentication';
-
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {
   faUser,
   faUserPlus,
@@ -12,6 +12,7 @@ import {
   faMoneyBill1Wave,
   faEnvelope,
   faUserTie,
+  faLink,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Sidebar } from 'primereact/sidebar';
@@ -33,6 +34,7 @@ const ExtraSidebar: NextPage<PropType> = ({
     (state: any) => state.authentication
   );
 
+  const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false);
   return (
     <Sidebar
       position='right'
@@ -78,19 +80,17 @@ const ExtraSidebar: NextPage<PropType> = ({
             </>
           )}
 
-          <Link href='/app/account'>
-            <button
-              type='button'
-              className='block text-start mb-2 w-full'
-              onClick={() => {
-                setSideBarVisibile(false);
-                router.push('/app/account');
-              }}
-            >
-              <FontAwesomeIcon className={` mr-4  `} icon={faUser} />
-              <span className=''>Account</span>
-            </button>
-          </Link>
+          <button
+            type='button'
+            className='block text-start mb-2 w-full'
+            onClick={() => {
+              setSideBarVisibile(false);
+              router.push('/app/account');
+            }}
+          >
+            <FontAwesomeIcon className={` mr-4  `} icon={faUser} />
+            <span className=''>Account</span>
+          </button>
           <hr className='h-0.5 mb-4 bg-gray-200' />
           <Link href='#'>
             <a className=' block mb-2 '>
@@ -112,6 +112,29 @@ const ExtraSidebar: NextPage<PropType> = ({
               <span className=''>Make Money With Us</span>
             </a>
           </Link>
+          <hr className='h-0.5 mb-4 bg-gray-200' />
+
+          <button type='button' className='block text-start mb-2 w-full'>
+            <FontAwesomeIcon className={` mr-4  `} icon={faLink} />
+            <CopyToClipboard
+              text={`${window.location.origin}/resident/register?estateCode=${estate.code}`}
+              onCopy={() => {
+                setCopiedToClipboard(true);
+
+                setTimeout(() => {
+                  setCopiedToClipboard(false);
+                }, 3300);
+              }}
+            >
+              <button>Copy Registration Link</button>
+            </CopyToClipboard>
+
+            {!!copiedToClipboard && (
+              <span className='ml-2 text-xs bg-gray-600 text-digiDefault pl-2 pr-2 pt-1 pb-1 rounded-lg'>
+                Copied
+              </span>
+            )}
+          </button>
         </div>
 
         <div className=''>

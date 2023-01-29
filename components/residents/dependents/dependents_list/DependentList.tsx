@@ -222,7 +222,7 @@ const ResidentDependentList = () => {
               )}
 
               {!formLoading && dependents.length < 1 && (
-                <div className='bg-gray-600 mb-2 text-digiDefault text-xs md:text-sm text-center  pt-2 pb-2'>
+                <div className='mb-2  text-center  pt-2 pb-2'>
                   <EmptyState message='No dependents found' />
                 </div>
               )}

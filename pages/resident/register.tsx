@@ -393,7 +393,11 @@ const ResidentData: NextPage<ResidentDataPropType> = () => {
                   {...register('estate_code')}
                   type='text'
                   autoComplete='on'
+                  disabled={!!router.query.estateCode}
                   className='rei-text-input'
+                  defaultValue={
+                    router.query.estateCode && router.query.estateCode
+                  }
                 />
               </label>
               {errors['estate_code'] && (
