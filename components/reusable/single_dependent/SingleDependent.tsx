@@ -36,8 +36,7 @@ const SingleDependent = () => {
   const [uploadedImageBlob, setUploadedImageBlob] = useState<any>(null);
   const [dependent, setDependent] = useState<SingleDependentType>();
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [showLoadingDeleteModal, setShowLoadingDeleteModal] =
-    useState<boolean>(true);
+
   const [editRequestLoading, setEditRequestLoading] = useState(false);
   const [deleteRequestLoading, setDeleteRequestLoading] = useState(false);
   const router = useRouter();
@@ -176,7 +175,7 @@ const SingleDependent = () => {
           detail: 'Dependent updated successfully.',
         })
       );
-      router.push('/app/dependents');
+      getDependent()
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
@@ -275,6 +274,31 @@ const SingleDependent = () => {
               {!formLoading && !dependent && (
                 <div className='mb-2  text-center  pt-2 pb-2'>
                   <EmptyState message='No dependent found matching that info' />
+                </div>
+              )}
+
+              {!formLoading && !!dependent &&  role === 'resident' && (
+                <div className='text-right mb-4'>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      editDependent(dependent);
+                    }}
+                    className='bg-gray-600 mr-4 hover:bg-black text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+                  >
+                    {' '}
+                    Update Profile
+                  </button>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      deleteDependent(dependent);
+                    }}
+                    className='border-2 border-gray-600 hover:bg-black hover:border-black text-gray-600 hover:text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+                  >
+                    {' '}
+                    Delete Dependent
+                  </button>
                 </div>
               )}
               {!formLoading && !!dependent && (
