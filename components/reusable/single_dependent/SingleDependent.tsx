@@ -175,13 +175,14 @@ const SingleDependent = () => {
           detail: 'Dependent updated successfully.',
         })
       );
-      getDependent()
+      getDependent();
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
     }
     setEditRequestLoading(false);
   };
+
   const deleteDependent = (dependent: SingleDependentType) => {
     showDeleteConfirmationDialogue(dependent);
   };
@@ -277,7 +278,7 @@ const SingleDependent = () => {
                 </div>
               )}
 
-              {!formLoading && !!dependent &&  role === 'resident' && (
+              {!formLoading && !!dependent && role === 'resident' && (
                 <div className='text-right mb-4'>
                   <button
                     type='button'

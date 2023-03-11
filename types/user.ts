@@ -15,6 +15,22 @@ export type UserType = {
   created_at: string;
 };
 
+type EditEstateUserInput = {
+  first_name: string;
+  type: string;
+
+  phone_number: string;
+  middle_name: string;
+  last_name: string;
+  email: string;
+};
+
+export type EditResidentInputType = EditEstateUserInput & {
+  gender: string;
+  marital_status: string;
+  address: string;
+};
+
 export type DependentUserType = {
   id: number;
   email: string;
