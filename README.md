@@ -32,3 +32,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## App Overview
+This is an estate management access control app with logs and export functionality.
+
+## Authentication
+Authentication is done with a bearer token from the server.
+Each estate scoped user can belong to multiple estates but can only be logged into one estate at a time.
+If the user wants to switch estates they have to relogin.
+
+## App Users
+All users of the app have their access level restricted to the estates they are currently logged into except for the superadmin.
+- Admin 
+- Resident
+- Security
+- SuperAdmin
+
+## Registeration Link
+Registeration link for residents for e.g looks like {{baseUrl}}/residents/register?estateCode=ESTATE2020
