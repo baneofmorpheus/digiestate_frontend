@@ -1,10 +1,14 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOut } from 'reducers/authentication';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { updateToastData } from 'reducers/utility';
+import axiosErrorHandler from 'helpers/axiosErrorHandler';
+import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
+
 import {
   faUser,
   faUserPlus,
@@ -14,6 +18,8 @@ import {
   faUserTie,
   faLink,
 } from '@fortawesome/free-solid-svg-icons';
+
+import { Badge } from 'primereact/badge';
 
 import { Sidebar } from 'primereact/sidebar';
 ('@fortawesome/free-solid-svg-icons');
@@ -28,11 +34,35 @@ const ExtraSidebar: NextPage<PropType> = ({
   setSideBarVisibile,
 }) => {
   const updateLoginDataDispatch = useDispatch();
+  const updateToastDispatch = useDispatch();
 
   const router = useRouter();
   const { user, role, estate } = useSelector(
     (state: any) => state.authentication
   );
+
+  const [pendingRegistrationCount, setPendingRegistrationCount] =
+    useState<number>(0);
+
+  const getPendingRegistrationCount = async () => {
+    try {
+      const { data } = await digiEstateAxiosInstance.get<{
+        data: { count: number };
+      }>(`/estates/${estate.id}/residents/count`);
+      setPendingRegistrationCount(data.data.count);
+    } catch (error: any) {
+      const toastData = axiosErrorHandler(error);
+      updateToastDispatch(updateToastData(toastData));
+    }
+  };
+
+  useEffect(() => {
+    if (role === 'resident') {
+      return;
+    }
+    getPendingRegistrationCount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false);
   return (
@@ -57,7 +87,10 @@ const ExtraSidebar: NextPage<PropType> = ({
               >
                 <FontAwesomeIcon className={` mr-4  `} icon={faUserPlus} />
 
-                <span className=''>Pending Registrations</span>
+                <span className='p-overlay-badge pr-4'>
+                  Pending Registrations
+                  <Badge value={pendingRegistrationCount}></Badge>
+                </span>
               </button>
               <hr className='h-0.5 mb-4 bg-gray-200' />
             </>
