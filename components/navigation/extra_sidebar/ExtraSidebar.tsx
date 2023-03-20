@@ -17,6 +17,7 @@ import {
   faEnvelope,
   faUserTie,
   faLink,
+  faFileExport,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Badge } from 'primereact/badge';
@@ -124,6 +125,20 @@ const ExtraSidebar: NextPage<PropType> = ({
             <FontAwesomeIcon className={` mr-4  `} icon={faUser} />
             <span className=''>Account</span>
           </button>
+          <hr className='h-0.5 mb-4 bg-gray-200' />
+          <button
+            type='button'
+            className='block text-start mb-2 w-full'
+            onClick={() => {
+              setSideBarVisibile(false);
+              router.push('/app/data-export');
+            }}
+          >
+            <FontAwesomeIcon className={` mr-4  `} icon={faFileExport} />
+
+            <span className=''>Data Export</span>
+          </button>
+
           <hr className='h-0.5 mb-4 bg-gray-200' />
           <Link href='#'>
             <a className=' block mb-2 '>
