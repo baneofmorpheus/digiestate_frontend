@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logOut } from 'reducers/authentication';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { updateToastData } from 'reducers/utility';
+import { updatePendingRegistrationCount } from 'reducers/admin';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
 
@@ -34,26 +35,23 @@ const ExtraSidebar: NextPage<PropType> = ({
   sidebarVisible,
   setSideBarVisibile,
 }) => {
-  const updateLoginDataDispatch = useDispatch();
-  const updateToastDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const router = useRouter();
   const { user, role, estate } = useSelector(
     (state: any) => state.authentication
   );
-
-  const [pendingRegistrationCount, setPendingRegistrationCount] =
-    useState<number>(0);
+  const { pendingRegistrationCount } = useSelector((state: any) => state.admin);
 
   const getPendingRegistrationCount = async () => {
     try {
       const { data } = await digiEstateAxiosInstance.get<{
         data: { count: number };
       }>(`/estates/${estate.id}/residents/count`);
-      setPendingRegistrationCount(data.data.count);
+      dispatch(updatePendingRegistrationCount(data.data.count));
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
-      updateToastDispatch(updateToastData(toastData));
+      dispatch(updateToastData(toastData));
     }
   };
 
@@ -174,7 +172,7 @@ const ExtraSidebar: NextPage<PropType> = ({
                 }, 3300);
               }}
             >
-              <button>Copy Registration Link</button>
+              <span>Copy Registration Link</span>
             </CopyToClipboard>
 
             {!!copiedToClipboard && (
@@ -195,7 +193,7 @@ const ExtraSidebar: NextPage<PropType> = ({
           </div>
           <button
             onClick={() => {
-              updateLoginDataDispatch(logOut({}));
+              dispatch(logOut({}));
             }}
             className='border block w-full ml-auto mr-auto rounded-lg border-gray-400 pl-4 pr-4 pt-2 pb-2'
             type='button'
