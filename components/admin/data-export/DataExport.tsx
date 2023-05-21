@@ -1,47 +1,107 @@
 import type { NextPage } from 'next';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { updateToastData } from 'reducers/utility';
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
-import { SingleBookedGuestType } from 'types';
-import { Skeleton } from 'primereact/skeleton';
-import BookedGuest from 'components/reusable/booked_guest/BookedGuest';
 import PreviousPage from 'components/navigation/previous_page/PreviousPage';
 import { Calendar } from 'primereact/calendar';
-
-import EmptyState from 'components/utility/empty_state/EmptyState';
-import NewItemButton from 'components/navigation/new_item_button/NewItemButton';
+import ErrorMessage from 'components/validation/error_msg';
 import moment from 'moment';
 import { ProgressBar } from 'primereact/progressbar';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { AxiosResponse } from 'axios';
+
+type ExportBookedGuestsInput = {
+  resident_name: string;
+  name: string;
+  format: 'xlsx' | 'csv' | '';
+  start_date: string;
+  end_date: string;
+};
+
+const exportBookingInputSchema = yup
+  .object()
+  .shape({
+    resident_name: yup.string().label('Resident Name'),
+    name: yup.string().label('Guest Name'),
+    format: yup
+      .string()
+      .matches(/(csv|xlsx)/, 'Format must be csv,xlsx')
+      .required()
+      .label('Format'),
+  })
+  .required();
 
 const DataExport: NextPage = () => {
   const estate = useSelector((state: any) => state.authentication.estate);
 
   const [exportLoading, setExportLoading] = useState<boolean>(false);
   const [dateRange, setDateRange] = useState<any>([]);
-  const [exportFormat, setExportFormat] = useState<'csv' | 'excel' | ''>('');
-
-  const [recentBookings, setRecentBookings] = useState<Array<any>>([]);
-  const router = useRouter();
+  const [exportFormat, setExportFormat] = useState<'csv' | 'xlsx' | ''>('');
 
   const updateToastDispatch = useDispatch();
 
-  async function exportBookingsToEmail() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    formState,
+  } = useForm<ExportBookedGuestsInput>({
+    resolver: yupResolver(exportBookingInputSchema),
+    mode: 'all',
+  });
+
+  async function exportBookingsToEmail(validatedData: ExportBookedGuestsInput) {
     try {
       setExportLoading(true);
 
-      const formattedStartDate = moment()
-        .subtract(48, 'hours')
-        .format('Y-MM-DD');
-      const formattedEndDate = moment().format('Y-MM-DD');
+      const payload: ExportBookedGuestsInput = {
+        start_date: '',
+        end_date: '',
+        name: validatedData.name,
+        resident_name: validatedData.resident_name,
+        format: validatedData.format,
+      };
 
-      const response: any = await digiEstateAxiosInstance.get(
-        `/bookings/${estate.id}/guests?start_date=${formattedStartDate}&end_date=${formattedEndDate}&sort[by]=updated_at&sort[order]=desc&per_page=25`
+      if (dateRange.length > 0) {
+        if (dateRange.length > 1 && !!dateRange[0] && !!dateRange[1]) {
+          payload.start_date = moment(dateRange[0]).format('Y-MM-DD');
+          payload.end_date = moment(dateRange[1]).format('Y-MM-DD');
+        } else if (!!dateRange[0]) {
+          payload.start_date = moment(dateRange[0]).format('Y-MM-DD');
+        }
+      }
+
+      const response: AxiosResponse<{
+        message: 'Export  requested';
+        code: 200;
+        data: null;
+      }> = await digiEstateAxiosInstance.post(
+        `/bookings/${estate.id}/export`,
+        payload
       );
-      setRecentBookings(response.data.data.booked_guests);
+
+      reset({
+        start_date: '',
+        end_date: '',
+        name: '',
+        resident_name: '',
+        format: '',
+      });
+      setDateRange([]);
+
+      updateToastDispatch(
+        updateToastData({
+          severity: 'success',
+          detail: 'The exported data will be sent to your mail shortly.',
+          summary: 'Your request was successful',
+        })
+      );
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
       updateToastDispatch(updateToastData(toastData));
@@ -55,15 +115,75 @@ const DataExport: NextPage = () => {
         <PreviousPage label='Data Export' />
 
         <div className='mb-4  ml-auto mr-auto lg:pr-0 lg:pl-0 pl-2 pr-2 '>
-          <form className='lg:w-3/4 ml-auto mr-auto'>
+          <form
+            onSubmit={handleSubmit(exportBookingsToEmail)}
+            className='2xl:w-3/4 ml-auto mr-auto'
+          >
             <div className='mb-4 flex flex-col  justify-between gap-y-2.5 md:gap-x-2.5 '>
               <h4 className='mb-4 fon'>Export Bookings to Mail</h4>
-              <div className=' text-sm'>
+              <div className='mb-2'>
+                <span className='text-sm mb-1'> Export Format*</span>
+
+                <select
+                  {...register('format')}
+                  value={exportFormat}
+                  onChange={(e) =>
+                    setExportFormat(e.target.value as typeof exportFormat)
+                  }
+                  className='rei-text-input'
+                  id=''
+                >
+                  <option value=''>Select Format</option>
+                  <option value='csv'>Csv</option>
+                  <option value='xlsx'>Excel</option>
+                </select>
+                {errors['format'] && (
+                  <ErrorMessage message={errors['format']['message']!} />
+                )}
+              </div>
+              <div
+                className='flex 
+              flex-col  gap-y-4 lg:gap-y-0 lg:gap-x-2 lg:flex-row justify-between'
+              >
+                <div className='w-full lg:w-1/2'>
+                  <label className='text-black'>
+                    Resident Name
+                    <input
+                      {...register('resident_name')}
+                      type='text'
+                      placeholder='E.g John Cena'
+                      className='rei-text-input'
+                    />
+                  </label>
+                  {errors['resident_name'] && (
+                    <ErrorMessage
+                      message={errors['resident_name']['message']!}
+                    />
+                  )}
+                </div>
+                <div className='w-full lg:w-1/2'>
+                  <label className='text-black'>
+                    Guest Name
+                    <input
+                      {...register('name')}
+                      type='text'
+                      placeholder='E.g Avery Michael'
+                      className='rei-text-input'
+                    />
+                  </label>
+                  {errors['name'] && (
+                    <ErrorMessage message={errors['name']['message']!} />
+                  )}
+                </div>
+              </div>
+
+              <div className=' text-sm mb-2'>
                 <label className='block' htmlFor='range'>
-                  Date Range
+                  Date Range*
                 </label>
                 <Calendar
                   id='range'
+                  required
                   className='w-full'
                   inputClassName='rei-text-input !text-base'
                   value={dateRange}
@@ -73,34 +193,16 @@ const DataExport: NextPage = () => {
                   readOnlyInput
                 />
               </div>
-              <div className='mb-2'>
-                <span className='text-sm mb-1'> Export Format</span>
-
-                <select
-                  value={exportFormat}
-                  onChange={(e) =>
-                    setExportFormat(e.target.value as typeof exportFormat)
-                  }
-                  className='rei-text-input'
-                  name='bookingStatus'
-                  id=''
-                >
-                  <option value=''>Select Format</option>
-                  <option value='csv'>Csv</option>
-                  <option value='excel'>Excel</option>
-                </select>
-              </div>
             </div>
             <small>
-              Your data will be exported and sent to you as an email.
+              Booking data will be exported and sent to you as an email. <br />{' '}
             </small>
             <hr className='h-0.5 mb-4 bg-gray-600' />
 
             <div className='flex gap-x-4 mb-4'>
               <button
                 disabled={exportLoading}
-                type='button'
-                onClick={exportBookingsToEmail}
+                type='submit'
                 className='pt-2 pb-2 pl-4 pr-4 bg-gray-600 hover:bg-black text-digiDefault rounded-lg text-sm'
               >
                 Send to Mail
@@ -152,56 +254,6 @@ const DataExport: NextPage = () => {
         }
       `}</style>
     </div>
-    // <div className='relative min-h-screen pt-2'>
-    //   <h5 className='mb-4'> Recent Bookings</h5>
-
-    //   {loadingRecentBooking ? (
-    //     <div className='text-sm'>
-    //       <div className='flex mb-4'>
-    //         <Skeleton shape='circle' size='3REM' className='mr-2'></Skeleton>
-    //         <div style={{ flex: '1' }}>
-    //           <Skeleton width='100%' className='mb-2'></Skeleton>
-    //           <Skeleton width='75%'></Skeleton>
-    //         </div>
-    //       </div>
-    //       <div className='flex mb-4'>
-    //         <Skeleton shape='circle' size='3REM' className='mr-2'></Skeleton>
-    //         <div style={{ flex: '1' }}>
-    //           <Skeleton width='100%' className='mb-2'></Skeleton>
-    //           <Skeleton width='75%'></Skeleton>
-    //         </div>
-    //       </div>
-    //       <div className='flex mb-4'>
-    //         <Skeleton shape='circle' size='3REM' className='mr-2'></Skeleton>
-    //         <div style={{ flex: '1' }}>
-    //           <Skeleton width='100%' className='mb-2'></Skeleton>
-    //           <Skeleton width='75%'></Skeleton>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   ) : (
-    //     ''
-    //   )}
-    //   <div className='recent-bookings'>
-    //     {!loadingRecentBooking && recentBookings.length < 1 && (
-    //       <div className='text-center  pt-2 pb-2 mb-2'>
-    //         <EmptyState message='No recent bookings found' />
-    //       </div>
-    //     )}
-
-    //     {!loadingRecentBooking &&
-    //       recentBookings.map((singleBooking: SingleBookedGuestType, index) => {
-    //         return (
-    //           <BookedGuest
-    //             key={index}
-    //             handleClick={navigateToSingleBooking}
-    //             guest={singleBooking}
-    //           />
-    //         );
-    //       })}
-    //   </div>
-    //   <NewItemButton link='/app/bookings/new' />
-    // </div>
   );
 };
 export default DataExport;
