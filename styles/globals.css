@@ -37,6 +37,25 @@ body {
   font-family: 'Lato', sans-serif !important;
 }
 
+::placeholder,
+input[type='text'] {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--grey-300) !important;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder,
+input[type='text'] {
+  /* Internet Explorer 10-11 */
+  color: var(--grey-300) !important;
+}
+
+::-ms-input-placeholder,
+input[type='text'] {
+  /* Microsoft Edge */
+  color: var(--grey-300) !important;
+}
+
 a {
   color: inherit;
   text-decoration: none;

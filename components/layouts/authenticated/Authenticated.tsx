@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Unauthorized from 'components/utility/unauthorized/Unauthorized';
 import MobileMenu from 'components/navigation/mobile_menu/MobileMenu';
 import type { NextPage } from 'next';
+import Head from 'next/head';
 
 type Props = {
   children: any;
@@ -31,6 +32,10 @@ const Authenticated: NextPage<Props> = ({ children, allowedRoles }) => {
   ) {
     return (
       <div>
+        <Head>
+          <title>DigiEstate Security App - Unauthorized</title>
+        </Head>
+
         <Unauthorized />
       </div>
     );
@@ -38,6 +43,9 @@ const Authenticated: NextPage<Props> = ({ children, allowedRoles }) => {
 
   return (
     <div className='container mx-auto relative'>
+      <Head>
+        <title>DigiEstate Security App</title>
+      </Head>
       <Sidebar />
       <main className='lg:w-2/4 ml-auto mr-auto pb-20'>{children}</main>
       <ToastWrapper />
