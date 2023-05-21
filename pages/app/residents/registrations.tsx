@@ -6,6 +6,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 import axiosErrorHandler from 'helpers/axiosErrorHandler';
 import { useSelector, useDispatch } from 'react-redux';
+import { updatePendingRegistrationCount } from 'reducers/admin';
 
 import { updateToastData } from 'reducers/utility';
 import digiEstateAxiosInstance from 'helpers/digiEstateAxiosInstance';
@@ -30,7 +31,7 @@ const PendingResidentsList = () => {
 
   const paginationRef = useRef<any>(null);
   const [formLoading, setFormLoading] = useState(false);
-  const updateToastDispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [residents, setResidents] = useState<Array<UserType>>([]);
 
@@ -74,6 +75,18 @@ const PendingResidentsList = () => {
     });
   };
 
+  const getPendingRegistrationCount = async () => {
+    try {
+      const { data } = await digiEstateAxiosInstance.get<{
+        data: { count: number };
+      }>(`/estates/${estate.id}/residents/count`);
+      dispatch(updatePendingRegistrationCount(data.data.count));
+    } catch (error: any) {
+      const toastData = axiosErrorHandler(error);
+      dispatch(updateToastData(toastData));
+    }
+  };
+
   const getResidents = useCallback(async () => {
     const queryData: any = {};
 
@@ -104,31 +117,21 @@ const PendingResidentsList = () => {
       setTotalPages(response.data.data.links.last_page);
     } catch (error: any) {
       const toastData = axiosErrorHandler(error);
-      updateToastDispatch(updateToastData(toastData));
+      dispatch(updateToastData(toastData));
     }
     setFormLoading(false);
-  }, [
-    currentPage,
-    estate.id,
-    updateToastDispatch,
-    filterData,
-    selectedPerPage,
-  ]);
+  }, [currentPage, estate.id, dispatch, filterData, selectedPerPage]);
 
   useEffect(() => {
     getResidents();
+    getPendingRegistrationCount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     getResidents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterData]);
-
-  useEffect(() => {
-    getResidents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [filterData, currentPage]);
 
   const onPageChange = (page: number) => {
     setCurrentPage(page);

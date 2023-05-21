@@ -317,20 +317,22 @@ const AdminSingleResident = () => {
                   </div>
                 )}
 
-              {!formLoading && !!resident && (
-                <div className='text-right mb-4'>
-                  <button
-                    type='button'
-                    onClick={() => {
-                      editResident();
-                    }}
-                    className='bg-gray-600 hover:bg-black text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
-                  >
-                    {' '}
-                    Update Profile
-                  </button>
-                </div>
-              )}
+              {!formLoading &&
+                !!resident &&
+                resident.estate_user?.approval_status !== 'pending' && (
+                  <div className='text-right mb-4'>
+                    <button
+                      type='button'
+                      onClick={() => {
+                        editResident();
+                      }}
+                      className='bg-gray-600 hover:bg-black text-digiDefault pl-2 pr-2 rounded-lg  text-xs pt-2 pb-2'
+                    >
+                      {' '}
+                      Update Profile
+                    </button>
+                  </div>
+                )}
               {!formLoading && !!resident && (
                 <div>
                   <div className='mb-2'>

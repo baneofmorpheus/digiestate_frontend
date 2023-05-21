@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
 import ResidentBookingList from 'components/residents/bookings/booking_list/BookingList';
 import SecurityBookingList from 'components/security/bookings/booking_list/BookingList';
+import AdminBookingList from 'components/admin/bookings/booking_list/BookingList';
 
 import { useSelector } from 'react-redux';
 
@@ -22,7 +23,7 @@ const BookingsList = () => {
 
         break;
       case 'admin':
-        setComponentToDisplay(<SecurityBookingList />);
+        setComponentToDisplay(<AdminBookingList />);
 
         break;
 
