@@ -40,7 +40,7 @@ const DataExport: NextPage = () => {
   const estate = useSelector((state: any) => state.authentication.estate);
 
   const [exportLoading, setExportLoading] = useState<boolean>(false);
-  const [dateRange, setDateRange] = useState<any>([]);
+  const [dateRange, setDateRange] = useState<any>(null);
   const [exportFormat, setExportFormat] = useState<'csv' | 'xlsx' | ''>('');
 
   const updateToastDispatch = useDispatch();
@@ -93,7 +93,7 @@ const DataExport: NextPage = () => {
         resident_name: '',
         format: '',
       });
-      setDateRange([]);
+      setDateRange(null);
 
       updateToastDispatch(
         updateToastData({
@@ -143,7 +143,7 @@ const DataExport: NextPage = () => {
               </div>
               <div
                 className='flex 
-              flex-col  gap-y-4 lg:gap-y-0 lg:gap-x-2 lg:flex-row justify-between'
+              flex-col  gap-y-4 lg:gap-y-0 mb-2 lg:gap-x-2 lg:flex-row justify-between'
               >
                 <div className='w-full lg:w-1/2'>
                   <label className='text-black'>

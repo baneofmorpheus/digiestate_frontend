@@ -1,43 +1,24 @@
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AuthenticatedLayout from 'components/layouts/authenticated/Authenticated';
-import ResidentHome from 'components/residents/home/Home';
-import moment from 'moment';
-
-import SecurityHome from 'components/security/home/Home';
 import AdminDataExport from 'components/admin/data-export/DataExport';
+import ResidentDataExport from 'components/residents/data-export/DataExport';
 
 import { useSelector } from 'react-redux';
 
 const DataExport = () => {
-  const user = useSelector((state: any) => state.authentication.user);
+  const { role } = useSelector((state: any) => state.authentication);
 
-  const role = useSelector((state: any) => state.authentication.role);
   const [componentToDisplay, setComponentToDisplay] = useState<any>(null);
-
-  function generateGreetings() {
-    const currentHour: number = parseInt(moment().format('HH'));
-
-    if (currentHour >= 3 && currentHour < 12) {
-      return 'Good Morning';
-    } else if (currentHour >= 12 && currentHour < 15) {
-      return 'Good Afternoon';
-    } else if (currentHour >= 15 && currentHour < 20) {
-      return 'Good Evening';
-    } else {
-      return 'Good Night';
-    }
-  }
 
   useEffect(() => {
     switch (role) {
       case 'resident':
-        setComponentToDisplay(<ResidentHome />);
+        setComponentToDisplay(<ResidentDataExport />);
 
         break;
       case 'security':
-        setComponentToDisplay(<SecurityHome />);
+        setComponentToDisplay(<AdminDataExport />);
 
         break;
       case 'admin':
