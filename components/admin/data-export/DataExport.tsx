@@ -207,14 +207,6 @@ const DataExport: NextPage = () => {
               >
                 Send to Mail
               </button>
-              <button
-                disabled={exportLoading}
-                onClick={() => {}}
-                type='button'
-                className='pt-2 pb-2 pl-4 hover:bg-gray-100  pr-4 border-2 border-gray-600 rounded-lg text-sm'
-              >
-                Cancel
-              </button>
             </div>
 
             {exportLoading && (
