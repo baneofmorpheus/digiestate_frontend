@@ -38,7 +38,7 @@ const SecurityBookingList = () => {
 
   const router = useRouter();
 
-  const [dateRange, setDateRange] = useState<any>([]);
+  const [dateRange, setDateRange] = useState<any>(null);
   const [bookingMode, setBookingMode] = useState<string>('all');
   const estate = useSelector((state: any) => state.authentication.estate);
   const [perPage, setPerPage] = useState<number>(10);
@@ -61,7 +61,7 @@ const SecurityBookingList = () => {
     setShowFilterModal(false);
 
     setSelectedName('');
-    setDateRange([]);
+    setDateRange(null);
     setBookingMode('all');
     setSelectedPerPage(10);
     setCurrentPage(1);
