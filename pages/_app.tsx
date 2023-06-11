@@ -16,6 +16,7 @@ import BugsnagPluginReact from '@bugsnag/plugin-react';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { ScrollTop } from 'primereact/scrolltop';
+import Script from 'next/script';
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -42,6 +43,22 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ErrorBoundary>
+          <Script
+            strategy='lazyOnload'
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_KEY}`}
+          />
+
+          <Script id='googleTag' strategy='lazyOnload'>
+            {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_KEY}', {
+                    page_path: window.location.pathname,
+                    });
+                `}
+          </Script>
+
           {getLayout(<Component {...pageProps} key={router.asPath} />)}
           <ScrollTop />
         </ErrorBoundary>
