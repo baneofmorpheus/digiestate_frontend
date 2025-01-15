@@ -57,7 +57,7 @@ const SelectSubscriptionPlan = () => {
         <div className='grid-cols-1 md:grid-cols-2 xl:grid-cols-3 grid justify-center  items-center gap-y-6 gap-x-4 mb-8'>
           {!loading &&
             subscriptionPlans.map((singleSubscription, index) => {
-              singleSubscription.total = Number(singleSubscription.total) + 1;
+              // singleSubscription.total = String(singleSubscription.total);
 
               const continerStyle = singleSubscription.is_featured
                 ? 'bg-digiDefault text-gray-600'

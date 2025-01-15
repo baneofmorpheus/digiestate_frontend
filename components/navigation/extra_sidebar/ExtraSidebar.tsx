@@ -138,6 +138,13 @@ const ExtraSidebar: NextPage<PropType> = ({
           </button>
 
           <hr className='h-0.5 mb-4 bg-gray-200' />
+          <Link href='/app/subscription'>
+            <a className=' block mb-2 '>
+              <FontAwesomeIcon className={` mr-4  `} icon={faCircleQuestion} />
+              <span className=''>Subscription</span>
+            </a>
+          </Link>
+          <hr className='h-0.5 mb-4 bg-gray-200' />
           <Link href='#'>
             <a className=' block mb-2 '>
               <FontAwesomeIcon className={` mr-4  `} icon={faCircleQuestion} />
